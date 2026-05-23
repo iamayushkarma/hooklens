@@ -8,6 +8,6 @@ app.use(helmet()); // Helmet is an Express middleware that adds security related
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
-app.get("/health", (req, res) => res.json({ status: "ok" }));
+app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 export default app;

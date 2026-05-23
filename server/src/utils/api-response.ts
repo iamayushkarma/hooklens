@@ -4,10 +4,10 @@ class ApiResponse {
   public message: string;
   public success: boolean;
 
-  constructor(statusCode: number, data: null, message: string = "success") {
+  constructor(statusCode: number, data: unknown, message: string = "success") {
+    this.statusCode = statusCode;
     this.data = data;
     this.message = message;
-    this.statusCode = statusCode;
     this.success = statusCode < 400; // Any status code below 400 is considered successful.
   }
 }

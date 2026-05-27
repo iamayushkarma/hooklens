@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import authRoute from "./routes/auth.routes";
+import authRouter from "./routes/auth.routes";
 
 const app = express();
 
@@ -12,6 +12,6 @@ app.use(express.json());
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 // auth routes
-app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/auth", authRouter);
 
 export default app;

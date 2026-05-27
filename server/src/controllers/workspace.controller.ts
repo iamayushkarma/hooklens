@@ -6,7 +6,7 @@ import { ApiError } from "../utils/api-error";
 import { Workspace } from "../models/workspace.model";
 
 // GET all workspaces where the logged-in user is a member, include workspace details, attach the user’s role in each workspace, and send it back.
-const getWorkspace = asyncHandler(async (req: Request, res: Response) => {
+const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
   const userId = (req as any).user.userId;
 
   const memberships = await WorkspaceMember.find({ userId }).populate(
@@ -108,7 +108,7 @@ const getMembers = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export {
-  getWorkspace,
+  getWorkspaces,
   createWorkspace,
   updateWorkspace,
   deleteWorkspace,

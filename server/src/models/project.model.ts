@@ -1,20 +1,41 @@
 import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema({
-  workspaceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Workspace",
-    required: true,
+const projectSchema = new mongoose.Schema(
+  {
+    workspaceId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Workspace",
+      required: true,
+      index: true,
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
+    name: {
+      type: String,
+      trim: true,
+      required: true,
+      minlength: 1,
+      maxlength: 100,
+    },
+
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+      maxlength: 1000,
+    },
   },
-  name: {
-    type: String,
-    trim: true,
-    required: true,
+  {
+    timestamps: true,
   },
-  discription: {
-    type: String,
-    default: "",
-  },
-});
+);
+
+// Prevent duplicate project names inside same workspace
+projectSchema.index({ workspaceId: 1, name: 1 }, { unique: true });
 
 export const Project = mongoose.model("Project", projectSchema);

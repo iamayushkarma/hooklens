@@ -26,7 +26,11 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   return res
     .status(201)
     .json(
-      new ApiResponse(201, { token, user: { id: user._id, fullName, email } }),
+      new ApiResponse(
+        201,
+        { token, user: { id: user._id, fullName, email } },
+        "User registered successfully",
+      ),
     );
 });
 
@@ -48,7 +52,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
         token,
         user: { id: user._id, fullName: user.fullName, email: user.email },
       },
-      "Logged In",
+      "User logged in successfully",
     ),
   );
 });

@@ -6,6 +6,8 @@ import { ApiError } from "../utils/api-error";
 import bcrypt from "bcryptjs";
 import { signToken } from "../utils/jwt";
 import { ApiResponse } from "../utils/api-response";
+import { Workspace } from "../models/workspace.model";
+import { WorkspaceMember } from "../models/workspaceMember.model";
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const { fullName, email, password } = registerSchema.parse(req.body); // using zod register schema to validate req.body
@@ -22,6 +24,17 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.create({ fullName, email, passwordHash });
 
   const token = signToken(user._id.toString());
+
+  // Auto-create workspace on user registration
+  const workspace = await Workspace.create({
+    name: `${name}'s Workspace`,
+    ownerId: user._id,
+  });
+  await WorkspaceMember.create({
+    workspaceId: workspace._id,
+    userId: user._id,
+    role: "owner",
+  });
 
   return res
     .status(201)

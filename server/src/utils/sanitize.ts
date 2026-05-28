@@ -1,4 +1,4 @@
-// Headers we never want to store (sensitive / useless)
+// Headers that should never want to store (sensitive / useless)
 const BLOCKED_HEADERS = new Set([
   "authorization",
   "cookie",

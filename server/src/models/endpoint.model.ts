@@ -1,6 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
-const endpointSchema = new mongoose.Schema(
+export interface IEndpoint extends Document {
+  projectId: mongoose.Types.ObjectId;
+  workspaceId: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
+  slug: string;
+  label: string;
+  isActive: boolean;
+  requestCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+const endpointSchema = new mongoose.Schema<IEndpoint>(
   {
     projectId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,5 +39,6 @@ const endpointSchema = new mongoose.Schema(
 // Compound index for fast user-scoped queries
 endpointSchema.index({ userId: 1, createdAt: -1 });
 endpointSchema.index({ projectId: 1, createdAt: -1 });
+endpointSchema.index({ slug: 1, isActive: 1 });
 
-export const Endpoint = mongoose.model("Endpoint", endpointSchema);
+export const Endpoint = mongoose.model<IEndpoint>("Endpoint", endpointSchema);

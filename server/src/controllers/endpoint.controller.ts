@@ -187,4 +187,10 @@ const getEndpointRequests = asyncHandler(
     );
   },
 );
-export { getEndpoint, createEndpoint, updateEndpoint, getEndpointRequests };
+export {
+  getEndpoint,
+  createEndpoint,
+  updateEndpoint,
+  deleteEndpoint,
+  getEndpointRequests,
+};

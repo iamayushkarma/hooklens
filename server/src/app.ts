@@ -1,23 +1,37 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+
 import authRouter from "./routes/auth.routes";
 import workspaceRoutes from "./routes/workspace.routes";
 import projectRoutes from "./routes/project.routes";
+import endpointRoutes from "./routes/endpoint.routes";
+
+import { captureHandler } from "./controllers/capture.controller";
+import {
+  captureRateLimit,
+  authRateLimit,
+} from "./middleware/rateLimit.middleware";
 
 const app = express();
 
-app.use(helmet()); // Helmet is an Express middleware that adds security related HTTP headers to backend.
+// Security Middleware
+app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL }));
-app.use(express.json());
+app.use(express.json({ limit: "200kb" })); // cap incoming body size
+app.use(express.urlencoded({ extended: true, limit: "200kb" }));
 
+// Health Check
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
-// auth routes
-app.use("/api/v1/auth", authRouter);
+// Capture Route (PUBLIC - must be before auth middleware)
+// Accepts ANY HTTP method, no auth, always returns 200
+app.all("/h/:slug", captureRateLimit, captureHandler);
 
-// workspace and project routes
-app.use("/api/workspaces", workspaceRoutes);
-app.use("/api/projects", projectRoutes);
+// API Routes
+app.use("/api/v1/auth", authRateLimit, authRouter);
+app.use("/api/v1/workspaces", workspaceRoutes);
+app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/endpoints", endpointRoutes);
 
 export default app;

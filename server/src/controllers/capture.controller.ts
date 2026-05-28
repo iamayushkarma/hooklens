@@ -19,7 +19,7 @@ const ALLOWED_METHODS = new Set([
 
 // Helper Function
 
-const captureHandler = async (
+export const captureHandler = async (
   req: Request<{ slug: string }>,
   res: Response,
 ): Promise<void> => {

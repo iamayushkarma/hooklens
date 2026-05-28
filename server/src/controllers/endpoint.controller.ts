@@ -61,3 +61,41 @@ const getEndpoint = asyncHandler(async (req: Request, res: Response) => {
 
   res.json(new ApiResponse(200, endpoints, "OK"));
 });
+
+// POST
+const createEndpoint = asyncHandler(async (req: Request, res: Response) => {
+  const userId = getUserId(req);
+  const { projectId, workspaceId, label } = createEndpointSchema.parse(
+    req.body,
+  );
+
+  // Verify project exists and actually belongs to the given workspace
+  // Prevents cross-workspace endpoint injection
+  const project = await Project.findById(projectId).lean();
+
+  if (!project) throw new ApiError(404, "Project not found");
+  if (project.workspaceId.toString() !== workspaceId) {
+    throw new ApiError(400, "Project does not belong to this workspace");
+  }
+
+  await requireMember(workspaceId, userId);
+
+  // Generating slug with collision retry
+  // nanoid(8) = 64^8 = ~281 trillion combinations, collision is near impossible
+  // but handled it properly anyway
+  let slug = nanoid(8);
+  const collision = await Endpoint.exists({ slug });
+  if (collision) slug = nanoid(12); // fallback to longer
+
+  const endpoint = await Endpoint.create({
+    projectId,
+    workspaceId,
+    userId,
+    slug,
+    label,
+  });
+
+  res.status(201).json(new ApiResponse(201, endpoint, "Endpoint created"));
+});
+
+export { getEndpoint, createEndpoint };

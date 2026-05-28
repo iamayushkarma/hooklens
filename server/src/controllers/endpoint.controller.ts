@@ -12,6 +12,8 @@ import {
 import { isValidObjectId } from "mongoose";
 import { Project } from "../models/project.model";
 import { RequestLog } from "../models/requestLog.model";
+import { emitEndpointDisabled } from "../socket/events";
+import { invalidateAccessCache } from "../socket";
 
 // Helper Functions
 
@@ -116,6 +118,11 @@ const updateEndpoint = asyncHandler(async (req: Request, res: Response) => {
     { $set: updates }, // explicit $set - never allow arbitrary field updates
     { new: true, runValidators: true },
   ).lean();
+
+  if (updates.isActive === false && updated) {
+    invalidateAccessCache(endpoint.slug);
+    emitEndpointDisabled(endpoint.slug);
+  }
 
   res.json(new ApiResponse(200, updated, "Endpoint updated"));
 });

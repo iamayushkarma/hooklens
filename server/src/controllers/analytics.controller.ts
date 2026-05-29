@@ -125,4 +125,88 @@ const getWorkspaceAnalytics = asyncHandler(
   },
 );
 
-export { getWorkspaceAnalytics };
+const getEndpointAnalytics = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = getUserId(req);
+    const endpointId = getParam(req, "id");
+
+    if (!isValidObjectId(endpointId))
+      throw new ApiError(400, "Invalid endpoint ID");
+
+    // Get endpoint and verify workspace access in one step
+    const endpoint = await Endpoint.findById(endpointId).lean();
+    if (!endpoint) throw new ApiError(404, "Endpoint not found");
+
+    const member = await WorkspaceMember.findOne({
+      workspaceId: endpoint.workspaceId,
+      userId,
+    }).lean();
+    if (!member) throw new ApiError(403, "Access denied");
+
+    const today = startOfToday();
+    const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    const [requestsToday, methodBreakdown, hourlyTimeline, totalRequests] =
+      await Promise.all([
+        // Count: today's requests for this endpoint ───────────────────────────
+        RequestLog.countDocuments({
+          endpointId,
+          createdAt: { $gte: today },
+        }),
+
+        // Group: method breakdown for this endpoint ───────────────────────────
+        RequestLog.aggregate([
+          { $match: { endpointId: endpoint._id } },
+          { $group: { _id: "$method", count: { $sum: 1 } } },
+          { $project: { _id: 0, method: "$_id", count: 1 } },
+          { $sort: { count: -1 } },
+        ]),
+
+        // Group: requests per hour for the last 24 hours
+        // More granular than daily — shows traffic spikes within a day
+        RequestLog.aggregate([
+          {
+            $match: {
+              endpointId: endpoint._id,
+              createdAt: { $gte: last24Hours },
+            },
+          },
+          {
+            $group: {
+              _id: {
+                $dateToString: {
+                  format: "%Y-%m-%dT%H:00",
+                  date: "$createdAt",
+                },
+              },
+              count: { $sum: 1 },
+            },
+          },
+          { $project: { _id: 0, hour: "$_id", count: 1 } },
+          { $sort: { hour: 1 } },
+        ]),
+
+        // requestCount on the model is a live counter — no aggregation needed
+        Promise.resolve(endpoint.requestCount),
+      ]);
+
+    res.json(
+      new ApiResponse(
+        200,
+        {
+          totalRequests,
+          requestsToday,
+          methodBreakdown,
+          hourlyTimeline,
+          endpoint: {
+            label: endpoint.label,
+            slug: endpoint.slug,
+            isActive: endpoint.isActive,
+          },
+        },
+        "OK",
+      ),
+    );
+  },
+);
+export { getWorkspaceAnalytics, getEndpointAnalytics };

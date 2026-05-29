@@ -6,7 +6,7 @@ import authRouter from "./routes/auth.routes";
 import workspaceRoutes from "./routes/workspace.routes";
 import projectRoutes from "./routes/project.routes";
 import endpointRoutes from "./routes/endpoint.routes";
-
+import analyticsRoutes from "./routes/analytics.routes";
 import { captureHandler } from "./controllers/capture.controller";
 import {
   captureRateLimit,
@@ -33,5 +33,6 @@ app.use("/api/v1/auth", authRateLimit, authRouter);
 app.use("/api/v1/workspaces", workspaceRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/endpoints", endpointRoutes);
+app.use("/api/v1/analytics", analyticsRoutes);
 
 export default app;

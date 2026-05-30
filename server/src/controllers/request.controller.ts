@@ -11,6 +11,12 @@ import { explainPayload } from "../utils/groq";
 import { emitRequestDeleted } from "../socket/events";
 
 // Helpers
+const toPlainObject = (val: unknown): Record<string, string> => {
+  if (!val) return {};
+  if (val instanceof Map) return Object.fromEntries(val);
+  if (typeof val === "object") return val as Record<string, string>;
+  return {};
+};
 
 const getUserId = (req: Request): string => {
   if (!req.user?.userId) throw new ApiError(401, "Unauthorized");
@@ -78,7 +84,7 @@ const replayRequestHandler = asyncHandler(
 
     const result = await replayRequest(
       requestLog.method,
-      Object.fromEntries(requestLog.headers as Map<string, string>),
+      toPlainObject(requestLog.headers), // ← fix
       requestLog.body,
       targetUrl,
     );
@@ -89,9 +95,7 @@ const replayRequestHandler = asyncHandler(
         {
           original: {
             method: requestLog.method,
-            headers: Object.fromEntries(
-              requestLog.headers as Map<string, string>,
-            ),
+            headers: toPlainObject(requestLog.headers), // ← fix
             body: requestLog.body,
           },
           replay: result,
@@ -110,7 +114,7 @@ const explainRequest = asyncHandler(async (req: Request, res: Response) => {
 
   const explanation = await explainPayload(
     requestLog.method,
-    Object.fromEntries(requestLog.headers as Map<string, string>),
+    toPlainObject(requestLog.headers),
     requestLog.body,
   );
 

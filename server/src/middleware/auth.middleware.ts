@@ -1,15 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/api-error";
 import { verifyToken } from "../utils/jwt";
 
-interface AuthRequest extends Request {
-  user?: {
-    userId: string;
-  };
-}
+// interface AuthRequest extends Request {
+//   user?: {
+//     userId: string;
+//   };
+// }
 export const authenticateUser = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): void => {

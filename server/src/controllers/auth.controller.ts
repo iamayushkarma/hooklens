@@ -27,7 +27,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
   // Auto-create workspace on user registration
   const workspace = await Workspace.create({
-    name: `${name}'s Workspace`,
+    name: `${fullName}'s Workspace`,
     ownerId: user._id,
   });
   await WorkspaceMember.create({

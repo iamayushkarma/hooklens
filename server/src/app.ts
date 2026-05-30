@@ -12,6 +12,7 @@ import {
   captureRateLimit,
   authRateLimit,
 } from "./middleware/rateLimit.middleware";
+import requestRoutes from "./routes/request.routes";
 
 const app = express();
 
@@ -34,5 +35,6 @@ app.use("/api/v1/workspaces", workspaceRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/endpoints", endpointRoutes);
 app.use("/api/v1/analytics", analyticsRoutes);
+app.use("/api/v1/requests", requestRoutes);
 
 export default app;

@@ -1,15 +1,35 @@
+// import http from "http";
+// import dotenv from "dotenv";
+// dotenv.config();
+
+// import app from "./app";
+// import { connectDB } from "./config/db";
+
+// const server = http.createServer(app);
+// const PORT = process.env.PORT || 5000;
+
+// connectDB().then(() => {
+//   server.listen(PORT, () =>
+//     console.log(`Server running on http://localhost:${PORT}`),
+//   );
+// });
 import http from "http";
 import dotenv from "dotenv";
 dotenv.config();
 
 import app from "./app";
 import { connectDB } from "./config/db";
+import { setupSocket } from "./socket";
 
-const server = http.createServer(app);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
-connectDB().then(() => {
+const start = async () => {
+  await connectDB();
+  const server = http.createServer(app);
+  setupSocket(server);
   server.listen(PORT, () =>
     console.log(`Server running on http://localhost:${PORT}`),
   );
-});
+};
+
+start();

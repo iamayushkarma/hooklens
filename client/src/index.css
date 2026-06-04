@@ -1,9 +1,9 @@
 @import "tailwindcss";
-
+/* Font Style */
 @theme {
   /* Fonts */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-  --font-mono: "IBM Plex Mono", "JetBrains Mono", "Fira Code", monospace;
+  --font-sans: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Geist Mono", monospace;
 
   /* Border Radius */
   --radius-sm: 4px;

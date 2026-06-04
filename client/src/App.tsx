@@ -4,7 +4,7 @@ const App = () => {
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
-  return <div className="">HookLens</div>;
+  return <></>;
 };
 
 export default App;

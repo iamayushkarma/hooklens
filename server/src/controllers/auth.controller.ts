@@ -8,6 +8,7 @@ import { signToken } from "../utils/jwt";
 import { ApiResponse } from "../utils/api-response";
 import { Workspace } from "../models/workspace.model";
 import { WorkspaceMember } from "../models/workspaceMember.model";
+import { AUTH_PROVIDER } from "../utils/auth-provider";
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const { fullName, email, password } = registerSchema.parse(req.body); // using zod register schema to validate req.body
@@ -21,7 +22,12 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     Number(process.env.BCRYPT_SALT_ROUNDS),
   ); // `BCRYPT_SALT_ROUNDS` represents bcrypt salt rounds
 
-  const user = await User.create({ fullName, email, passwordHash });
+  const user = await User.create({
+    fullName,
+    email,
+    passwordHash,
+    authProvider: AUTH_PROVIDER.LOCAL,
+  });
 
   const token = signToken(user._id.toString());
 
@@ -53,8 +59,18 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.findOne({ email });
   if (!user) throw new ApiError(401, "Invalid email or password");
 
+  if (!user.passwordHash) {
+    throw new ApiError(401, "Invalid email or password");
+  }
   const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+
   if (!isPasswordValid) throw new ApiError(401, "Invalid email or password");
+  if (user.authProvider === AUTH_PROVIDER.GOOGLE) {
+    throw new ApiError(
+      400,
+      "This account uses Google Sign-In. Please continue with Google.",
+    );
+  }
 
   const token = signToken(user._id.toString());
 
@@ -73,7 +89,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 const getCurrentUser = asyncHandler(async (req: Request, res: Response) => {
   // req.user is attached by auth middleware
   const user = await User.findById((req as any).user.userId).select(
-    "-passwordHash",
+    "-passwordHash -googleId",
   );
   if (!user) throw new ApiError(404, "User not found");
 

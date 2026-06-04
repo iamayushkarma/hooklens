@@ -12,7 +12,18 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
-    passwordHash: { type: String, required: true },
+    passwordHash: { type: String },
+    authProvider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
+    },
+    googleId: {
+      type: String,
+    },
+    avatar: {
+      type: String,
+    },
   },
   { timestamps: true },
 );

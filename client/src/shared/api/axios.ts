@@ -3,7 +3,6 @@ import { API_CONFIG } from "@/shared/api/config";
 
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
-  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {

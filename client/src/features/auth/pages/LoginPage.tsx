@@ -7,7 +7,7 @@ function LoginPage() {
   const [password, setPassword] = useState<string>("");
 
   const navigate = useNavigate();
-
+  const googleLogin = useAuthStore((state) => state.googleLogin);
   const login = useAuthStore((state) => state.login);
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
@@ -49,6 +49,19 @@ function LoginPage() {
           Submit
         </button>
       </form>
+      <button
+        type="button"
+        onClick={async () => {
+          try {
+            await googleLogin();
+            navigate("/dashboard");
+          } catch (error) {
+            console.error(error);
+          }
+        }}
+      >
+        Continue with Google
+      </button>
     </div>
   );
 }

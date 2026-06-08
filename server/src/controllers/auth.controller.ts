@@ -9,6 +9,7 @@ import { ApiResponse } from "../utils/api-response";
 import { Workspace } from "../models/workspace.model";
 import { WorkspaceMember } from "../models/workspaceMember.model";
 import { AUTH_PROVIDER } from "../utils/auth-provider";
+import admin from "../config/firebase-admin";
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const { fullName, email, password } = registerSchema.parse(req.body); // using zod register schema to validate req.body
@@ -96,4 +97,58 @@ const getCurrentUser = asyncHandler(async (req: Request, res: Response) => {
   return res.json(new ApiResponse(200, user, "OK"));
 });
 
-export { registerUser, loginUser, getCurrentUser };
+const googleLogin = asyncHandler(async (req: Request, res: Response) => {
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    throw new ApiError(400, "Google token is required");
+  }
+
+  const decodedToken = await admin.auth().verifyIdToken(idToken);
+
+  const { uid, email, name } = decodedToken;
+
+  if (!email) {
+    throw new ApiError(400, "Google account email not found");
+  }
+
+  let user = await User.findOne({ email });
+
+  if (!user) {
+    user = await User.create({
+      fullName: name,
+      email,
+      googleId: uid,
+      authProvider: AUTH_PROVIDER.GOOGLE,
+    });
+
+    // Create default workspace
+    const workspace = await Workspace.create({
+      name: `${name}'s Workspace`,
+      ownerId: user._id,
+    });
+    await WorkspaceMember.create({
+      workspaceId: workspace._id,
+      userId: user._id,
+      role: "owner",
+    });
+  }
+  const token = signToken(user._id.toString());
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        token,
+        user: {
+          id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+        },
+      },
+      "Google login successful",
+    ),
+  );
+});
+
+export { registerUser, loginUser, getCurrentUser, googleLogin };

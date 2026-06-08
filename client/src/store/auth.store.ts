@@ -3,12 +3,13 @@ import { loginApi } from "@/features/auth/api/login";
 import { registerApi } from "@/features/auth/api/register";
 import { getCurrentUserApi } from "@/features/auth/api/get-current-user";
 import type { User } from "@/features/auth/types/auth.types";
-
+import { googleLoginApi } from "@/features/auth/api/google-login";
+import { googleAuthApi } from "@/features/auth/api/google-auth";
 interface AuthStore {
   user: User | null;
   token: string | null;
   loading: boolean;
-
+  googleLogin: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   register: (
     fullName: string,
@@ -25,6 +26,19 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   token: localStorage.getItem("token"),
   loading: false,
+
+  googleLogin: async () => {
+    const { idToken } = await googleLoginApi();
+
+    const response = await googleAuthApi(idToken);
+
+    localStorage.setItem("token", response.data.token);
+
+    set({
+      token: response.data.token,
+      user: response.data.user,
+    });
+  },
 
   login: async (email, password) => {
     set({ loading: true });

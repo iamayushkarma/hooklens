@@ -12,8 +12,8 @@ export const appRoutes = (
 
       <Route path="/register" element={<RegisterPage />} />
     </Route>
-    <Route element={<DashboardLayout />}>
-      <Route path="/" element={<Dashboard />} />{" "}
+    <Route path="/dashboard" element={<DashboardLayout />}>
+      <Route index element={<Dashboard />} />{" "}
     </Route>
   </Routes>
 );

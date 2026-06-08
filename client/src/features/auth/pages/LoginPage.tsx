@@ -1,6 +1,6 @@
 import { useState, type SubmitEvent } from "react";
-import { loginApi } from "../api/login";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/auth.store";
 
 function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -8,10 +8,12 @@ function LoginPage() {
 
   const navigate = useNavigate();
 
+  const login = useAuthStore((state) => state.login);
+
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await loginApi(email, password);
+      await login(email, password);
       navigate("/dashboard");
     } catch (error) {
       console.log(error);

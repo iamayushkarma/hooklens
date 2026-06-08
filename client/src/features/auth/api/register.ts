@@ -3,12 +3,12 @@ import type { AuthResponse } from "@/features/auth/types/auth.types";
 import { API_ENDPOINTS } from "@/shared/constants/api-endpoints";
 
 export const registerApi = async (
-  fullname: string,
+  fullName: string,
   email: string,
   password: string,
 ) => {
   const { data } = await api.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, {
-    fullname,
+    fullName,
     email,
     password,
   });

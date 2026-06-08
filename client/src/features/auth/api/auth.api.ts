@@ -1,15 +1,11 @@
 import api from "@/shared/api/axios";
+import type { AuthResponse } from "@/features/auth/types/auth.types";
 
-import type {
-  LoginInput,
-  AuthResponse,
-  ApiResponse,
-} from "@/shared/types/auth.types";
+export const loginApi = async (email: string, password: string) => {
+  const { data } = await api.post<AuthResponse>("/auth/login", {
+    email,
+    password,
+  });
 
-export const login = async (
-  data: LoginInput,
-): Promise<ApiResponse<AuthResponse>> => {
-  const response = await api.post("/auth/login", data);
-
-  return response.data;
+  return data;
 };

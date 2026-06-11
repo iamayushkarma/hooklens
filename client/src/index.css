@@ -31,7 +31,7 @@
 
   --color-border-default: #c8cce8;
   --color-border-subtle: #e0e2f0;
-  --color-border-strong: #a0a8d8;
+  --color-border-strong: #0d1117;
 
   --color-text-primary: #141412;
   --color-text-secondary: #888780;
@@ -76,9 +76,9 @@
   --color-bg-sidebar: #0a0a0a;
   --color-bg-card: #0e0e0e;
 
-  --color-border-default: #181818;
-  --color-border-subtle: #1e1e1e;
-  --color-border-strong: #252525;
+  --color-border-default: #3a3a3a;
+  --color-border-subtle: #353535;
+  --color-border-strong: #d7d7d7;
 
   --color-text-primary: #ececec;
   --color-text-secondary: #404040;

@@ -7,7 +7,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="text-red-500"> Wellcome {user?.fullName}</div>
+      <h1>Dashboard Home</h1>
       <ThemeSwitcher />
     </>
   );

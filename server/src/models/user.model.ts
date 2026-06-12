@@ -21,8 +21,9 @@ const userSchema = new mongoose.Schema(
     googleId: {
       type: String,
     },
-    avatar: {
+    avatarUrl: {
       type: String,
+      required: true,
     },
   },
   { timestamps: true },

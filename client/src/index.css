@@ -29,9 +29,11 @@
   --color-bg-sidebar: #f3f2ec;
   --color-bg-card: #ffffff;
 
-  --color-border-default: #c8cce8;
-  --color-border-subtle: #e0e2f0;
-  --color-border-strong: #0d1117;
+  --color-border-default: #e1ded3;
+  --color-border-subtle: #e8e5db;
+  --color-border-strong: #d7d2c5;
+
+  --color-base-hover: #eae8e0;
 
   --color-text-primary: #141412;
   --color-text-secondary: #888780;
@@ -76,9 +78,9 @@
   --color-bg-sidebar: #0a0a0a;
   --color-bg-card: #0e0e0e;
 
-  --color-border-default: #3a3a3a;
-  --color-border-subtle: #353535;
-  --color-border-strong: #d7d7d7;
+  --color-border-default: #262626;
+  --color-border-subtle: #1f1f1f;
+  --color-border-strong: #3a3a3a;
 
   --color-text-primary: #ececec;
   --color-text-secondary: #404040;
@@ -86,6 +88,7 @@
   --color-text-accent: #2633cb;
 
   --color-accent-subtle: #0c0e25;
+  --color-base-hover: #171717;
 
   --color-success: #4ade80;
   --color-success-bg: #081508;

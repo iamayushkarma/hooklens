@@ -33,12 +33,12 @@ function ThemeSwitcher() {
           <button
             key={item.mode}
             onClick={() => setTheme(item.mode)}
-            className="relative flex flex-1 items-center justify-center gap-2 py-2 text-sm font-medium"
+            className="relative cursor-pointer  flex flex-1 items-center justify-center gap-2 py-2 text-sm font-medium"
           >
             {isActive && (
               <motion.div
                 layoutId="theme-switcher-pill"
-                className="absolute inset-0 rounded-md bg-bg-sidebar shadow-md border border-border-default"
+                className="absolute inset-0 rounded-md pointer-events-none bg-bg-sidebar shadow-md border border-border-default"
                 transition={{
                   type: "spring",
                   stiffness: 400,

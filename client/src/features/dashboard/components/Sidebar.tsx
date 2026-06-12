@@ -1,12 +1,53 @@
 import logo from "@/assets/icons/logo-icon.png";
 import { EllipsisVertical } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
+import { useState, useEffect, useRef } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Building2,
+  FolderKanban,
+  PlugZap,
+  Inbox,
+  RefreshCw,
+  ChartColumn,
+  Users,
+  MailPlus,
+  Settings,
+  BellRing,
+  LogOut,
+  CircleUserRound,
+  type LucideIcon,
+} from "lucide-react";
+import logoDefault from "@/assets/icons/logo-default.png";
+import type { User } from "@/features/auth/types/auth.types";
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
+
 function Sidebar() {
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
+
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      console.log("clicked");
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        console.log("outside");
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const toggleUserMenu = () => {
     return setShowUserMenu((prev) => !prev);
   };
+
   const { user } = useAuthStore();
   return (
     <div className="w-70 flex justify-between flex-col bg-bg-sidebar border-r border-border-default">
@@ -85,7 +126,7 @@ function Sidebar() {
         </div>
       </div>
       {/* Bottom section */}
-      <div className="p-3 relative">
+      <div className="p-3 relative" ref={menuRef}>
         <div
           onClick={toggleUserMenu}
           className="py-2 px-2 hover:bg-base-hover rounded-md cursor-pointer flex items-center justify-between relative"
@@ -134,27 +175,6 @@ function Sidebar() {
 }
 
 export default Sidebar;
-
-import { NavLink } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Building2,
-  FolderKanban,
-  PlugZap,
-  Inbox,
-  RefreshCw,
-  ChartColumn,
-  Users,
-  MailPlus,
-  Settings,
-  BellRing,
-  LogOut,
-  CircleUserRound,
-  type LucideIcon,
-} from "lucide-react";
-import { useState } from "react";
-import type { User } from "@/features/auth/types/auth.types";
-import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 // Helper component
 interface RouteItem {
@@ -272,8 +292,6 @@ const UserMenu = ({ user, routes }: useMenueProps) => {
 };
 
 //---------------------------------
-
-import logoDefault from "@/assets/icons/logo-default.png";
 
 function UserLogo() {
   const { user } = useAuthStore();

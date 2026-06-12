@@ -23,11 +23,14 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     Number(process.env.BCRYPT_SALT_ROUNDS),
   ); // `BCRYPT_SALT_ROUNDS` represents bcrypt salt rounds
 
+  const avatarUrl = `https://api.dicebear.com/9.x/adventurer/svg?seed=${email}`;
+
   const user = await User.create({
     fullName,
     email,
     passwordHash,
     authProvider: AUTH_PROVIDER.LOCAL,
+    avatarUrl,
   });
 
   const token = signToken(user._id.toString());
@@ -80,7 +83,12 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
       200,
       {
         token,
-        user: { id: user._id, fullName: user.fullName, email: user.email },
+        user: {
+          id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
+        },
       },
       "User logged in successfully",
     ),
@@ -106,7 +114,7 @@ const googleLogin = asyncHandler(async (req: Request, res: Response) => {
 
   const decodedToken = await admin.auth().verifyIdToken(idToken);
 
-  const { uid, email, name } = decodedToken;
+  const { uid, email, name, picture } = decodedToken;
 
   if (!email) {
     throw new ApiError(400, "Google account email not found");
@@ -120,6 +128,7 @@ const googleLogin = asyncHandler(async (req: Request, res: Response) => {
       email,
       googleId: uid,
       authProvider: AUTH_PROVIDER.GOOGLE,
+      avatarUrl: picture,
     });
 
     // Create default workspace
@@ -144,6 +153,7 @@ const googleLogin = asyncHandler(async (req: Request, res: Response) => {
           id: user._id,
           fullName: user.fullName,
           email: user.email,
+          avatarUrl: user.avatarUrl,
         },
       },
       "Google login successful",

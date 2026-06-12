@@ -9,6 +9,7 @@ interface AuthStore {
   user: User | null;
   token: string | null;
   loading: boolean;
+  initialized: boolean;
   googleLogin: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   register: (
@@ -26,6 +27,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   token: localStorage.getItem("token"),
   loading: false,
+  initialized: false,
 
   googleLogin: async () => {
     const { idToken } = await googleLoginApi();
@@ -37,6 +39,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({
       token: response.data.token,
       user: response.data.user,
+      initialized: true,
     });
   },
 
@@ -52,6 +55,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         user: response.data.user,
         token: response.data.token,
         loading: false,
+        initialized: true,
       });
     } catch (error) {
       set({ loading: false });
@@ -81,14 +85,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
   initialize: async () => {
     const token = localStorage.getItem("token");
 
-    if (!token) return;
+    if (!token) {
+      set({ initialized: true });
+      return;
+    }
 
     try {
       const response = await getCurrentUserApi();
 
       set({
-        user: response.data,
+        user: response.data.data,
         token,
+        initialized: true,
       });
     } catch {
       localStorage.removeItem("token");
@@ -96,6 +104,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({
         user: null,
         token: null,
+        initialized: true,
       });
     }
   },
@@ -106,6 +115,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({
       user: null,
       token: null,
+      initialized: true,
     });
   },
 }));

@@ -2,8 +2,10 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import RegisterPage from "@/features/auth/pages/RegisterPage";
 import AuthLayout from "@/app/layouts/AuthLayout";
-import DashboardLayout from "../layouts/DashboardLayout";
+import DashboardLayout from "@/app/layouts/DashboardLayout";
 import Dashboard from "@/features/dashboard/Dashboard";
+import MainLayout from "@/app/layouts/MainLayout";
+import HomePage from "@/features/public/pages/HomePage";
 
 export const appRoutes = (
   <Routes>
@@ -13,7 +15,10 @@ export const appRoutes = (
       <Route path="/register" element={<RegisterPage />} />
     </Route>
     <Route path="/dashboard" element={<DashboardLayout />}>
-      <Route index element={<Dashboard />} />{" "}
+      <Route index element={<Dashboard />} />
+    </Route>
+    <Route path="/" element={<MainLayout />}>
+      <Route index element={<HomePage />} />
     </Route>
   </Routes>
 );

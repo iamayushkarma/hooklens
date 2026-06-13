@@ -3,6 +3,7 @@ import { EllipsisVertical } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
   Building2,
@@ -14,6 +15,7 @@ import {
   Users,
   MailPlus,
   Settings,
+  Menu,
   BellRing,
   LogOut,
   CircleUserRound,
@@ -25,7 +27,7 @@ import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 function Sidebar() {
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
-
+  const [collapsed, setCollapsed] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,14 +51,40 @@ function Sidebar() {
   };
 
   const { user } = useAuthStore();
+  const { goToDashboard } = useAppNavigation();
+
   return (
-    <div className="w-70 flex justify-between flex-col bg-bg-sidebar border-r border-border-default">
+    <div
+      className={`flex justify-between flex-col  bg-bg-sidebar border-r border-border-default  transition-all duration-200 ease-in-out
+        ${collapsed ? "w-14" : "w-70"}
+        `}
+    >
       {/* Top section */}
       <div>
         {/* Logo */}
-        <div className="py-3 px-4.5 flex items-center h-14 cursor-pointer gap-2 border-b border-border-default">
-          <img src={logo} className="w-5" />
-          <h1 className="font-semibold">HookLens</h1>
+        <div className="py-3 px-4.5 flex justify-between items-center h-14 gap-2 border-b border-border-default">
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.15 }}
+                onClick={() => goToDashboard()}
+                className="flex items-center gap-1 cursor-pointer overflow-hidden"
+              >
+                <img src={logo} className="w-5 flex-shrink-0" />
+                <h1 className="font-semibold whitespace-nowrap">HookLens</h1>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          {/* When collapsed, center the menu icon */}
+          <div className={`${collapsed ? "w-full flex justify-center" : ""}`}>
+            <Menu
+              onClick={() => setCollapsed((prev) => !prev)}
+              className="size-5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors"
+            />
+          </div>
         </div>
         {/* Navigations */}
         <div>
@@ -64,6 +92,7 @@ function Sidebar() {
           <SideNavigation
             heading="Home"
             className="mt-4"
+            collapsed={collapsed}
             routes={[
               {
                 label: "Dashboard",
@@ -85,6 +114,7 @@ function Sidebar() {
           {/* Monitoring */}
           <SideNavigation
             heading="Monitoring"
+            collapsed={collapsed}
             routes={[
               {
                 label: "Endpoints",
@@ -110,6 +140,7 @@ function Sidebar() {
           />
           <SideNavigation
             heading="Team"
+            collapsed={collapsed}
             routes={[
               {
                 label: "Members",
@@ -126,50 +157,52 @@ function Sidebar() {
         </div>
       </div>
       {/* Bottom section */}
-      <div className="p-3 relative" ref={menuRef}>
-        <div
-          onClick={toggleUserMenu}
-          className="py-2 px-2 hover:bg-base-hover rounded-md cursor-pointer flex items-center justify-between relative"
-        >
-          {/* User detail */}
-          <div className="flex items-center gap-1 min-w-0 flex-1">
-            {/* User avatar */}
+      {!collapsed && (
+        <div className="p-3 relative" ref={menuRef}>
+          <div
+            onClick={toggleUserMenu}
+            className="py-2 px-2 hover:bg-base-hover rounded-md cursor-pointer flex items-center justify-between relative"
+          >
+            {/* User detail */}
+            <div className="flex items-center gap-1 min-w-0 flex-1">
+              {/* User avatar */}
 
-            <UserLogo />
-            {/* User name  */}
-            <div className="text-[.8rem] leading-4.5  min-w-0 flex-1">
-              <h2 className="text-text-primary truncate">{user?.fullName}</h2>
-              <p className="text-text-secondary truncate">{user?.email}</p>
+              <UserLogo />
+              {/* User name  */}
+              <div className="text-[.8rem] leading-4.5  min-w-0 flex-1">
+                <h2 className="text-text-primary truncate">{user?.fullName}</h2>
+                <p className="text-text-secondary truncate">{user?.email}</p>
+              </div>
+            </div>
+            {/* User actions */}
+            <div>
+              <EllipsisVertical className="size-4 text-text-secondary" />
             </div>
           </div>
-          {/* User actions */}
-          <div>
-            <EllipsisVertical className="size-4 text-text-secondary" />
-          </div>
+          {showUserMenu && (
+            <UserMenu
+              user={user!}
+              routes={[
+                {
+                  label: "Notification",
+                  icon: BellRing,
+                  path: "/members",
+                },
+                {
+                  label: "Account",
+                  icon: CircleUserRound,
+                  path: "/invitations",
+                },
+                {
+                  label: "Settings",
+                  icon: Settings,
+                  path: "/invitations",
+                },
+              ]}
+            />
+          )}
         </div>
-        {showUserMenu && (
-          <UserMenu
-            user={user!}
-            routes={[
-              {
-                label: "Notification",
-                icon: BellRing,
-                path: "/members",
-              },
-              {
-                label: "Account",
-                icon: CircleUserRound,
-                path: "/invitations",
-              },
-              {
-                label: "Settings",
-                icon: Settings,
-                path: "/invitations",
-              },
-            ]}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 }
@@ -186,18 +219,27 @@ interface RouteItem {
 interface SideNavigationProps {
   heading: string;
   className?: string;
+  collapsed: boolean;
   routes: RouteItem[];
 }
 const SideNavigation = ({
   className,
   heading,
   routes,
+  collapsed,
 }: SideNavigationProps) => {
   return (
-    <div className={`${className} p-3 mt-2`}>
-      <h2 className="text-text-secondary font-medium text-sm px-3">
-        {heading}
-      </h2>
+    <div
+      className={`${className} p-3 mt-2 ${collapsed && "flex items-center justify-center"}`}
+    >
+      {!collapsed && (
+        <h2 className="text-text-secondary font-medium text-sm px-3">
+          {heading}
+        </h2>
+      )}
+
+      {/* Divider line replaces heading when collapsed */}
+      {collapsed && <div className="border-t border-border-default mb-2" />}
       <ul className="grid mt-1 gap-1">
         {routes.map((route) => {
           const Icon = route.icon;
@@ -206,14 +248,29 @@ const SideNavigation = ({
             <li key={route.label}>
               <NavLink
                 to={route.path}
+                title={collapsed ? route.label : undefined}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 px-3 py-1 rounded-md transition-colors ${
+                  `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${
                     isActive ? "bg-base-hover " : "hover:bg-base-hover"
                   }`
                 }
               >
                 <Icon className="size-4" />
-                <span className="font-medium text-[.9rem]">{route.label}</span>
+                {!collapsed && (
+                  <AnimatePresence>
+                    {!collapsed && (
+                      <motion.span
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="font-medium text-[.9rem] overflow-hidden whitespace-nowrap"
+                      >
+                        {route.label}
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                )}
               </NavLink>
             </li>
           );

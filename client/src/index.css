@@ -17,6 +17,10 @@
   --transition-base: 150ms ease;
   --transition-slow: 250ms ease;
 
+  --color-tooltip-bg: #1a1a1a;
+  --color-tooltip-text: #ececec;
+  --color-tooltip-border: #2e2e2e;
+
   /* Brand */
   --color-accent: #2633cb;
   --color-accent-hover: #1e28a8;
@@ -89,6 +93,10 @@
 
   --color-accent-subtle: #0c0e25;
   --color-base-hover: #171717;
+
+  --color-tooltip-bg: #ffffff;
+  --color-tooltip-text: #000000; /* pure black, not #141412 */
+  --color-tooltip-border: #e1ded3;
 
   --color-success: #4ade80;
   --color-success-bg: #081508;

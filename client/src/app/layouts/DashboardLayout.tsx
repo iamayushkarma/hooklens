@@ -21,7 +21,7 @@ function DashboardLayout() {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-20 md:hidden"
+          className="fixed inset-0 backdrop-blur-[1px] z-20 md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}

@@ -4,10 +4,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 interface HeaderProps {
+  mobileOpen: boolean;
   onMobileMenuOpen: () => void;
 }
 
-export function Header({ onMobileMenuOpen }: HeaderProps) {
+export function Header({ mobileOpen, onMobileMenuOpen }: HeaderProps) {
   const { goToDashboard } = useAppNavigation();
   return (
     <header className="h-14 border-b border-border-default flex items-center justify-between px-4 gap-3">
@@ -32,7 +33,7 @@ export function Header({ onMobileMenuOpen }: HeaderProps) {
         onClick={onMobileMenuOpen}
         className="md:hidden text-text-secondary hover:text-text-primary transition-colors"
       >
-        <Menu className="size-5" />
+        {!mobileOpen && <Menu className="size-5" />}
       </button>
 
       {/* rest of your header content */}

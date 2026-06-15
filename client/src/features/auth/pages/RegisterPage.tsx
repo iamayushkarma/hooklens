@@ -1,4 +1,4 @@
-import { useState, type SubmitEvent } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { FcGoogle } from "react-icons/fc";
@@ -13,17 +13,28 @@ function RegisterPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const loading = useAuthStore((state) => state.loading);
   const navigate = useNavigate();
   const googleLogin = useAuthStore((state) => state.googleLogin);
   const register = useAuthStore((state) => state.register);
 
-  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
     try {
       await register(fullName, email, password);
       navigate("/login");
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     }
   };
 
@@ -103,8 +114,15 @@ function RegisterPage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     isPassword={true}
                   />
-                  <Button type="submit" className="select-none">
-                    Create account
+                  {error && (
+                    <p className="text-sm text-danger -mt-2">{error}</p>
+                  )}
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="select-none"
+                  >
+                    {loading ? "Creating account..." : "Create account"}
                   </Button>
                 </form>
               </div>

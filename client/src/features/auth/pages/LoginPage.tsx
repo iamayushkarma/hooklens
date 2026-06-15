@@ -55,7 +55,7 @@ function LoginPage() {
         </div>
         {/* left section */}
         <div className="w-[90%] mx-auto md:w-1/2 bg-bg-base relative">
-          <div className="flex items-center rounded-lg w-full h-145 md:h-full justify-center  max-sm:bg-[#1c1c1a] max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
+          <div className="flex items-center rounded-lg w-full h-145 md:h-full justify-center  max-sm:bg-bg-base max-sm:shadow-lg max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
             <div className="w-96 h-112">
               {/* Heading section */}
               <div className="text-center mx-auto">
@@ -141,7 +141,7 @@ function LoginPage() {
                 </Button>
               </div>
               {/* Register */}
-              <div className="mt-10 md:mt-6 text-center">
+              <div className="mt-4 md:mt-6 text-center">
                 <p className="text-sm text-text-secondary">
                   Don't have an account?{" "}
                   <button

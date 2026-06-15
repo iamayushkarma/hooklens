@@ -248,7 +248,7 @@ const SideNavigation = ({
           return (
             <li key={route.label}>
               {collapsed ? (
-                <Tooltip content={route.label}>
+                <Tooltip content={route.label} position="right">
                   <NavLink
                     to={route.path}
                     title={collapsed ? route.label : undefined}

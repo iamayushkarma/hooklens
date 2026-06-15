@@ -16,6 +16,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const googleLogin = useAuthStore((state) => state.googleLogin);
   const login = useAuthStore((state) => state.login);
+  const loading = useAuthStore((state) => state.loading);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -89,8 +90,12 @@ function LoginPage() {
                   {error && (
                     <p className="text-sm text-danger -mt-2">{error}</p>
                   )}
-                  <Button type="submit" className="select-none">
-                    Sign in
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="select-none"
+                  >
+                    {loading ? "Signing in..." : "Sign in"}
                   </Button>
                 </form>
               </div>

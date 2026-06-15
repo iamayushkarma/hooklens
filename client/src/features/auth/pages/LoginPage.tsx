@@ -1,4 +1,3 @@
-import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { FcGoogle } from "react-icons/fc";
@@ -7,24 +6,36 @@ import authPatternOne from "@/assets/icons/auth-pattern-01.png";
 import authPatterTwo from "@/assets/icons/auth-pattern-02.png";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  loginSchema,
+  type LoginFormData,
+} from "@/shared/validators/auth.validators";
 
 function LoginPage() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-
   const navigate = useNavigate();
   const googleLogin = useAuthStore((state) => state.googleLogin);
   const login = useAuthStore((state) => state.login);
   const loading = useAuthStore((state) => state.loading);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(email, password);
+      await login(data.email, data.password);
       navigate("/dashboard");
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Invalid email or password");
+      setError("root", {
+        message: err?.response?.data?.message || "Invalid email or password",
+      });
     }
   };
   return (
@@ -67,28 +78,30 @@ function LoginPage() {
               {/* Login form */}
               <div className="mx-auto mt-10">
                 <form
-                  onSubmit={handleSubmit}
+                  onSubmit={handleSubmit(onSubmit)}
                   className="flex gap-4 flex-col"
                   action=""
                 >
                   <Input
                     label="E-mail"
                     id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your Email"
+                    error={errors.email?.message}
+                    {...register("email")}
                   />
                   <Input
                     label="Password"
                     placeholder="••••••••"
                     id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     isPassword={true}
+                    error={errors.password?.message}
+                    {...register("password")}
                   />
 
-                  {error && (
-                    <p className="text-sm text-danger -mt-2">{error}</p>
+                  {errors.root && (
+                    <p className="text-sm text-danger -mt-2">
+                      {errors.root.message}
+                    </p>
                   )}
                   <Button
                     type="submit"

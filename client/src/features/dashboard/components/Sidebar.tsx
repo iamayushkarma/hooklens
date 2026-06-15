@@ -24,6 +24,7 @@ import {
 import logoDefault from "@/assets/icons/logo-default.png";
 import type { User } from "@/features/auth/types/auth.types";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
+import Tooltip from "@/shared/components/ui/Tooltip";
 
 function Sidebar() {
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
@@ -246,32 +247,63 @@ const SideNavigation = ({
 
           return (
             <li key={route.label}>
-              <NavLink
-                to={route.path}
-                title={collapsed ? route.label : undefined}
-                className={({ isActive }) =>
-                  `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${
-                    isActive ? "bg-base-hover " : "hover:bg-base-hover"
-                  }`
-                }
-              >
-                <Icon className="size-4" />
-                {!collapsed && (
-                  <AnimatePresence>
+              {collapsed ? (
+                <Tooltip content={route.label}>
+                  <NavLink
+                    to={route.path}
+                    title={collapsed ? route.label : undefined}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${
+                        isActive ? "bg-base-hover " : "hover:bg-base-hover"
+                      }`
+                    }
+                  >
+                    <Icon className="size-4" />
                     {!collapsed && (
-                      <motion.span
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: "auto" }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="font-medium text-[.9rem] overflow-hidden whitespace-nowrap"
-                      >
-                        {route.label}
-                      </motion.span>
+                      <AnimatePresence>
+                        {!collapsed && (
+                          <motion.span
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: "auto" }}
+                            exit={{ opacity: 0, width: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="font-medium text-[.9rem] overflow-hidden whitespace-nowrap"
+                          >
+                            {route.label}
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
                     )}
-                  </AnimatePresence>
-                )}
-              </NavLink>
+                  </NavLink>
+                </Tooltip>
+              ) : (
+                <NavLink
+                  to={route.path}
+                  title={collapsed ? route.label : undefined}
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${
+                      isActive ? "bg-base-hover " : "hover:bg-base-hover"
+                    }`
+                  }
+                >
+                  <Icon className="size-4" />
+                  {!collapsed && (
+                    <AnimatePresence>
+                      {!collapsed && (
+                        <motion.span
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: "auto" }}
+                          exit={{ opacity: 0, width: 0 }}
+                          transition={{ duration: 0.15 }}
+                          className="font-medium text-[.9rem] overflow-hidden whitespace-nowrap"
+                        >
+                          {route.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </NavLink>
+              )}
             </li>
           );
         })}

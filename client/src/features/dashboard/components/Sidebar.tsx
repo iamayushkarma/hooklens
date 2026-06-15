@@ -251,7 +251,6 @@ const SideNavigation = ({
                 <Tooltip content={route.label} position="right">
                   <NavLink
                     to={route.path}
-                    title={collapsed ? route.label : undefined}
                     className={({ isActive }) =>
                       `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${
                         isActive ? "bg-base-hover " : "hover:bg-base-hover"

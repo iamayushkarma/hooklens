@@ -103,12 +103,12 @@ function Sidebar() {
               {
                 label: "Workspace",
                 icon: Building2,
-                path: "/workspace",
+                path: "/dashboard/workspace",
               },
               {
                 label: "Project",
                 icon: FolderKanban,
-                path: "/project",
+                path: "/dashboard/project",
               },
             ]}
           />
@@ -120,22 +120,22 @@ function Sidebar() {
               {
                 label: "Endpoints",
                 icon: PlugZap,
-                path: "/endpoints",
+                path: "/dashboard/endpoints",
               },
               {
                 label: "Requests",
                 icon: Inbox,
-                path: "/requests",
+                path: "/dashboard/requests",
               },
               {
                 label: "Replays",
                 icon: RefreshCw,
-                path: "/replays",
+                path: "/dashboard/replays",
               },
               {
                 label: "Analytics",
                 icon: ChartColumn,
-                path: "/analytics",
+                path: "/dashboard/analytics",
               },
             ]}
           />
@@ -146,12 +146,12 @@ function Sidebar() {
               {
                 label: "Members",
                 icon: Users,
-                path: "/members",
+                path: "/dashboard/members",
               },
               {
                 label: "Invitations",
                 icon: MailPlus,
-                path: "/invitations",
+                path: "/dashboard/invitations",
               },
             ]}
           />

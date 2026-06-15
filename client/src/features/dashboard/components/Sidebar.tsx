@@ -69,13 +69,13 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
     <div
       className={`flex justify-between flex-col bg-bg-sidebar border-r border-border-default transition-all duration-200 ease-in-out
     fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0
-    h-svh overflow-y-auto
+    h-dvh
     ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
     ${collapsed ? "w-14" : "w-70"}
-    `}
+  `}
     >
       {/* Top section */}
-      <div>
+      <div className="flex-1 overflow-y-auto overflow-x-visible min-h-0">
         {/* Logo */}
         <div className="py-3 px-4.5 flex justify-between items-center h-14 gap-2 border-b border-border-default">
           <AnimatePresence>

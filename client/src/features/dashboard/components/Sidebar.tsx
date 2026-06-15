@@ -2,7 +2,7 @@ import logo from "@/assets/icons/logo-icon.png";
 import { EllipsisVertical } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -17,6 +17,7 @@ import {
   Settings,
   Menu,
   BellRing,
+  X,
   LogOut,
   CircleUserRound,
   type LucideIcon,
@@ -26,10 +27,20 @@ import type { User } from "@/features/auth/types/auth.types";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import Tooltip from "@/shared/components/ui/Tooltip";
 
-function Sidebar() {
+interface SidebarProps {
+  mobileOpen: boolean;
+  onMobileClose: () => void;
+}
+function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    onMobileClose();
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,9 +67,12 @@ function Sidebar() {
 
   return (
     <div
-      className={`flex justify-between flex-col  bg-bg-sidebar border-r border-border-default  transition-all duration-200 ease-in-out
-        ${collapsed ? "w-14" : "w-70"}
-        `}
+      className={`flex justify-between flex-col bg-bg-sidebar border-r border-border-default transition-all duration-200 ease-in-out
+    fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0
+    h-svh overflow-y-auto
+    ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+    ${collapsed ? "w-14" : "w-70"}
+    `}
     >
       {/* Top section */}
       <div>
@@ -80,10 +94,18 @@ function Sidebar() {
             )}
           </AnimatePresence>
           {/* When collapsed, center the menu icon */}
-          <div className={`${collapsed ? "w-full flex justify-center" : ""}`}>
+          <div
+            className={`flex items-center gap-2 ${collapsed ? "w-full justify-center" : ""}`}
+          >
+            {/* Desktop collapse toggle */}
             <Menu
               onClick={() => setCollapsed((prev) => !prev)}
-              className="size-5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors"
+              className="size-5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors hidden md:block"
+            />
+            {/* Mobile close button */}
+            <X
+              onClick={onMobileClose}
+              className="size-5 cursor-pointer text-text-secondary hover:text-text-primary transition-colors md:hidden"
             />
           </div>
         </div>
@@ -328,7 +350,7 @@ const UserMenu = ({ user, routes }: useMenueProps) => {
     goToLogin();
   };
   return (
-    <div className="absolute w-58 bottom-7 -right-56 z-50 bg-bg-sidebar border border-border-default shadow-lg rounded-md">
+    <div className="absolute w-58 bottom-18 md:bottom-7  right-1 md:-right-56 z-50 bg-bg-sidebar border border-border-default shadow-lg rounded-md">
       <div className="py-1">
         {/* User detail */}
         <div className="flex items-center gap-1 px-3 py-1.5 min-w-0 flex-1 border-b-2 border-border-default">

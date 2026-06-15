@@ -18,7 +18,7 @@ const app = express();
 
 // Security Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(cors({ origin: process.env.CLIENT_URL?.split(",") }));
 app.use(express.json({ limit: "200kb" })); // cap incoming body size
 app.use(express.urlencoded({ extended: true, limit: "200kb" }));
 

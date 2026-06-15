@@ -1,4 +1,4 @@
-import { useState, type SubmitEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { FcGoogle } from "react-icons/fc";
@@ -11,18 +11,19 @@ import { Input } from "@/shared/components/ui/Input";
 function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
   const googleLogin = useAuthStore((state) => state.googleLogin);
   const login = useAuthStore((state) => state.login);
 
-  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await login(email, password);
       navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Invalid email or password");
     }
   };
   return (
@@ -84,6 +85,10 @@ function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     isPassword={true}
                   />
+
+                  {error && (
+                    <p className="text-sm text-danger -mt-2">{error}</p>
+                  )}
                   <Button type="submit" className="select-none">
                     Sign in
                   </Button>
@@ -127,7 +132,7 @@ function LoginPage() {
                   <span className="sm:hidden">Github</span>
 
                   {/* Tablet and Desktop */}
-                  <span className="hidden sm:inline">Sign in with Google</span>
+                  <span className="hidden sm:inline">Sign in with GitHub</span>
                 </Button>
               </div>
               {/* Register */}

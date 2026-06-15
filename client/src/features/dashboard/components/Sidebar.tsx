@@ -1,4 +1,3 @@
-import logo from "@/assets/icons/logo-icon.png";
 import { EllipsisVertical } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 import { useState, useEffect, useRef } from "react";
@@ -18,6 +17,7 @@ import {
   Menu,
   BellRing,
   X,
+  ChevronsUpDown,
   LogOut,
   CircleUserRound,
   type LucideIcon,
@@ -78,7 +78,7 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       <div className="flex-1 overflow-y-auto overflow-x-visible min-h-0">
         {/* Logo */}
         <div className="py-3 px-4.5 flex justify-between items-center h-14 gap-2 border-b border-border-default">
-          <AnimatePresence>
+          {/* <AnimatePresence>
             {!collapsed && (
               <motion.div
                 initial={{ opacity: 0, width: 0 }}
@@ -90,6 +90,23 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               >
                 <img src={logo} className="w-5 flex-shrink-0" />
                 <h1 className="font-semibold whitespace-nowrap">HookLens</h1>
+              </motion.div>
+            )}
+          </AnimatePresence> */}
+          <AnimatePresence>
+            {!collapsed && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex items-center gap-1.5 cursor-pointer overflow-hidden min-w-0 flex-1"
+              >
+                <span className="font-semibold text-sm whitespace-nowrap truncate">
+                  {user?.fullName
+                    ? `${user.fullName}'s Workspace`
+                    : "My Workspace"}
+                </span>
               </motion.div>
             )}
           </AnimatePresence>

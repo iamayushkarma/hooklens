@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { FcGoogle } from "react-icons/fc";
@@ -7,34 +6,38 @@ import authPatternOne from "@/assets/icons/auth-pattern-01.png";
 import authPatterTwo from "@/assets/icons/auth-pattern-02.png";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  registerSchema,
+  type RegisterFormData,
+} from "@/shared/validators/auth.validators";
 
 function RegisterPage() {
-  const [fullName, setFullName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
-
   const loading = useAuthStore((state) => state.loading);
   const navigate = useNavigate();
   const googleLogin = useAuthStore((state) => state.googleLogin);
   const register = useAuthStore((state) => state.register);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+  const {
+    register: registerField,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      await register(fullName, email, password);
+      await register(data.fullName, data.email, data.password);
       navigate("/login");
     } catch (err: any) {
-      setError(
-        err?.response?.data?.message ||
+      setError("root", {
+        message:
+          err?.response?.data?.message ||
           "Something went wrong. Please try again.",
-      );
+      });
     }
   };
 
@@ -80,42 +83,45 @@ function RegisterPage() {
               {/* Register form */}
               <div className="mx-auto mt-10">
                 <form
-                  onSubmit={handleSubmit}
+                  onSubmit={handleSubmit(onSubmit)}
                   className="flex gap-4 flex-col"
                   action=""
                 >
                   <Input
                     label="Full name"
                     id="name"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
                     placeholder="Enter your full name"
+                    error={errors.fullName?.message}
+                    {...registerField("fullName")}
                   />
                   <Input
                     label="E-mail"
                     id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your Email"
+                    error={errors.email?.message}
+                    {...registerField("email")}
                   />
                   <Input
                     label="Password"
                     placeholder="••••••••"
                     id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     isPassword={true}
+                    error={errors.password?.message}
+                    {...registerField("password")}
                   />
                   <Input
                     label="Confirm password"
                     placeholder="••••••••"
                     id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
                     isPassword={true}
+                    error={errors.confirmPassword?.message}
+                    {...registerField("confirmPassword")}
                   />
-                  {error && (
-                    <p className="text-sm text-danger -mt-2">{error}</p>
+
+                  {errors.root && (
+                    <p className="text-sm text-danger -mt-2">
+                      {errors.root.message}
+                    </p>
                   )}
                   <Button
                     type="submit"

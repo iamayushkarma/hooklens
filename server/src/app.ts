@@ -13,6 +13,7 @@ import {
   authRateLimit,
 } from "./middleware/rateLimit.middleware";
 import requestRoutes from "./routes/request.routes";
+import { errorHandler } from "./middleware/error.middleware";
 
 const app = express();
 
@@ -37,4 +38,6 @@ app.use("/api/v1/endpoints", endpointRoutes);
 app.use("/api/v1/analytics", analyticsRoutes);
 app.use("/api/v1/requests", requestRoutes);
 
+// Globle Error handler
+app.use(errorHandler);
 export default app;

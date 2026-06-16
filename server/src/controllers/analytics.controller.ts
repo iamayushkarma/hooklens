@@ -54,7 +54,8 @@ const getWorkspaceAnalytics = asyncHandler(
     if (!member) throw new ApiError(403, "Access denied");
 
     const today = startOfToday();
-    const twoWeeksAgo = daysAgo(14);
+    // const twoWeeksAgo = daysAgo(14);
+    const twoMonthsAgo = daysAgo(60);
 
     console.log("server - workspaceId:", workspaceId);
     console.log("server - workspaceId type:", typeof workspaceId);
@@ -138,7 +139,7 @@ const getWorkspaceAnalytics = asyncHandler(
         {
           $match: {
             workspaceId: workspaceObjectId,
-            createdAt: { $gte: twoWeeksAgo },
+            createdAt: { $gte: twoMonthsAgo },
           },
         },
         {
@@ -166,7 +167,7 @@ const getWorkspaceAnalytics = asyncHandler(
         {
           $match: {
             workspaceId: workspaceObjectId,
-            createdAt: { $gte: twoWeeksAgo },
+            createdAt: { $gte: twoMonthsAgo },
           },
         },
         {

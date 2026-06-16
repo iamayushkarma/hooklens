@@ -41,7 +41,7 @@ const requestLogSchema = new Schema<IRequestLog>({
 });
 
 // auto delete after 7 days. This IS the index on createdAt.
-requestLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: 604800 });
+requestLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7776000 });
 
 // Fast endpoint history page
 requestLogSchema.index({ endpointId: 1, createdAt: -1 });

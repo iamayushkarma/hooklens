@@ -65,8 +65,9 @@ function Dashboard() {
 
       <ThemeSwitcher />
 
-      {/* <pre>{JSON.stringify(analytics, null, 2)}</pre> */}
-      <AnalyticsChart data={analytics?.dailyTimeline ?? []} />
+      <div className="mt-5">
+        <AnalyticsChart data={analytics?.dailyTimeline ?? []} />
+      </div>
     </>
   );
 }

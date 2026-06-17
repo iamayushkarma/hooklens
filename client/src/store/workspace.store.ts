@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface WorkspaceStore {
   currentWorkspaceId: string | null;
@@ -10,23 +11,30 @@ interface WorkspaceStore {
   clearSelection: () => void;
 }
 
-export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
-  currentWorkspaceId: null,
-  currentProjectId: null,
-
-  setCurrentWorkspaceId: (id) =>
-    set({
-      currentWorkspaceId: id,
-    }),
-
-  setCurrentProjectId: (id) =>
-    set({
-      currentProjectId: id,
-    }),
-
-  clearSelection: () =>
-    set({
+export const useWorkspaceStore = create<WorkspaceStore>()(
+  persist(
+    (set) => ({
       currentWorkspaceId: null,
       currentProjectId: null,
+
+      setCurrentWorkspaceId: (id) =>
+        set({
+          currentWorkspaceId: id,
+        }),
+
+      setCurrentProjectId: (id) =>
+        set({
+          currentProjectId: id,
+        }),
+
+      clearSelection: () =>
+        set({
+          currentWorkspaceId: null,
+          currentProjectId: null,
+        }),
     }),
-}));
+    {
+      name: "workspace-storage",
+    },
+  ),
+);

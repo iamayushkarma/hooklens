@@ -5,6 +5,8 @@ import { getCurrentUserApi } from "@/features/auth/api/get-current-user";
 import type { User } from "@/features/auth/types/auth.types";
 import { googleLoginApi } from "@/features/auth/api/google-login";
 import { googleAuthApi } from "@/features/auth/api/google-auth";
+import { getWorkspaces } from "@/features/workspace/api/getWorkspaces";
+import { useWorkspaceStore } from "./workspace.store";
 interface AuthStore {
   user: User | null;
   token: string | null;
@@ -50,6 +52,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
       const response = await loginApi(email, password);
 
       localStorage.setItem("token", response.data.token);
+
+      const workspaces = await getWorkspaces();
+      if (workspaces.length) {
+        useWorkspaceStore.getState().setCurrentWorkspaceId(workspaces[0]._id);
+      }
 
       set({
         user: response.data.user,

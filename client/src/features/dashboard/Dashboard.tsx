@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import ThemeSwitcher from "@/shared/components/ui/ThemeToggler";
 import { AnalyticsChart } from "./components/AnalyticsChart";
-import { getWorkspaces } from "@/features/analytics/api/getWorkspaces";
+import { getWorkspaces } from "@/features/workspace/api/getWorkspaces";
 import { getWorkspaceAnalytics } from "../analytics/api/getWorkspaceAnalytics";
 import { ChevronDown } from "lucide-react";
 

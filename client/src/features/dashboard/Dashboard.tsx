@@ -6,6 +6,7 @@ import { getWorkspaces } from "@/features/workspace/api/getWorkspaces";
 import { getWorkspaceAnalytics } from "../analytics/api/getWorkspaceAnalytics";
 import { ChevronDown } from "lucide-react";
 import DashboardHeader from "@/features/dashboard/components/DashboardHeader";
+import TopEndpointsPieChart from "./components/TopEndpointsPieChart";
 
 function Dashboard() {
   const [analytics, setAnalytics] = useState<any>(null);
@@ -60,6 +61,7 @@ function Dashboard() {
       {/* <DashboardHeader /> */}
       <ThemeSwitcher />
       {/* Analytics Chart */}
+      {/* <TopEndpointsPieChart data={analytics?.topEndpoints ?? []} /> */}
       <div className="mt-5 border bg-bg-card border-border-default rounded-lg py-2 px-4">
         <div className="py-6 px-2 flex items-center justify-between">
           {/* heading and sub heading */}

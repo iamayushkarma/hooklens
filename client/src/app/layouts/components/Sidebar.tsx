@@ -407,7 +407,7 @@ const UserMenu = ({ user, routes }: useMenueProps) => {
         <div className="p-1">
           <div
             onClick={handleLogout}
-            className="flex cursor-pointer py-1.5 px-3 items-center gap-2 rounded-md hover:bg-base-hover transition-colors"
+            className="flex cursor-pointer py-1.5 px-3 items-center gap-2 rounded-md hover:bg-danger-hover hover:text-white transition-colors"
           >
             <LogOut className="size-4" />
             <span className="font-medium text-[.9rem]">Logout</span>

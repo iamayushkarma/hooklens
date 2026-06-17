@@ -38,6 +38,7 @@
   --color-border-strong: #d7d2c5;
 
   --color-base-hover: #eae8e0;
+  --color-danger-hover: #fc0130;
 
   --color-text-primary: #141412;
   --color-text-secondary: #888780;
@@ -93,6 +94,7 @@
 
   --color-accent-subtle: #0c0e25;
   --color-base-hover: #171717;
+  --color-danger-hover: #b62324;
 
   --color-tooltip-bg: #ffffff;
   --color-tooltip-text: #000000; /* pure black, not #141412 */

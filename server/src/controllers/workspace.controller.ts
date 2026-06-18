@@ -202,6 +202,121 @@ const inviteMember = async (req: Request, res: Response) => {
   );
 };
 
+//  GET /api/workspaces/invite/accept/:token
+const acceptInvite = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const userId = req.user!.userId;
+  const user = await User.findById(userId);
+
+  const invitation = await Invitation.findOne({ token });
+
+  if (!invitation) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Invalid invite token" });
+  }
+  if (invitation.status !== "pending") {
+    return res.status(410).json({
+      success: false,
+      message: `Invite already ${invitation.status}`,
+    });
+  }
+  if (invitation.expiresAt < new Date()) {
+    await Invitation.findByIdAndUpdate(invitation._id, { status: "expired" });
+    return res
+      .status(410)
+      .json({ success: false, message: "Invite has expired" });
+  }
+
+  // Add to workspace
+  await WorkspaceMember.create({
+    workspaceId: invitation.workspaceId,
+    userId,
+    role: invitation.role,
+    joinedAt: new Date(),
+  });
+
+  await Invitation.findByIdAndUpdate(invitation._id, { status: "accepted" });
+
+  return ok(
+    res,
+    { workspaceId: invitation.workspaceId },
+    "Joined workspace successfully",
+  );
+};
+
+// PATCH /api/workspaces/:id/members/:userId/role
+const changeMemberRole = async (req: Request, res: Response) => {
+  const { id, userId: targetUserId } = req.params;
+  const { role } = req.body;
+  const requesterId = req.user!.userId;
+
+  // Can't change your own role
+  if (requesterId === targetUserId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "You cannot change your own role" });
+  }
+
+  // Can't set someone as owner (use transfer ownership for that)
+  if (role === "owner") {
+    return res.status(400).json({
+      success: false,
+      message: "Use transfer ownership to assign owner role",
+    });
+  }
+
+  const targetMember = await WorkspaceMember.findOne({
+    workspaceId: id,
+    userId: targetUserId,
+  });
+  if (!targetMember) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Member not found" });
+  }
+
+  // Can't demote another owner
+  if (targetMember.role === "owner") {
+    return res
+      .status(403)
+      .json({ success: false, message: "Cannot change owner's role" });
+  }
+
+  targetMember.role = role;
+  await targetMember.save();
+
+  return ok(res, { userId: targetUserId, newRole: role }, "Role updated");
+};
+
+// DELETE /api/workspaces/:id/members/:userId
+const removeMember = async (req: Request, res: Response) => {
+  const { id, userId: targetUserId } = req.params;
+  const requesterId = req.user!.userId;
+
+  const targetMember = await WorkspaceMember.findOne({
+    workspaceId: id,
+    userId: targetUserId,
+  });
+  if (!targetMember) {
+    return res
+      .status(404)
+      .json({ success: false, message: "Member not found" });
+  }
+
+  // Can't remove owner
+  if (targetMember.role === "owner") {
+    return res.status(403).json({
+      success: false,
+      message: "Cannot remove workspace owner. Transfer ownership first.",
+    });
+  }
+
+  await targetMember.deleteOne();
+
+  return ok(res, null, "Member removed");
+};
+
 export {
   getWorkspaces,
   createWorkspace,
@@ -209,4 +324,7 @@ export {
   deleteWorkspace,
   getMembers,
   inviteMember,
+  acceptInvite,
+  changeMemberRole,
+  removeMember,
 };

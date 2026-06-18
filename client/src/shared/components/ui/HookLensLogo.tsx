@@ -5,7 +5,7 @@ import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 function HookLensLogo() {
   const { goToDashboard } = useAppNavigation();
   return (
-    <div className="py-3 md:px-4.5 flex justify-between items-center h-14 gap-2 border-b border-border-default">
+    <div className="py-3 md:px-4.5 flex justify-between items-center h-14 gap-2">
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, width: 0 }}

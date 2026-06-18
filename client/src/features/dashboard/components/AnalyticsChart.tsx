@@ -20,7 +20,6 @@ const chartConfig = {
 };
 
 export function AnalyticsChart({ data }: Props) {
-  console.log(data);
   return (
     <ChartContainer config={chartConfig} className="h-75 w-full ">
       <AreaChart data={data}>

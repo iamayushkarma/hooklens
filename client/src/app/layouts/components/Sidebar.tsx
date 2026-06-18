@@ -44,9 +44,7 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      console.log("clicked");
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        console.log("outside");
         setShowUserMenu(false);
       }
     };

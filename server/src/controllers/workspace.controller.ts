@@ -122,33 +122,27 @@ const deleteWorkspace = asyncHandler(async (req: Request, res: Response) => {
   return ok(res, null, "Workspace deleted");
 });
 
-// GET members of a workspa
+// GET members of a workspace
 const getMembers = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
   const { id } = req.params;
 
-  // Check if current user belongs to this workspace
-  const currentMember = await WorkspaceMember.findOne({
-    workspaceId: id,
-    userId,
-  });
+  const [members, pendingInvites] = await Promise.all([
+    WorkspaceMember.find({ workspaceId: id })
+      .populate("userId", "name email createdAt")
+      .lean(),
+    Invitation.find({ workspaceId: id, status: "pending" })
+      .populate("invitedByUserId", "name email")
+      .lean(),
+  ]);
 
-  if (!currentMember) {
-    throw new ApiError(403, "Access denied");
-  }
-
-  const members = await WorkspaceMember.find({ workspaceId: id }).populate(
-    "userId",
-    "-passwordHash",
-  );
-  // Clean response structure
-  const formattedMembers = members.map((member: any) => ({
-    ...member.userId.toObject(),
-    role: member.role,
-    workspaceId: member.workspaceId,
+  const formatted = members.map((m) => ({
+    memberId: m._id,
+    role: m.role,
+    joinedAt: m.joinedAt,
+    user: m.userId, // populated: { _id, name, email }
   }));
 
-  return res.json(new ApiResponse(200, formattedMembers, "Members fetched"));
+  return ok(res, { members: formatted, pendingInvites });
 });
 
 export {

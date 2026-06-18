@@ -10,6 +10,7 @@ import { validate } from "../middleware/validate.middleware";
 import { requireProjectRole } from "../middleware/project-rbac.middleware";
 import {
   createProjectSchema,
+  getProjectsSchema,
   updateProjectSchema,
 } from "../validators/project.validator";
 import { requireWorkspaceBodyRole } from "../middleware/workspace-body-rbac.middleware";
@@ -17,7 +18,7 @@ import { requireWorkspaceBodyRole } from "../middleware/workspace-body-rbac.midd
 const router = Router();
 router.use(authenticateUser);
 
-router.get("/", getProjects);
+router.get("/", validate(getProjectsSchema), getProjects);
 router.post(
   "/",
   requireWorkspaceBodyRole("admin"),

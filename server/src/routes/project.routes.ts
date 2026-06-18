@@ -7,7 +7,7 @@ import {
 } from "../controllers/project.controller";
 import { authenticateUser } from "../middleware/auth.middleware";
 import { validate } from "../middleware/validate.middleware";
-
+import { requireProjectRole } from "../middleware/project-rbac.middleware";
 import {
   createProjectSchema,
   updateProjectSchema,
@@ -18,7 +18,12 @@ router.use(authenticateUser);
 
 router.get("/", getProjects);
 router.post("/", validate(createProjectSchema), createProject);
-router.patch("/:id", validate(updateProjectSchema), updateProject);
-router.delete("/:id", deleteProject);
+router.patch(
+  "/:id",
+  requireProjectRole("member"),
+  validate(updateProjectSchema),
+  updateProject,
+);
+router.delete("/:id", requireProjectRole("admin"), deleteProject);
 
 export default router;

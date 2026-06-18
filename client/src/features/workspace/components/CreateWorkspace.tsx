@@ -45,11 +45,11 @@ function CreateWorkspace({
     try {
       setLoading(true);
 
-      closeModal();
       await createWorkspace(userInput);
       onChange("");
-    } catch (error) {
-      console.error(error);
+      closeModal();
+    } catch (error: any) {
+      setError(error?.response?.data?.message ?? "Failed to create workspace");
     } finally {
       setLoading(false);
     }
@@ -67,6 +67,11 @@ function CreateWorkspace({
         <label className="text-sm font-medium">Workspace Name</label>
         <Input
           value={userInput}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleCreateWorkspace();
+            }
+          }}
           onChange={(e) => {
             onChange(e.target.value);
             if (error) {

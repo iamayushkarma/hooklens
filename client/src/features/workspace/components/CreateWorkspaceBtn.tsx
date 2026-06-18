@@ -8,6 +8,7 @@ function CreateWorkspaceBtn() {
   const [workspaceName, setWorkspaceName] = useState("");
 
   const closeModal = () => {
+    setWorkspaceName("");
     setIsModalOpen(false);
   };
   return (

@@ -12,12 +12,18 @@ import {
   createProjectSchema,
   updateProjectSchema,
 } from "../validators/project.validator";
+import { requireWorkspaceBodyRole } from "../middleware/workspace-body-rbac.middleware";
 
 const router = Router();
 router.use(authenticateUser);
 
 router.get("/", getProjects);
-router.post("/", validate(createProjectSchema), createProject);
+router.post(
+  "/",
+  requireWorkspaceBodyRole("admin"),
+  validate(createProjectSchema),
+  createProject,
+);
 router.patch(
   "/:id",
   requireProjectRole("member"),

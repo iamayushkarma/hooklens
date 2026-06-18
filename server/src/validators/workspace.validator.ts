@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const createWorkspaceScheme = z.object({
+const createWorkspaceSchema = z.object({
   body: z.object({
     name: z.string().min(3, "Name too short").max(50, "Name too long"),
   }),
@@ -23,7 +23,7 @@ const changeMemberRoleSchema = z.object({
 });
 
 export {
-  createWorkspaceScheme,
+  createWorkspaceSchema,
   updateWorkspaceSchema,
   inviteMemberSchema,
   changeMemberRoleSchema,

@@ -12,7 +12,7 @@ const roleRank: Record<WorkspaceRole, number> = {
   viewer: 1,
 };
 
-export const requiredWorkspaceRole = (minimumRole: WorkspaceRole) => {
+export const requireWorkspaceRole = (minimumRole: WorkspaceRole) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const workspaceId = req.params.id;

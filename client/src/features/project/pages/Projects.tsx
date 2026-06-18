@@ -13,7 +13,7 @@ function Projects() {
 
     const fetchProject = async () => {
       const res = await getProjects(workspaceId);
-      setProjects(res);
+      setProjects(res.projects);
       console.log(res);
     };
     fetchProject();

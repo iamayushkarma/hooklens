@@ -16,19 +16,49 @@ const requireMember = async (workspaceId: string, userId: string) => {
 
 // GET all projects inside a workspace
 const getProjects = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
-
-  const { workspaceId } = req.query as { workspaceId: string };
-
-  await requireMember(workspaceId, userId);
-
-  const projects = await Project.find({
+  const {
     workspaceId,
-  }).sort({
-    updatedAt: -1,
-  });
+    page = 1,
+    limit = 10,
+  } = req.query as {
+    workspaceId: string;
+    page?: string;
+    limit?: string;
+  };
 
-  return res.json(new ApiResponse(200, projects, "OK"));
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const [projects, total] = await Promise.all([
+    Project.find({
+      workspaceId,
+    })
+      .sort({
+        updatedAt: -1,
+      })
+      .skip(skip)
+      .limit(Number(limit))
+      .lean(),
+
+    Project.countDocuments({
+      workspaceId,
+    }),
+  ]);
+
+  return res.json(
+    new ApiResponse(
+      200,
+      {
+        projects,
+        pagination: {
+          page: Number(page),
+          limit: Number(limit),
+          total,
+          totalPages: Math.ceil(total / Number(limit)),
+        },
+      },
+      "Projects fetched successfully",
+    ),
+  );
 });
 
 const createProject = asyncHandler(async (req: Request, res: Response) => {

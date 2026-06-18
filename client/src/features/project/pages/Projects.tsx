@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getProjects } from "../api/getProject";
 import { useWorkspaceStore } from "@/store/workspace.store";
 import { ProjectCard } from "../components/ProjectCard";
-import CreateProjectCard from "../components/CreateProjectCard";
+import CreateProjectCard from "../components/CreateProjectBtn";
 import type { Project } from "../types/project.types";
 
 function Projects() {

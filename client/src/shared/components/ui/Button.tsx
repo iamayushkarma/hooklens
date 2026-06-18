@@ -13,8 +13,9 @@ export function Button({
     <button
       disabled={disabled || loading}
       className={`
-        h-11 w-full rounded-md
+        h-9 rounded-md
         bg-accent
+        px-4
         text-white
         hover:bg-accent-hover
         cursor-pointer

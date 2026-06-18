@@ -3,7 +3,8 @@ import { getWorkspaces } from "../api/getWorkspaces";
 import { useEffect, useState } from "react";
 import WorkspaceCard from "../components/WorkspaceCard";
 import type { WorkspaceProp } from "../types/workspace.type";
-import CreateWorkspace from "../components/CreateWorkspace";
+import CreateWorkspace from "../components/CreateWorkspaceBtn";
+import CreateWorkspaceBtn from "../components/CreateWorkspaceBtn";
 
 function Workspace() {
   const [workspace, setWorkspace] = useState<WorkspaceProp[]>([]);
@@ -30,7 +31,7 @@ function Workspace() {
           updatedAt={workspace.updatedAt}
         />
       ))}
-      <CreateWorkspace />
+      <CreateWorkspaceBtn />
       {/* <pre>{JSON.stringify(workspace, null, 2)}</pre> */}
     </div>
   );

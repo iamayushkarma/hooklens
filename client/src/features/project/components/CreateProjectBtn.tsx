@@ -16,7 +16,7 @@ function CreateProjectBtn() {
         onClick={() => setIsModalOpen(true)}
         className="cursor-pointer rounded-xl border border-dashed border-border-default bg-bg-sidebar h-56 flex flex-col items-center justify-center gap-3 transition-colors hover:bg-base-hover"
       >
-        <Plus className="size-6" />
+        <Plus className="size-5" />
 
         <div className="text-center">
           <p className="font-medium text-text-primary">Create Project</p>

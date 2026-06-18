@@ -7,6 +7,7 @@ import { Workspace } from "../models/workspace.model";
 import { ok } from "../utils/response";
 import { created } from "../utils/response";
 import { Project } from "../models/project.model";
+import { Invitation } from "../models/Invitation.model";
 
 // GET all workspaces where the logged-in user is a member, include workspace details, attach the user’s role in each workspace, and send it back.
 const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
@@ -104,15 +105,21 @@ const deleteWorkspace = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
   const workspace = await Workspace.findById(id);
-  if (!workspace) throw new ApiError(404, "Not found");
+  if (!workspace) throw new ApiError(404, "Workspace not found");
 
   if (workspace.ownerId.toString() !== userId)
     throw new ApiError(403, "Only owner can delete");
 
-  await Workspace.findByIdAndDelete(id);
-  await WorkspaceMember.deleteMany({ workspaceId: id });
+  // Cascade delete order matters
+  await Promise.all([
+    WorkspaceMember.deleteMany({ workspaceId: id }),
+    Invitation.deleteMany({ workspaceId: id }),
+    Project.deleteMany({ workspaceId: id }),
+    // Add Endpoint.deleteMany, RequestLog.deleteMany here when those models exist
+  ]);
+  await workspace.deleteOne();
 
-  res.json(new ApiResponse(200, null, "Workspace deleted"));
+  return ok(res, null, "Workspace deleted");
 });
 
 // GET members of a workspa

@@ -15,7 +15,7 @@ function CreateWorkspaceBtn() {
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className="border bg-bg-sidebar cursor-pointer border-border-default rounded-lg w-62 flex items-center justify-center hover:bg-base-hover h-36"
+        className="border bg-bg-sidebar cursor-pointer border-border-default rounded-lg w-62 flex items-center justify-center hover:bg-base-hover h-56"
       >
         <Plus className="size-5" />
       </div>

@@ -7,6 +7,7 @@ import Dashboard from "@/features/dashboard/Dashboard";
 import MainLayout from "@/app/layouts/MainLayout";
 import HomePage from "@/features/public/pages/HomePage";
 import Workspace from "@/features/workspace/pages/Workspace";
+import Projects from "@/features/project/pages/Projects";
 
 export const appRoutes = (
   <Routes>
@@ -18,6 +19,7 @@ export const appRoutes = (
     <Route path="/dashboard" element={<DashboardLayout />}>
       <Route index element={<Dashboard />} />
       <Route path="workspace" element={<Workspace />} />
+      <Route path="project" element={<Projects />} />
     </Route>
     <Route path="/" element={<MainLayout />}>
       <Route index element={<HomePage />} />

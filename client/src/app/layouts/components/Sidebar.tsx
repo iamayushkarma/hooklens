@@ -76,21 +76,6 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       <div className="flex-1 overflow-y-auto overflow-x-visible min-h-0">
         {/* Logo */}
         <div className="py-3 px-4.5 flex justify-between items-center h-14 gap-2 border-b border-border-default">
-          {/* <AnimatePresence>
-            {!collapsed && (
-              <motion.div
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: "auto" }}
-                exit={{ opacity: 0, width: 0 }}
-                transition={{ duration: 0.15 }}
-                onClick={() => goToDashboard()}
-                className="flex items-center gap-1 cursor-pointer overflow-hidden"
-              >
-                <img src={logo} className="w-5 flex-shrink-0" />
-                <h1 className="font-semibold whitespace-nowrap">HookLens</h1>
-              </motion.div>
-            )}
-          </AnimatePresence> */}
           <AnimatePresence>
             {!collapsed && (
               <motion.div
@@ -98,7 +83,8 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                 animate={{ opacity: 1, width: "auto" }}
                 exit={{ opacity: 0, width: 0 }}
                 transition={{ duration: 0.15 }}
-                className="flex items-center gap-1.5 cursor-pointer overflow-hidden min-w-0 flex-1"
+                onClick={goToDashboard}
+                className="flex items-center cursor-pointer gap-1.5 cursor-pointer overflow-hidden min-w-0 flex-1"
               >
                 <span className="font-semibold text-sm whitespace-nowrap truncate">
                   {user?.fullName
@@ -288,6 +274,7 @@ const SideNavigation = ({
                 <Tooltip content={route.label} position="right">
                   <NavLink
                     to={route.path}
+                    end={route.path === "/dashboard"}
                     className={({ isActive }) =>
                       `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${
                         isActive ? "bg-base-hover " : "hover:bg-base-hover"
@@ -315,6 +302,7 @@ const SideNavigation = ({
               ) : (
                 <NavLink
                   to={route.path}
+                  end={route.path === "/dashboard"}
                   title={collapsed ? route.label : undefined}
                   className={({ isActive }) =>
                     `flex items-center gap-2 px-3 ${collapsed ? "py-1.5" : "py-1"} rounded-md transition-colors ${

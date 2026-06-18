@@ -17,9 +17,13 @@ const workspaceMemberSchema = new mongoose.Schema(
       enum: ["owner", "admin", "member", "viewer"],
       default: "member",
     },
+    joinedAt: { type: Date, default: Date.now },
   },
   { timestamps: true },
 );
+
+// Prevent duplicate membership
+workspaceMemberSchema.index({ workspaceId: 1, userId: 1 }, { unique: true });
 
 export const WorkspaceMember = mongoose.model(
   "WorkspaceMember",

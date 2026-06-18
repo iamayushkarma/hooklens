@@ -85,18 +85,15 @@ const updateWorkspace = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name } = req.body;
 
-  // Is user member of this workspace
-  const member = await WorkspaceMember.findOne({ workspaceId: id, userId });
-
-  if (!member || !["owner", "admin"].includes(member.role)) {
-    throw new ApiError(403, "Not authorized");
-  }
-
   const workspace = await Workspace.findByIdAndUpdate(
     id,
     { name },
-    { new: true },
-  );
+    { new: true, runValidators: true },
+  ).lean();
+
+  if (!workspace) {
+    return res.status(404).json(new ApiError(404, "Workspace not found"));
+  }
 
   return res.json(new ApiResponse(200, workspace, "Updated"));
 });

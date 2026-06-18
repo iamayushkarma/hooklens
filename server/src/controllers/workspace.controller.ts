@@ -59,13 +59,24 @@ const createWorkspace = asyncHandler(async (req: Request, res: Response) => {
 
   const workspace = await Workspace.create({ name, ownerId: userId });
 
+  // Auto add creator as owner
   await WorkspaceMember.create({
     workspaceId: workspace._id,
     userId,
     role: "owner",
+    joinedAt: new Date(),
   });
 
-  res.status(201).json(new ApiResponse(201, workspace, "Workspace created"));
+  return created(
+    res,
+    {
+      ...workspace.toObject(),
+      yourRole: "owner",
+      memberCount: 1,
+      projectCount: 0,
+    },
+    "Workspace created",
+  );
 });
 
 // PATCH updates a workspace name, but ONLY if the logged-in user is an 'owner' or 'admin'.

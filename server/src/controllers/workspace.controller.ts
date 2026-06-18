@@ -4,21 +4,50 @@ import { WorkspaceMember } from "../models/workspaceMember.model";
 import { ApiResponse } from "../utils/api-response";
 import { ApiError } from "../utils/api-error";
 import { Workspace } from "../models/workspace.model";
+import { ok } from "../utils/response";
+import { created } from "../utils/response";
+import { Project } from "../models/project.model";
 
 // GET all workspaces where the logged-in user is a member, include workspace details, attach the user’s role in each workspace, and send it back.
 const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
   const userId = (req as any).user.userId;
 
-  const memberships = await WorkspaceMember.find({ userId }).populate(
-    "workspaceId",
-  ); // `populate` - Fetch all workspace memberships for the user and include full workspace details instead of only workspaceId
+  // Find all memberships for this user
+  const memberships = await WorkspaceMember.find({ userId }).lean();
+  const workspaceIds = memberships.map((m) => m.workspaceId);
 
-  const workspaces = memberships.map((m: any) => ({
-    ...m.workspaceId.toObject(), //Mongoose documents are special objects, toObject() converts them into normal JS objects.
-    role: m.role,
+  // Fetch all workspaces and member counts in parallel
+  const [workspaces, memberCounts, projectCounts] = await Promise.all([
+    Workspace.find({ _id: { $in: workspaceIds } }).lean(),
+    WorkspaceMember.aggregate([
+      { $match: { workspaceId: { $in: workspaceIds } } },
+      { $group: { _id: "$workspaceId", count: { $sum: 1 } } },
+    ]),
+    Project.aggregate([
+      { $match: { workspaceId: { $in: workspaceIds } } },
+      { $group: { _id: "$workspaceId", count: { $sum: 1 } } },
+    ]),
+  ]);
+
+  // Build lookup maps
+  const memberCountMap = Object.fromEntries(
+    memberCounts.map((m) => [m._id.toString(), m.count]),
+  );
+  const projectCountMap = Object.fromEntries(
+    projectCounts.map((p) => [p._id.toString(), p.count]),
+  );
+  const roleMap = Object.fromEntries(
+    memberships.map((m) => [m.workspaceId.toString(), m.role]),
+  );
+
+  const enriched = workspaces.map((ws) => ({
+    ...ws,
+    yourRole: roleMap[ws._id.toString()],
+    memberCount: memberCountMap[ws._id.toString()] || 0,
+    projectCount: projectCountMap[ws._id.toString()] || 0,
   }));
 
-  return res.json(new ApiResponse(200, workspaces, "OK"));
+  return ok(res, enriched);
 });
 
 // POST creates a new workspace and automatically adds the creator as the owner member.

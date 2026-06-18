@@ -14,7 +14,7 @@ function CreateProjectBtn() {
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className="cursor-pointer rounded-xl border border-dashed border-border-default bg-bg-sidebar h-56 flex flex-col items-center justify-center gap-3 transition-colors hover:bg-base-hover"
+        className="cursor-pointer rounded-xl border-2 border-dashed border-border-default bg-bg-sidebar h-56 flex flex-col items-center justify-center gap-3 transition-colors hover:bg-base-hover"
       >
         <Plus className="size-5" />
 

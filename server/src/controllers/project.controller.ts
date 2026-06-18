@@ -4,15 +4,8 @@ import { WorkspaceMember } from "../models/workspaceMember.model";
 import { ApiResponse } from "../utils/api-response";
 import { ApiError } from "../utils/api-error";
 import { asyncHandler } from "../utils/async-handler";
-
-const requireMember = async (workspaceId: string, userId: string) => {
-  if (!workspaceId) {
-    throw new ApiError(400, "workspaceId is required");
-  }
-  const member = await WorkspaceMember.findOne({ workspaceId, userId });
-  if (!member) throw new ApiError(403, "Not a member of this workspace");
-  return member;
-};
+import { Endpoint } from "../models/endpoint.model";
+import { RequestLog } from "../models/requestLog.model";
 
 // GET all projects inside a workspace
 const getProjects = asyncHandler(async (req: Request, res: Response) => {
@@ -44,11 +37,47 @@ const getProjects = asyncHandler(async (req: Request, res: Response) => {
     }),
   ]);
 
+  const enrichedProjects = await Promise.all(
+    projects.map(async (project) => {
+      const endpoints = await Endpoint.find({
+        projectId: project._id,
+      })
+        .select("_id")
+        .lean();
+
+      const endpointIds = endpoints.map((endpoint) => endpoint._id);
+
+      const requestCount = await RequestLog.countDocuments({
+        endpointId: {
+          $in: endpointIds,
+        },
+      });
+
+      const latestRequest = await RequestLog.findOne({
+        endpointId: {
+          $in: endpointIds,
+        },
+      })
+        .sort({
+          createdAt: -1,
+        })
+        .select("createdAt")
+        .lean();
+
+      return {
+        ...project,
+        endpointCount: endpoints.length,
+        requestCount,
+        lastActivityAt: latestRequest?.createdAt ?? project.updatedAt,
+      };
+    }),
+  );
+
   return res.json(
     new ApiResponse(
       200,
       {
-        projects,
+        projects: enrichedProjects,
         pagination: {
           page: Number(page),
           limit: Number(limit),

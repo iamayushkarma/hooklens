@@ -8,6 +8,8 @@ import { ok } from "../utils/response";
 import { created } from "../utils/response";
 import { Project } from "../models/project.model";
 import { Invitation } from "../models/Invitation.model";
+import { User } from "../models/user.model";
+import { randomBytes } from "crypto";
 
 // GET all workspaces where the logged-in user is a member, include workspace details, attach the user’s role in each workspace, and send it back.
 const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
@@ -145,10 +147,66 @@ const getMembers = asyncHandler(async (req: Request, res: Response) => {
   return ok(res, { members: formatted, pendingInvites });
 });
 
+const inviteMember = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { email, role } = req.body;
+  const invitedByUserId = req.user!.userId;
+
+  // Check if user already a member
+  const existingUser = await User.findOne({ email }).lean();
+  if (existingUser) {
+    const alreadyMember = await WorkspaceMember.findOne({
+      workspaceId: id,
+      userId: existingUser._id,
+    });
+    if (alreadyMember) {
+      return res
+        .status(409)
+        .json({ success: false, message: "User is already a member" });
+    }
+  }
+
+  // Check for existing pending invite
+  const existingInvite = await Invitation.findOne({
+    workspaceId: id,
+    email,
+    status: "pending",
+  });
+  if (existingInvite) {
+    return res
+      .status(409)
+      .json({ success: false, message: "Invite already sent to this email" });
+  }
+
+  // Generate secure token
+  const token = randomBytes(32).toString("hex");
+  const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000); // 48 hours
+
+  const invitation = await Invitation.create({
+    workspaceId: id as string,
+    invitedByUserId,
+    email,
+    role,
+    token,
+    expiresAt,
+    status: "pending",
+  });
+
+  // TODO: Send invite email here with link:
+  // `${process.env.CLIENT_URL}/invite/accept/${token}`
+
+  return created(
+    res,
+    { invitationId: invitation._id, email, role, expiresAt },
+    "Invite sent",
+  );
+};
+
 export {
   getWorkspaces,
   createWorkspace,
   updateWorkspace,
   deleteWorkspace,
   getMembers,
+  inviteMember,
 };

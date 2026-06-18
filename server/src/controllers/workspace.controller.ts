@@ -1,25 +1,29 @@
 import { Request, Response } from "express";
-import { asyncHandler } from "../utils/async-handler";
-import { WorkspaceMember } from "../models/workspaceMember.model";
-import { ApiResponse } from "../utils/api-response";
-import { ApiError } from "../utils/api-error";
-import { Workspace } from "../models/workspace.model";
-import { ok } from "../utils/response";
-import { created } from "../utils/response";
-import { Project } from "../models/project.model";
-import { Invitation } from "../models/Invitation.model";
-import { User } from "../models/user.model";
 import { randomBytes } from "crypto";
+import mongoose from "mongoose";
+import { asyncHandler } from "../utils/async-handler";
+import { ApiError } from "../utils/api-error";
+import { ok, created } from "../utils/response";
+import { Workspace } from "../models/workspace.model";
+import { WorkspaceMember } from "../models/workspaceMember.model";
+import { Invitation } from "../models/Invitation.model";
+import { Project } from "../models/project.model";
+import { User } from "../models/user.model";
 
-// GET all workspaces where the logged-in user is a member, include workspace details, attach the user’s role in each workspace, and send it back.
+// GET /api/workspaces
 const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
+  if (!req.user) throw new ApiError(401, "Unauthorized");
 
-  // Find all memberships for this user
-  const memberships = await WorkspaceMember.find({ userId }).lean();
+  const userId = req.user.userId;
+
+  const memberships = await WorkspaceMember.find({ userId })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  if (!memberships.length) return ok(res, []);
+
   const workspaceIds = memberships.map((m) => m.workspaceId);
 
-  // Fetch all workspaces and member counts in parallel
   const [workspaces, memberCounts, projectCounts] = await Promise.all([
     Workspace.find({ _id: { $in: workspaceIds } }).lean(),
     WorkspaceMember.aggregate([
@@ -32,7 +36,6 @@ const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
     ]),
   ]);
 
-  // Build lookup maps
   const memberCountMap = Object.fromEntries(
     memberCounts.map((m) => [m._id.toString(), m.count]),
   );
@@ -46,45 +49,66 @@ const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
   const enriched = workspaces.map((ws) => ({
     ...ws,
     yourRole: roleMap[ws._id.toString()],
-    memberCount: memberCountMap[ws._id.toString()] || 0,
-    projectCount: projectCountMap[ws._id.toString()] || 0,
+    memberCount: memberCountMap[ws._id.toString()] ?? 0,
+    projectCount: projectCountMap[ws._id.toString()] ?? 0,
   }));
 
   return ok(res, enriched);
 });
 
-// POST creates a new workspace and automatically adds the creator as the owner member.
+// POST /api/workspaces
 const createWorkspace = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
+  const userId = req.user.userId;
   const { name } = req.body;
 
-  if (!name) throw new ApiError(400, "Name is required");
+  const session = await mongoose.startSession();
 
-  const workspace = await Workspace.create({ name, ownerId: userId });
+  try {
+    session.startTransaction();
 
-  // Auto add creator as owner
-  await WorkspaceMember.create({
-    workspaceId: workspace._id,
-    userId,
-    role: "owner",
-    joinedAt: new Date(),
-  });
+    // create returns array when used with session
+    const [workspace] = await Workspace.create([{ name, ownerId: userId }], {
+      session,
+    });
 
-  return created(
-    res,
-    {
-      ...workspace.toObject(),
-      yourRole: "owner",
-      memberCount: 1,
-      projectCount: 0,
-    },
-    "Workspace created",
-  );
+    await WorkspaceMember.create(
+      [
+        {
+          workspaceId: workspace._id,
+          userId,
+          role: "owner",
+          joinedAt: new Date(),
+        },
+      ],
+      { session },
+    );
+
+    await session.commitTransaction();
+
+    return created(
+      res,
+      {
+        ...workspace.toObject(),
+        yourRole: "owner",
+        memberCount: 1,
+        projectCount: 0,
+      },
+      "Workspace created",
+    );
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
 });
 
-// PATCH updates a workspace name, but ONLY if the logged-in user is an 'owner' or 'admin'.
+// PATCH /api/workspaces/:id
 const updateWorkspace = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
   const { id } = req.params;
   const { name } = req.body;
 
@@ -94,39 +118,57 @@ const updateWorkspace = asyncHandler(async (req: Request, res: Response) => {
     { new: true, runValidators: true },
   ).lean();
 
-  if (!workspace) {
-    return res.status(404).json(new ApiError(404, "Workspace not found"));
-  }
-
-  return res.json(new ApiResponse(200, workspace, "Updated"));
-});
-
-// DELETE workspace but ONLY if the logged-in user is the owner.
-const deleteWorkspace = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
-  const { id } = req.params;
-
-  const workspace = await Workspace.findById(id);
   if (!workspace) throw new ApiError(404, "Workspace not found");
 
-  if (workspace.ownerId.toString() !== userId)
-    throw new ApiError(403, "Only owner can delete");
-
-  // Cascade delete order matters
-  await Promise.all([
-    WorkspaceMember.deleteMany({ workspaceId: id }),
-    Invitation.deleteMany({ workspaceId: id }),
-    Project.deleteMany({ workspaceId: id }),
-    // Add Endpoint.deleteMany, RequestLog.deleteMany here when those models exist
-  ]);
-  await workspace.deleteOne();
-
-  return ok(res, null, "Workspace deleted");
+  return ok(res, workspace, "Workspace updated");
 });
 
-// GET members of a workspace
-const getMembers = asyncHandler(async (req: Request, res: Response) => {
+// DELETE /api/workspaces/:id
+const deleteWorkspace = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
+  const userId = req.user.userId;
   const { id } = req.params;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const workspace = await Workspace.findById(id).session(session);
+
+    if (!workspace) throw new ApiError(404, "Workspace not found");
+
+    if (workspace.ownerId.toString() !== userId) {
+      throw new ApiError(403, "Only the owner can delete this workspace");
+    }
+
+    await Promise.all([
+      WorkspaceMember.deleteMany({ workspaceId: id }).session(session),
+      Invitation.deleteMany({ workspaceId: id }).session(session),
+      Project.deleteMany({ workspaceId: id }).session(session),
+      workspace.deleteOne({ session }),
+    ]);
+
+    await session.commitTransaction();
+
+    return ok(res, null, "Workspace deleted");
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+});
+
+// GET /api/workspaces/:id/members
+const getMembers = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
+  const { id } = req.params;
+
+  const workspace = await Workspace.findById(id).select("_id");
+  if (!workspace) throw new ApiError(404, "Workspace not found");
 
   const [members, pendingInvites] = await Promise.all([
     WorkspaceMember.find({ workspaceId: id })
@@ -141,46 +183,48 @@ const getMembers = asyncHandler(async (req: Request, res: Response) => {
     memberId: m._id,
     role: m.role,
     joinedAt: m.joinedAt,
-    user: m.userId, // populated: { _id, name, email }
+    user: m.userId,
   }));
 
   return ok(res, { members: formatted, pendingInvites });
 });
 
-const inviteMember = async (req: Request, res: Response) => {
+// POST /api/workspaces/:id/invite
+const inviteMember = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
   const { id } = req.params;
   const { email, role } = req.body;
-  const invitedByUserId = req.user!.userId;
+  const invitedByUserId = req.user.userId;
 
-  // Check if user already a member
+  const workspace = await Workspace.findById(id).select("_id");
+  if (!workspace) throw new ApiError(404, "Workspace not found");
+
+  const currentUser = await User.findById(invitedByUserId).select("email");
+  if (currentUser?.email === email) {
+    throw new ApiError(400, "You cannot invite yourself");
+  }
+
   const existingUser = await User.findOne({ email }).lean();
   if (existingUser) {
     const alreadyMember = await WorkspaceMember.findOne({
       workspaceId: id,
       userId: existingUser._id,
     });
-    if (alreadyMember) {
-      return res
-        .status(409)
-        .json({ success: false, message: "User is already a member" });
-    }
+    if (alreadyMember) throw new ApiError(409, "User is already a member");
   }
 
-  // Check for existing pending invite
   const existingInvite = await Invitation.findOne({
     workspaceId: id,
     email,
     status: "pending",
   });
-  if (existingInvite) {
-    return res
-      .status(409)
-      .json({ success: false, message: "Invite already sent to this email" });
-  }
+  if (existingInvite)
+    throw new ApiError(409, "Invite already sent to this email");
 
-  // Generate secure token
+  // token is stored in DB for lookup but never sent back to client
   const token = randomBytes(32).toString("hex");
-  const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000); // 48 hours
+  const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000);
 
   const invitation = await Invitation.create({
     workspaceId: id as string,
@@ -192,130 +236,142 @@ const inviteMember = async (req: Request, res: Response) => {
     status: "pending",
   });
 
-  // TODO: Send invite email here with link:
-  // `${process.env.CLIENT_URL}/invite/accept/${token}`
+  // TODO: send email with link ${process.env.CLIENT_URL}/invite/accept/${token}
 
   return created(
     res,
     { invitationId: invitation._id, email, role, expiresAt },
     "Invite sent",
   );
-};
+});
 
-//  GET /api/workspaces/invite/accept/:token
-const acceptInvite = async (req: Request, res: Response) => {
+// GET /api/workspaces/invite/accept/:token
+const acceptInvite = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
   const { token } = req.params;
-  const userId = req.user!.userId;
-  const user = await User.findById(userId);
+  const userId = req.user.userId;
 
-  const invitation = await Invitation.findOne({ token });
+  const [user, invitation] = await Promise.all([
+    User.findById(userId).select("email"),
+    Invitation.findOne({ token }),
+  ]);
 
-  if (!invitation) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Invalid invite token" });
+  if (!user) throw new ApiError(404, "User not found");
+  if (!invitation) throw new ApiError(404, "Invalid invite token");
+
+  if (user.email !== invitation.email) {
+    throw new ApiError(403, "This invitation was not sent to your account");
   }
+
   if (invitation.status !== "pending") {
-    return res.status(410).json({
-      success: false,
-      message: `Invite already ${invitation.status}`,
-    });
+    throw new ApiError(410, `Invite already ${invitation.status}`);
   }
+
   if (invitation.expiresAt < new Date()) {
     await Invitation.findByIdAndUpdate(invitation._id, { status: "expired" });
-    return res
-      .status(410)
-      .json({ success: false, message: "Invite has expired" });
+    throw new ApiError(410, "Invite has expired");
   }
 
-  // Add to workspace
-  await WorkspaceMember.create({
+  const alreadyMember = await WorkspaceMember.findOne({
     workspaceId: invitation.workspaceId,
     userId,
-    role: invitation.role,
-    joinedAt: new Date(),
   });
+  if (alreadyMember) throw new ApiError(409, "You are already a member");
 
-  await Invitation.findByIdAndUpdate(invitation._id, { status: "accepted" });
+  const session = await mongoose.startSession();
 
-  return ok(
-    res,
-    { workspaceId: invitation.workspaceId },
-    "Joined workspace successfully",
-  );
-};
+  try {
+    session.startTransaction();
+
+    await WorkspaceMember.create(
+      [{ workspaceId: invitation.workspaceId, userId, role: invitation.role }],
+      { session },
+    );
+
+    await Invitation.findByIdAndUpdate(
+      invitation._id,
+      { status: "accepted" },
+      { session },
+    );
+
+    await session.commitTransaction();
+
+    return ok(
+      res,
+      { workspaceId: invitation.workspaceId },
+      "Joined workspace successfully",
+    );
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+});
 
 // PATCH /api/workspaces/:id/members/:userId/role
-const changeMemberRole = async (req: Request, res: Response) => {
+const changeMemberRole = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
   const { id, userId: targetUserId } = req.params;
   const { role } = req.body;
-  const requesterId = req.user!.userId;
+  const requesterId = req.user.userId;
 
-  // Can't change your own role
   if (requesterId === targetUserId) {
-    return res
-      .status(400)
-      .json({ success: false, message: "You cannot change your own role" });
+    throw new ApiError(400, "You cannot change your own role");
   }
 
-  // Can't set someone as owner (use transfer ownership for that)
   if (role === "owner") {
-    return res.status(400).json({
-      success: false,
-      message: "Use transfer ownership to assign owner role",
-    });
+    throw new ApiError(400, "Use transfer ownership to assign the owner role");
   }
 
   const targetMember = await WorkspaceMember.findOne({
     workspaceId: id,
     userId: targetUserId,
   });
-  if (!targetMember) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Member not found" });
-  }
 
-  // Can't demote another owner
+  if (!targetMember) throw new ApiError(404, "Member not found");
+
   if (targetMember.role === "owner") {
-    return res
-      .status(403)
-      .json({ success: false, message: "Cannot change owner's role" });
+    throw new ApiError(403, "Cannot change the owner's role");
   }
 
   targetMember.role = role;
   await targetMember.save();
 
   return ok(res, { userId: targetUserId, newRole: role }, "Role updated");
-};
+});
 
 // DELETE /api/workspaces/:id/members/:userId
-const removeMember = async (req: Request, res: Response) => {
+const removeMember = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
   const { id, userId: targetUserId } = req.params;
-  const requesterId = req.user!.userId;
+  const requesterId = req.user.userId;
+
+  if (requesterId === targetUserId) {
+    throw new ApiError(400, "You cannot remove yourself from the workspace");
+  }
 
   const targetMember = await WorkspaceMember.findOne({
     workspaceId: id,
     userId: targetUserId,
   });
-  if (!targetMember) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Member not found" });
-  }
 
-  // Can't remove owner
+  if (!targetMember) throw new ApiError(404, "Member not found");
+
   if (targetMember.role === "owner") {
-    return res.status(403).json({
-      success: false,
-      message: "Cannot remove workspace owner. Transfer ownership first.",
-    });
+    throw new ApiError(
+      403,
+      "Cannot remove the owner. Transfer ownership first.",
+    );
   }
 
   await targetMember.deleteOne();
 
   return ok(res, null, "Member removed");
-};
+});
 
 export {
   getWorkspaces,

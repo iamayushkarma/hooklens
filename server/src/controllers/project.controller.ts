@@ -22,7 +22,11 @@ const getProjects = asyncHandler(async (req: Request, res: Response) => {
 
   await requireMember(workspaceId, userId);
 
-  const projects = await Project.find({ workspaceId });
+  const projects = await Project.find({
+    workspaceId,
+  }).sort({
+    updatedAt: -1,
+  });
 
   return res.json(new ApiResponse(200, projects, "OK"));
 });
@@ -30,12 +34,6 @@ const getProjects = asyncHandler(async (req: Request, res: Response) => {
 const createProject = asyncHandler(async (req: Request, res: Response) => {
   const userId = (req as any).user.userId;
   const { workspaceId, name, description } = req.body;
-
-  if (!workspaceId || typeof name !== "string" || !name.trim()) {
-    throw new ApiError(400, "workspaceId and valid name required");
-  }
-
-  await requireMember(workspaceId, userId);
 
   const project = await Project.create({
     workspaceId,
@@ -49,20 +47,17 @@ const createProject = asyncHandler(async (req: Request, res: Response) => {
 
 // PATCH
 const updateProject = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
   const { name, description } = req.body;
   const { id } = req.params;
 
   const project = await Project.findById(id);
 
-  if (!project) throw new ApiError(404, "Not found");
-
-  await requireMember(project.workspaceId.toString(), userId);
+  if (!project) throw new ApiError(404, "Project Not found");
 
   const updates: Record<string, any> = {};
 
   // Validate and add name
-  if (req.body.name !== undefined) {
+  if (name !== undefined) {
     if (typeof req.body.name !== "string" || !req.body.name.trim()) {
       throw new ApiError(400, "Invalid project name");
     }
@@ -70,7 +65,7 @@ const updateProject = asyncHandler(async (req: Request, res: Response) => {
   }
 
   // Validate and add description
-  if (req.body.description !== undefined) {
+  if (description !== undefined) {
     if (typeof req.body.description !== "string") {
       throw new ApiError(400, "Invalid description");
     }
@@ -93,18 +88,9 @@ const updateProject = asyncHandler(async (req: Request, res: Response) => {
 
 // DELETE
 const deleteProject = asyncHandler(async (req: Request, res: Response) => {
-  const userId = (req as any).user.userId;
   const { id } = req.params;
   const project = await Project.findById(id);
   if (!project) throw new ApiError(404, "Not found");
-
-  const member = await WorkspaceMember.findOne({
-    workspaceId: project.workspaceId,
-    userId,
-  });
-  if (!member || !["owner", "admin"].includes(member.role)) {
-    throw new ApiError(403, "Not authorized");
-  }
 
   await Project.findByIdAndDelete(id);
   res.json(new ApiResponse(200, null, "Project deleted"));

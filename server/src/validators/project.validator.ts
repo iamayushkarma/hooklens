@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+const getProjectsSchema = z.object({
+  query: z.object({
+    workspaceId: z.string().min(1),
+
+    page: z.coerce.number().min(1).default(1),
+
+    limit: z.coerce.number().min(1).max(100).default(10),
+  }),
+});
+
 const createProjectSchema = z.object({
   body: z.object({
     workspaceId: z.string().min(1, "Workspace ID is required"),
@@ -26,4 +36,4 @@ const updateProjectSchema = z.object({
   }),
 });
 
-export { createProjectSchema, updateProjectSchema };
+export { getProjectsSchema, createProjectSchema, updateProjectSchema };

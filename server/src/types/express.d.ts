@@ -5,6 +5,7 @@ declare global {
       user?: {
         userId: string;
       };
+      workspaceRole?: string;
     }
   }
 }

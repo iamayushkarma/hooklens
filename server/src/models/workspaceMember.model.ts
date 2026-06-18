@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+export type WorkspaceRole = "owner" | "admin" | "member" | "viewer";
+
 const workspaceMemberSchema = new mongoose.Schema(
   {
     workspaceId: {

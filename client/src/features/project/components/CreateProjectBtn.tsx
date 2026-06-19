@@ -22,7 +22,7 @@ function CreateProjectBtn() {
           <p className="font-medium text-text-primary">Create Project</p>
 
           <p className="text-xs text-text-secondary">
-            Start monitoring a new API
+            Start monitoring a new APIcd...
           </p>
         </div>
       </div>

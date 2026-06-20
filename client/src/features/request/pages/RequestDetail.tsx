@@ -5,6 +5,7 @@ import { getRequest } from "@/features/request/api/getRequest";
 import type { RequestLog } from "../types/request.types";
 import { JsonSection } from "../components/JsonSection";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
+import { replayRequest } from "../api/replayRequest";
 
 function RequestDetail() {
   const { requestId } = useParams();
@@ -27,6 +28,17 @@ function RequestDetail() {
     fetchRequest();
   }, [requestId]);
 
+  const handleReplay = async () => {
+    if (!request) return;
+
+    try {
+      const result = await replayRequest(request._id);
+
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   if (!request) {
     return (
       <div className="rounded-lg border border-border-default p-6">
@@ -68,7 +80,10 @@ function RequestDetail() {
           </div>
 
           <div className="flex gap-2">
-            <button className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar">
+            <button
+              onClick={handleReplay}
+              className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar"
+            >
               Replay Request
             </button>
 

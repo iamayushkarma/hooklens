@@ -1,12 +1,22 @@
 import type { Endpoint } from "../types/endpoint.types";
-
+import { useNavigate, useParams } from "react-router-dom";
 interface EndpointCardProps {
   endpoint: Endpoint;
 }
 
 function EndpointCard({ endpoint }: EndpointCardProps) {
+  const navigate = useNavigate();
+
+  const { workspaceId, projectId } = useParams();
   return (
-    <div className="rounded-lg border border-border-default bg-bg-card p-4">
+    <div
+      onClick={() =>
+        navigate(
+          `/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints/${endpoint._id}`,
+        )
+      }
+      className="cursor-pointer rounded-lg border border-border-default bg-bg-card p-4 transition-all hover:border-border-hover hover:shadow-sm"
+    >
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-medium">{endpoint.label}</h3>

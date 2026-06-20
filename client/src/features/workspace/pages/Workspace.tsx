@@ -3,16 +3,16 @@ import { getWorkspaces } from "../api/getWorkspaces";
 import WorkspaceCard from "../components/WorkspaceCard";
 import CreateWorkspaceBtn from "../components/CreateWorkspaceBtn";
 import type { WorkspaceProp } from "../types/workspace.type";
-
+import { useWorkspaceStore } from "@/store/workspace.store";
 function Workspace() {
   const [workspaces, setWorkspaces] = useState<WorkspaceProp[]>([]);
-
+  const setWorkspaceStore = useWorkspaceStore((state) => state.setWorkspaces);
   useEffect(() => {
     const fetchWorkspaces = async () => {
       const data = await getWorkspaces();
 
       setWorkspaces(data);
-
+      setWorkspaceStore(data);
       console.log(data);
     };
 

@@ -226,7 +226,7 @@ interface AuthenticatedSocket extends Socket {
 export const setupSocket = (server: http.Server): void => {
   io = new Server(server, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: process.env.CLIENT_URL?.split(","),
       methods: ["GET", "POST"],
       credentials: true,
     },

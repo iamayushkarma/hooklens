@@ -1,46 +1,21 @@
-// import { EllipsisVertical } from "lucide-react";
-// import type { Project } from "../types/project.types";
-
-// interface ProjectCardProps {
-//   project: Project;
-// }
-// export function ProjectCard({ project }: ProjectCardProps) {
-//   return (
-//     <div className="group rounded-lg border border-border-default bg-bg-card p-5 hover:bg-base-hover transition-colors cursor-pointer">
-//       <div className="flex items-start justify-between">
-//         <h3 className="font-semibold text-text-primary">{project.name}</h3>
-
-//         <button className="opacity-0 group-hover:opacity-100 transition-opacity">
-//           <EllipsisVertical className="size-4 text-text-secondary" />
-//         </button>
-//       </div>
-
-//       <p className="mt-2 text-sm text-text-secondary line-clamp-2">
-//         {project.description}
-//       </p>
-
-//       <div className="mt-5 border-t border-border-default pt-3">
-//         <p className="text-xs text-text-secondary">
-//           Created{" "}
-//           {new Date(project.createdAt).toLocaleDateString("en-IN", {
-//             day: "numeric",
-//             month: "short",
-//             year: "numeric",
-//           })}
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { EllipsisVertical } from "lucide-react";
 import type { Project } from "../types/project.types";
+import { useNavigate, useParams } from "react-router-dom";
+import { useWorkspaceStore } from "@/store/workspace.store";
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const navigate = useNavigate();
+
+  const { workspaceId } = useParams();
+
+  const setCurrentProjectId = useWorkspaceStore(
+    (state) => state.setCurrentProjectId,
+  );
+
   const projectInitial = project.name.charAt(0).toUpperCase();
 
   const formatRelativeTime = (date: string) => {
@@ -77,7 +52,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
   };
 
   return (
-    <div className="group cursor-pointer rounded-xl border border-border-default bg-bg-card p-5 transition-all duration-200 hover:-translate-y-1 hover:border-border-hover hover:shadow-md">
+    <div
+      onClick={() => {
+        setCurrentProjectId(project._id);
+
+        navigate(
+          `/dashboard/workspaces/${workspaceId}/projects/${project._id}`,
+        );
+      }}
+      className="group cursor-pointer rounded-xl border border-border-default bg-bg-card p-5 transition-all duration-200 hover:-translate-y-1 hover:border-border-hover hover:shadow-md"
+    >
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">

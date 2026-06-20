@@ -7,6 +7,7 @@ import type { Project } from "../types/project.types";
 
 function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const setProjectsStore = useWorkspaceStore((state) => state.setProjects);
   const workspaceId = useWorkspaceStore((store) => store.currentWorkspaceId);
   useEffect(() => {
     if (!workspaceId) return;
@@ -14,6 +15,7 @@ function Projects() {
     const fetchProject = async () => {
       const res = await getProjects(workspaceId);
       setProjects(res.projects);
+      setProjectsStore(res.projects);
       console.log(res);
     };
     fetchProject();

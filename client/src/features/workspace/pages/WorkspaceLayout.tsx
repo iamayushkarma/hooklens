@@ -1,7 +1,8 @@
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
+import { useWorkspace } from "../hooks/useWorkspace";
 
 function WorkspaceLayout() {
-  const { workspaceId } = useParams();
+  const { workspaceId } = useWorkspace();
 
   const tabs = [
     {
@@ -29,10 +30,14 @@ function WorkspaceLayout() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-semibold">Workspace</h1>
+      <div className="border-b border-border-default pb-4">
+        <h1 className="text-2xl font-semibold">Workspace Name</h1>
 
-        <p className="text-text-secondary">Workspace Management</p>
+        <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
+          <span>Owner</span>
+          <span>3 Members</span>
+          <span>12 Projects</span>
+        </div>
       </div>
 
       {/* Navigation */}

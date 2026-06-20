@@ -1,10 +1,14 @@
 import type { WorkspaceProp } from "@/features/workspace/types/workspace.type";
+import { useWorkspaceStore } from "@/store/workspace.store";
 import { FolderKanban, Settings, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 function WorkspaceCard({ ...workspace }: WorkspaceProp) {
   const navigate = useNavigate();
-
+  const setCurrentWorkspaceId = useWorkspaceStore(
+    (state) => state.setCurrentWorkspaceId,
+  );
+  console.log(useWorkspaceStore.getState());
   function formatDate(date: string) {
     return new Date(date).toLocaleDateString("en-IN", {
       day: "numeric",
@@ -15,7 +19,11 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
 
   return (
     <div
-      onClick={() => navigate(`/dashboard/workspaces/${workspace._id}`)}
+      onClick={() => {
+        setCurrentWorkspaceId(workspace._id);
+
+        navigate(`/dashboard/workspaces/${workspace._id}`);
+      }}
       className="w-62 rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm"
     >
       {/* Header */}

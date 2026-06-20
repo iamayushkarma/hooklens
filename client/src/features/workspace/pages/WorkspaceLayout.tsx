@@ -1,29 +1,28 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { useWorkspace } from "../hooks/useWorkspace";
-
+import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
 function WorkspaceLayout() {
-  const { workspaceId } = useWorkspace();
+  const { currentWorkspaceId } = useCurrentWorkspace();
 
   const tabs = [
     {
       label: "Overview",
-      path: `/dashboard/workspaces/${workspaceId}`,
+      path: `/dashboard/workspaces/${currentWorkspaceId}`,
     },
     {
       label: "Projects",
-      path: `/dashboard/workspaces/${workspaceId}/projects`,
+      path: `/dashboard/workspaces/${currentWorkspaceId}/projects`,
     },
     {
       label: "Members",
-      path: `/dashboard/workspaces/${workspaceId}/members`,
+      path: `/dashboard/workspaces/${currentWorkspaceId}/members`,
     },
     {
       label: "Invitations",
-      path: `/dashboard/workspaces/${workspaceId}/invitations`,
+      path: `/dashboard/workspaces/${currentWorkspaceId}/invitations`,
     },
     {
       label: "Settings",
-      path: `/dashboard/workspaces/${workspaceId}/settings`,
+      path: `/dashboard/workspaces/${currentWorkspaceId}/settings`,
     },
   ];
 
@@ -37,6 +36,7 @@ function WorkspaceLayout() {
           <span>Owner</span>
           <span>3 Members</span>
           <span>12 Projects</span>
+          <p>{currentWorkspaceId}</p>
         </div>
       </div>
 

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Header } from "@/app/layouts/components/Header";
 import Sidebar from "@/app/layouts/components/Sidebar";
 import { Outlet } from "react-router-dom";
+import { useSocketConnection } from "@/socket/useSocketConnection";
 
 function DashboardLayout() {
+  useSocketConnection();
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
     if (mobileOpen) {

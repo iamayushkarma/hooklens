@@ -5,10 +5,17 @@ export function useAppNavigation() {
 
   return {
     goToLogin: () => navigate("/login"),
+
     goToDashboard: () => navigate("/dashboard"),
-    goToSettings: () => navigate("/settings"),
-    goToWorkspaces: () => navigate("/workspaces"),
-    goToProjects: () => navigate("/projects"),
+
+    goToWorkspaces: () => navigate("/dashboard/workspaces"),
+
+    goToWorkspace: (workspaceId: string) =>
+      navigate(`/dashboard/workspaces/${workspaceId}`),
+
+    goToProject: (workspaceId: string, projectId: string) =>
+      navigate(`/dashboard/workspaces/${workspaceId}/projects/${projectId}`),
+
     goBack: () => navigate(-1),
   };
 }

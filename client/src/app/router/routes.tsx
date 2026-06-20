@@ -21,6 +21,7 @@ import EndpointLayout from "@/features/endpoint/pages/EndpointLayout";
 import EndpointRequests from "@/features/endpoint/pages/EndpointRequests";
 import EndpointAnalytics from "@/features/endpoint/pages/EndpointAnalytics";
 import EndpointSettings from "@/features/endpoint/pages/EndpointSettings";
+import RequestDetail from "@/features/request/pages/RequestDetail";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -56,6 +57,8 @@ export const appRoutes = (
         element={<EndpointLayout />}
       >
         <Route index element={<EndpointRequests />} />
+
+        <Route path="requests/:requestId" element={<RequestDetail />} />
 
         <Route path="analytics" element={<EndpointAnalytics />} />
 

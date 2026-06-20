@@ -1,7 +1,10 @@
 import type { WorkspaceProp } from "@/features/workspace/types/workspace.type";
 import { FolderKanban, Settings, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function WorkspaceCard({ ...workspace }: WorkspaceProp) {
+  const navigate = useNavigate();
+
   function formatDate(date: string) {
     return new Date(date).toLocaleDateString("en-IN", {
       day: "numeric",
@@ -11,12 +14,20 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
   }
 
   return (
-    <div className="w-62 rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm">
+    <div
+      onClick={() => navigate(`/dashboard/workspaces/${workspace._id}`)}
+      className="w-62 rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm"
+    >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border-default p-4">
         <h2 className="truncate text-base font-semibold">{workspace.name}</h2>
 
-        <button className="cursor-pointer text-text-secondary hover:text-text-primary">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="cursor-pointer text-text-secondary hover:text-text-primary"
+        >
           <Settings className="size-4" />
         </button>
       </div>

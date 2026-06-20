@@ -126,7 +126,7 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               {
                 label: "Workspace",
                 icon: Building2,
-                path: "/dashboard/workspace",
+                path: "/dashboard/workspaces",
               },
               {
                 label: "Project",

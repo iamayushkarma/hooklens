@@ -12,6 +12,8 @@ import WorkspaceLayout from "@/features/workspace/pages/WorkspaceLayout";
 import WorkspaceMembers from "@/features/workspace/pages/WorkspaceMembers";
 import WorkspaceInvitations from "@/features/workspace/pages/WorkspaceInvitations";
 import WorkspaceSettings from "@/features/workspace/pages/WorkspaceSettings";
+import ProjectLayout from "@/features/project/pages/ProjectLayout";
+import ProjectOverview from "@/features/project/pages/ProjectOverview";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -24,12 +26,14 @@ export const appRoutes = (
       <Route path="workspaces" element={<Workspace />} />
 
       <Route path="workspaces/:workspaceId" element={<WorkspaceLayout />}>
-        {/* <Route index element={<WorkspaceProjects />} /> */}
         <Route index element={<Projects />} />
+
+        <Route path="projects/:projectId" element={<ProjectLayout />}>
+          <Route index element={<ProjectOverview />} />
+        </Route>
+
         <Route path="members" element={<WorkspaceMembers />} />
-
         <Route path="invitations" element={<WorkspaceInvitations />} />
-
         <Route path="settings" element={<WorkspaceSettings />} />
       </Route>
       {/* <Route path="project" element={<Projects />} /> */}

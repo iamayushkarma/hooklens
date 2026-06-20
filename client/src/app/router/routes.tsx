@@ -13,11 +13,10 @@ import WorkspaceMembers from "@/features/workspace/pages/WorkspaceMembers";
 import WorkspaceInvitations from "@/features/workspace/pages/WorkspaceInvitations";
 import WorkspaceSettings from "@/features/workspace/pages/WorkspaceSettings";
 import ProjectLayout from "@/features/project/pages/ProjectLayout";
-import ProjectOverview from "@/features/project/pages/ProjectOverview";
-import ProjectEndpoints from "@/features/project/pages/ProjectEndpoints";
 import ProjectRequests from "@/features/project/pages/ProjectRequests";
 import ProjectReplays from "@/features/project/pages/ProjectReplays";
 import ProjectAnalytics from "@/features/project/pages/ProjectAnalytics";
+import Endpoint from "@/features/endpoint/pages/Endpoint";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -40,7 +39,7 @@ export const appRoutes = (
         path="workspaces/:workspaceId/projects/:projectId"
         element={<ProjectLayout />}
       >
-        <Route index element={<ProjectEndpoints />} />
+        <Route index element={<Endpoint />} />
 
         <Route path="requests" element={<ProjectRequests />} />
 

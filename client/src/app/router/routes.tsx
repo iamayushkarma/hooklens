@@ -9,7 +9,6 @@ import HomePage from "@/features/public/pages/HomePage";
 import Workspace from "@/features/workspace/pages/Workspace";
 import Projects from "@/features/project/pages/Projects";
 import WorkspaceLayout from "@/features/workspace/pages/WorkspaceLayout";
-import WorkspaceOverview from "@/features/workspace/pages/WorkspaceOverview";
 import WorkspaceMembers from "@/features/workspace/pages/WorkspaceMembers";
 import WorkspaceInvitations from "@/features/workspace/pages/WorkspaceInvitations";
 import WorkspaceSettings from "@/features/workspace/pages/WorkspaceSettings";
@@ -26,9 +25,7 @@ export const appRoutes = (
       <Route path="workspaces" element={<Workspace />} />
 
       <Route path="workspaces/:workspaceId" element={<WorkspaceLayout />}>
-        <Route index element={<WorkspaceOverview />} />
-
-        <Route path="projects" element={<WorkspaceProjects />} />
+        <Route index element={<WorkspaceProjects />} />
 
         <Route path="members" element={<WorkspaceMembers />} />
 

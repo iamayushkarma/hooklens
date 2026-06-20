@@ -6,12 +6,8 @@ function WorkspaceLayout() {
 
   const tabs = [
     {
-      label: "Overview",
-      path: `/dashboard/workspaces/${currentWorkspaceId}`,
-    },
-    {
       label: "Projects",
-      path: `/dashboard/workspaces/${currentWorkspaceId}/projects`,
+      path: `/dashboard/workspaces/${currentWorkspaceId}`,
     },
     {
       label: "Members",

@@ -1,7 +1,31 @@
-import { Outlet } from "react-router-dom";
 import { useCurrentProject } from "../hooks/useCurrentProject";
+
+import { NavLink, Outlet, useParams } from "react-router-dom";
 function ProjectLayout() {
   const { currentProject } = useCurrentProject();
+  const { workspaceId, projectId } = useParams();
+  const tabs = [
+    {
+      label: "Overview",
+      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}`,
+    },
+    {
+      label: "Endpoints",
+      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints`,
+    },
+    {
+      label: "Requests",
+      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/requests`,
+    },
+    {
+      label: "Replays",
+      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/replays`,
+    },
+    {
+      label: "Analytics",
+      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/analytics`,
+    },
+  ];
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -10,7 +34,24 @@ function ProjectLayout() {
         <p className="text-text-secondary">Project Management</p>
       </div>
 
-      <div>Project Navigation Here</div>
+      <div className="flex gap-2 border-b border-border-default">
+        {tabs.map((tab) => (
+          <NavLink
+            key={tab.label}
+            to={tab.path}
+            end={tab.label === "Overview"}
+            className={({ isActive }) =>
+              `px-4 py-2 text-sm ${
+                isActive
+                  ? "border-b-2 border-primary font-medium"
+                  : "text-text-secondary"
+              }`
+            }
+          >
+            {tab.label}
+          </NavLink>
+        ))}
+      </div>
       <div className="flex items-center gap-4 text-sm text-text-secondary">
         <span>{currentProject?.endpointCount} Endpoints</span>
 

@@ -11,7 +11,9 @@ function EndpointRequests() {
   const endpoint = useCurrentEndpoint();
   const [requests, setRequests] = useState<RequestLog[]>([]);
 
-  useLiveRequests(endpoint?.slug);
+  useLiveRequests(endpoint?.slug, (newRequest) => {
+    setRequests((prev) => [newRequest, ...prev]);
+  });
   useEffect(() => {
     if (!endpointId) return;
 

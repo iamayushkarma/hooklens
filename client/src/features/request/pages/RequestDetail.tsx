@@ -6,6 +6,7 @@ import type { RequestLog } from "../types/request.types";
 import { JsonSection } from "../components/JsonSection";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { replayRequest } from "../api/replayRequest";
+import { deleteRequest } from "../api/deleteRequest";
 
 function RequestDetail() {
   const { requestId } = useParams();
@@ -46,7 +47,21 @@ function RequestDetail() {
       </div>
     );
   }
+  const handleDelete = async () => {
+    if (!request) return;
 
+    const confirmed = window.confirm("Delete this request?");
+
+    if (!confirmed) return;
+
+    try {
+      await deleteRequest(request._id);
+
+      goBack();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -91,7 +106,10 @@ function RequestDetail() {
               AI Explain
             </button>
 
-            <button className="rounded-lg border border-red-500/20 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10">
+            <button
+              onClick={handleDelete}
+              className="rounded-lg border border-red-500/20 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10"
+            >
               Delete
             </button>
           </div>

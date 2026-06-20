@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getRequests } from "@/features/request/api/getRequests";
+import { getRequests } from "@/features/request/api/getRequest";
 import type { RequestLog } from "@/features/request/types/request.types";
 import RequestCard from "@/features/request/components/RequestCard";
 

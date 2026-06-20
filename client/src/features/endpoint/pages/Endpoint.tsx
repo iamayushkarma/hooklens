@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { getEndpoints } from "../api/getEndpoints";
 import type { Endpoint as EndpointType } from "../types/endpoint.types";
+import EndpointCard from "../components/EndpointCard";
 
 function Endpoint() {
   const { projectId } = useParams();
@@ -23,7 +24,12 @@ function Endpoint() {
 
   return (
     <div>
-      <pre>{JSON.stringify(endpoints, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(endpoints, null, 2)}</pre> */}
+      <div className="space-y-4">
+        {endpoints.map((endpoint) => (
+          <EndpointCard key={endpoint._id} endpoint={endpoint} />
+        ))}
+      </div>
     </div>
   );
 }

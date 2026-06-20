@@ -1,7 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
+
 function WorkspaceLayout() {
-  const { currentWorkspaceId } = useCurrentWorkspace();
+  const { currentWorkspace, currentWorkspaceId } = useCurrentWorkspace();
 
   const tabs = [
     {
@@ -30,16 +31,16 @@ function WorkspaceLayout() {
     <div className="space-y-6">
       {/* Header */}
       <div className="border-b border-border-default pb-4">
-        <h1 className="text-2xl font-semibold">Workspace Name</h1>
+        <h1 className="text-2xl font-semibold">{currentWorkspace?.name}</h1>
 
-        <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
-          <span>Owner</span>
-          <span>3 Members</span>
-          <span>12 Projects</span>
-          <p>{currentWorkspaceId}</p>
+        <div className="mt-2 flex items-center gap-4 text-sm text-text-secondary">
+          <span className="capitalize">{currentWorkspace?.yourRole}</span>
+
+          <span>{currentWorkspace?.memberCount} Members</span>
+
+          <span>{currentWorkspace?.projectCount} Projects</span>
         </div>
       </div>
-
       {/* Navigation */}
       <div className="flex gap-2 border-b border-border-default">
         {tabs.map((tab) => (

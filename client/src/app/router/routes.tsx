@@ -14,6 +14,10 @@ import WorkspaceInvitations from "@/features/workspace/pages/WorkspaceInvitation
 import WorkspaceSettings from "@/features/workspace/pages/WorkspaceSettings";
 import ProjectLayout from "@/features/project/pages/ProjectLayout";
 import ProjectOverview from "@/features/project/pages/ProjectOverview";
+import ProjectEndpoints from "@/features/project/pages/ProjectEndpoints";
+import ProjectRequests from "@/features/project/pages/ProjectRequests";
+import ProjectReplays from "@/features/project/pages/ProjectReplays";
+import ProjectAnalytics from "@/features/project/pages/ProjectAnalytics";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -36,7 +40,13 @@ export const appRoutes = (
         path="workspaces/:workspaceId/projects/:projectId"
         element={<ProjectLayout />}
       >
-        <Route index element={<ProjectOverview />} />
+        <Route index element={<ProjectEndpoints />} />
+
+        <Route path="requests" element={<ProjectRequests />} />
+
+        <Route path="replays" element={<ProjectReplays />} />
+
+        <Route path="analytics" element={<ProjectAnalytics />} />
       </Route>
       {/* <Route path="project" element={<Projects />} /> */}
     </Route>

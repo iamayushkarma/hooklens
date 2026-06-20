@@ -8,12 +8,8 @@ function ProjectLayout() {
   const { workspaceId, projectId } = useParams();
   const tabs = [
     {
-      label: "Overview",
-      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}`,
-    },
-    {
       label: "Endpoints",
-      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints`,
+      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}`,
     },
     {
       label: "Requests",
@@ -44,7 +40,7 @@ function ProjectLayout() {
           <NavLink
             key={tab.label}
             to={tab.path}
-            end={tab.label === "Overview"}
+            end
             className={({ isActive }) =>
               `px-4 py-2 text-sm ${
                 isActive

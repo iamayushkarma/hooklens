@@ -17,6 +17,10 @@ import ProjectRequests from "@/features/project/pages/ProjectRequests";
 import ProjectReplays from "@/features/project/pages/ProjectReplays";
 import ProjectAnalytics from "@/features/project/pages/ProjectAnalytics";
 import Endpoint from "@/features/endpoint/pages/Endpoint";
+import EndpointLayout from "@/features/endpoint/pages/EndpointLayout";
+import EndpointRequests from "@/features/endpoint/pages/EndpointRequests";
+import EndpointAnalytics from "@/features/endpoint/pages/EndpointAnalytics";
+import EndpointSettings from "@/features/endpoint/pages/EndpointSettings";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -46,6 +50,16 @@ export const appRoutes = (
         <Route path="replays" element={<ProjectReplays />} />
 
         <Route path="analytics" element={<ProjectAnalytics />} />
+      </Route>
+      <Route
+        path="workspaces/:workspaceId/projects/:projectId/endpoints/:endpointId"
+        element={<EndpointLayout />}
+      >
+        <Route index element={<EndpointRequests />} />
+
+        <Route path="analytics" element={<EndpointAnalytics />} />
+
+        <Route path="settings" element={<EndpointSettings />} />
       </Route>
       {/* <Route path="project" element={<Projects />} /> */}
     </Route>

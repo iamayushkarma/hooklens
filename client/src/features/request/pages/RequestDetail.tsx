@@ -4,9 +4,11 @@ import { useParams } from "react-router-dom";
 import { getRequest } from "@/features/request/api/getRequest";
 import type { RequestLog } from "../types/request.types";
 import { JsonSection } from "../components/JsonSection";
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 function RequestDetail() {
   const { requestId } = useParams();
+  const { goBack } = useAppNavigation();
 
   const [request, setRequest] = useState<RequestLog | null>(null);
 
@@ -36,25 +38,48 @@ function RequestDetail() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <div className="flex items-center gap-3">
-          <span
-            className={`rounded-md px-3 py-1 text-sm font-medium ${
-              request.method === "GET"
-                ? "bg-blue-500/10 text-blue-500"
-                : request.method === "POST"
-                  ? "bg-green-500/10 text-green-500"
-                  : request.method === "PUT"
-                    ? "bg-yellow-500/10 text-yellow-500"
-                    : request.method === "DELETE"
-                      ? "bg-red-500/10 text-red-500"
-                      : "bg-primary/10 text-primary"
-            }`}
-          >
-            {request.method}
-          </span>
+      <div className="space-y-4">
+        <button
+          onClick={goBack}
+          className="text-sm text-text-secondary hover:text-text-primary"
+        >
+          ← Back to Requests
+        </button>
 
-          <h1 className="text-2xl font-semibold">Request Detail</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span
+              className={`rounded-md px-3 py-1 text-sm font-medium ${
+                request.method === "GET"
+                  ? "bg-blue-500/10 text-blue-500"
+                  : request.method === "POST"
+                    ? "bg-green-500/10 text-green-500"
+                    : request.method === "PUT"
+                      ? "bg-yellow-500/10 text-yellow-500"
+                      : request.method === "DELETE"
+                        ? "bg-red-500/10 text-red-500"
+                        : "bg-primary/10 text-primary"
+              }`}
+            >
+              {request.method}
+            </span>
+
+            <h1 className="text-2xl font-semibold">Request Detail</h1>
+          </div>
+
+          <div className="flex gap-2">
+            <button className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar">
+              Replay Request
+            </button>
+
+            <button className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar">
+              AI Explain
+            </button>
+
+            <button className="rounded-lg border border-red-500/20 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10">
+              Delete
+            </button>
+          </div>
         </div>
       </div>
 

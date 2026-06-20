@@ -1,8 +1,10 @@
 import { useCurrentProject } from "../hooks/useCurrentProject";
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 import { NavLink, Outlet, useParams } from "react-router-dom";
 function ProjectLayout() {
   const { currentProject } = useCurrentProject();
+  const { goToWorkspace } = useAppNavigation();
   const { workspaceId, projectId } = useParams();
   const tabs = [
     {
@@ -28,6 +30,9 @@ function ProjectLayout() {
   ];
   return (
     <div className="flex flex-col gap-6">
+      <button onClick={() => goToWorkspace(workspaceId!)}>
+        ← Back to Workspace
+      </button>
       <div>
         <h1 className="text-2xl font-semibold">{currentProject?.name}</h1>
 

@@ -8,23 +8,22 @@ export function useLiveRequests(
   useEffect(() => {
     if (!slug) return;
 
+    console.log("JOINING ROOM:", slug);
+
     socket.emit("inspect:join", slug);
 
     const handleNewRequest = (data: any) => {
+      console.log("REQUEST NEW", data);
+
       onNewRequest(data.request);
     };
 
-    socket.on("connect", () => {
-      console.log("CONNECTED", socket.id);
-    });
     socket.on("request:new", handleNewRequest);
-    socket.on("request:new", (data) => {
-      console.log("REQUEST NEW", data);
-    });
 
     return () => {
       socket.emit("inspect:leave", slug);
+
       socket.off("request:new", handleNewRequest);
     };
-  }, [slug, onNewRequest]);
+  }, [slug]);
 }

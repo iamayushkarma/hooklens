@@ -42,7 +42,7 @@ export const getRoomName = (slug: string): string => `endpoint:${slug}`;
 // Slug Normalization
 const normalizeSlug = (raw: unknown): string | null => {
   if (typeof raw !== "string") return null;
-  const slug = raw.trim().toLowerCase();
+  const slug = raw.trim();
   // Rejecting empty, too long, or slugs with illegal characters
   if (!slug || slug.length > 64 || !/^[a-z0-9_-]+$/.test(slug)) return null;
   return slug;
@@ -239,6 +239,7 @@ export const setupSocket = (server: http.Server): void => {
   // Runs once per connection before any events.
   // Unauthenticated sockets are rejected here — never reach event handlers.
   io.use((socket: AppSocket, next) => {
+    console.log("Socket auth: ", socket.handshake.auth);
     const token = socket.handshake.auth?.token;
 
     if (!token || typeof token !== "string") {

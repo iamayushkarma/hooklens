@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getRequests } from "@/features/request/api/getRequests";
 import type { RequestLog } from "@/features/request/types/request.types";
@@ -11,9 +11,11 @@ function EndpointRequests() {
   const endpoint = useCurrentEndpoint();
   const [requests, setRequests] = useState<RequestLog[]>([]);
 
-  useLiveRequests(endpoint?.slug, (newRequest) => {
+  const handleNewRequest = useCallback((newRequest: RequestLog) => {
     setRequests((prev) => [newRequest, ...prev]);
-  });
+  }, []);
+
+  useLiveRequests(endpoint?.slug, handleNewRequest);
   useEffect(() => {
     if (!endpointId) return;
 

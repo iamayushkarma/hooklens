@@ -7,10 +7,12 @@ import { JsonSection } from "../components/JsonSection";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { replayRequest } from "../api/replayRequest";
 import { deleteRequest } from "../api/deleteRequest";
+import { explainRequest } from "../api/explainRequest";
 
 function RequestDetail() {
   const { requestId } = useParams();
   const { goBack } = useAppNavigation();
+  const [explanation, setExplanation] = useState("");
 
   const [request, setRequest] = useState<RequestLog | null>(null);
 
@@ -29,6 +31,17 @@ function RequestDetail() {
     fetchRequest();
   }, [requestId]);
 
+  const handleExplain = async () => {
+    if (!request) return;
+
+    try {
+      const res = await explainRequest(request._id);
+
+      setExplanation(res.explanation);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleReplay = async () => {
     if (!request) return;
 
@@ -102,8 +115,11 @@ function RequestDetail() {
               Replay Request
             </button>
 
-            <button className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar">
-              AI Explain
+            <button
+              onClick={handleExplain}
+              className="rounded-lg border px-4 py-2"
+            >
+              Explain Payload
             </button>
 
             <button
@@ -148,7 +164,13 @@ function RequestDetail() {
           <p className="break-all">{request.userAgent}</p>
         </div>
       </div>
+      {explanation && (
+        <div className="rounded-lg border p-4">
+          <h3 className="font-medium">AI Explanation</h3>
 
+          <p className="mt-2 text-sm">{explanation}</p>
+        </div>
+      )}
       {/* Payload */}
       <JsonSection title="Headers" data={request.headers ?? {}} />
 

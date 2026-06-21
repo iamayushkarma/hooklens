@@ -10,7 +10,7 @@ function EndpointRequests() {
   const { endpointId } = useParams();
   const endpoint = useCurrentEndpoint();
   const [requests, setRequests] = useState<RequestLog[]>([]);
-
+  const [search, setSearch] = useState("");
   const handleNewRequest = useCallback((newRequest: RequestLog) => {
     setRequests((prev) => [newRequest, ...prev]);
   }, []);
@@ -28,9 +28,27 @@ function EndpointRequests() {
     fetchRequests();
   }, [endpointId]);
 
+  const filteredRequests = requests.filter((request) => {
+    const query = search.toLowerCase();
+
+    return (
+      request.method.toLowerCase().includes(query) ||
+      request.ip.toLowerCase().includes(query) ||
+      request.userAgent.toLowerCase().includes(query) ||
+      request.contentType?.toLowerCase().includes(query) ||
+      JSON.stringify(request.body).toLowerCase().includes(query)
+    );
+  });
   return (
     <div className="space-y-3">
-      {requests.map((request) => (
+      <input
+        type="text"
+        placeholder="Search requests..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full rounded-lg border border-border-default px-4 py-2"
+      />
+      {filteredRequests.map((request) => (
         <RequestCard key={request._id} request={request} />
       ))}
     </div>

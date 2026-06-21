@@ -20,13 +20,23 @@ export interface ServerToClientEvents {
   "socket:error": (data: { event: string; message: string }) => void;
 }
 
+export interface JoinResponse {
+  success: boolean;
+  message: string;
+  slug?: string;
+}
+
 export interface ClientToServerEvents {
-  "inspect:join": (slug: string) => void;
+  "inspect:join": (
+    slug: string,
+    callback: (response: JoinResponse) => void,
+  ) => void;
   "inspect:leave": (slug: string) => void;
 }
 
 interface SocketData {
   userId: string;
+  joiningRooms: Set<string>;
 }
 
 type AppSocket = Socket<
@@ -44,7 +54,7 @@ const normalizeSlug = (raw: unknown): string | null => {
   if (typeof raw !== "string") return null;
   const slug = raw.trim();
   // Rejecting empty, too long, or slugs with illegal characters
-  if (!slug || slug.length > 64 || !/^[a-z0-9_-]+$/.test(slug)) return null;
+  if (!slug || slug.length > 64 || !/^[A-Za-z0-9_-]+$/.test(slug)) return null;
   return slug;
 };
 
@@ -259,76 +269,104 @@ export const setupSocket = (server: http.Server): void => {
   // Connection
   io.on("connection", (socket: AppSocket) => {
     const { userId } = socket.data;
+    socket.data.joiningRooms = new Set<string>();
 
     log.info("socket:connected", { socketId: socket.id, userId });
 
     // inspect:join
-    socket.on("inspect:join", async (rawSlug) => {
-      // 1. Rate limit — reject spam before any DB work
-      if (!joinLimiter.isAllowed(socket.id)) {
-        socket.emit("socket:error", {
-          event: "inspect:join",
-          message: "Too many join requests. Wait a moment.",
-        });
-        log.warn("socket:join:ratelimited", { socketId: socket.id, userId });
-        return;
-      }
-
-      // 2. Normalize and validate slug format
-      const slug = normalizeSlug(rawSlug);
-      if (!slug) {
-        socket.emit("socket:error", {
-          event: "inspect:join",
-          message: "Invalid endpoint slug",
-        });
-        return;
-      }
-
-      const room = getRoomName(slug);
-
-      // 3. Duplicate join prevention — joining the same room twice is a no-op
-      //    but we skip the DB query entirely if already joined
-      if (socket.rooms.has(room)) return;
-
-      // 4. RBAC check — workspace membership, not owner-only
-      try {
-        const { allowed, reason } = await canAccessEndpointBySlug(slug, userId);
-
-        if (!allowed) {
+    socket.on(
+      "inspect:join",
+      async (rawSlug, callback: (response: JoinResponse) => void) => {
+        const slug = normalizeSlug(rawSlug);
+        if (!slug) {
+          const payload = {
+            success: false,
+            message: "Invalid endpoint slug",
+          };
           socket.emit("socket:error", {
             event: "inspect:join",
-            message: reason ?? "Access denied",
+            message: payload.message,
           });
-          log.warn("socket:join:denied", {
-            socketId: socket.id,
-            userId,
-            slug,
-            reason,
-          });
+          callback(payload);
           return;
         }
 
-        socket.join(room);
-        log.info("socket:join:success", {
-          socketId: socket.id,
-          userId,
-          slug,
-          room,
-        });
-      } catch (err) {
-        // Something failed in DB — tell client to retry, log full error server-side
-        socket.emit("socket:error", {
-          event: "inspect:join",
-          message: "Could not join room. Please try again.",
-        });
-        log.error("socket:join:exception", {
-          socketId: socket.id,
-          userId,
-          slug,
-          error: err instanceof Error ? err.message : String(err),
-        });
-      }
-    });
+        const room = getRoomName(slug);
+
+        if (socket.rooms.has(room) || socket.data.joiningRooms.has(room)) {
+          callback({ success: true, message: "Already joined", slug });
+          return;
+        }
+
+        if (!joinLimiter.isAllowed(socket.id)) {
+          const payload = {
+            success: false,
+            message: "Too many join requests. Wait a moment.",
+          };
+          socket.emit("socket:error", {
+            event: "inspect:join",
+            message: payload.message,
+          });
+          log.warn("socket:join:ratelimited", { socketId: socket.id, userId });
+          callback(payload);
+          return;
+        }
+
+        socket.data.joiningRooms.add(room);
+        try {
+          const { allowed, reason } = await canAccessEndpointBySlug(
+            slug,
+            userId,
+          );
+
+          if (!allowed) {
+            const payload = {
+              success: false,
+              message: reason ?? "Access denied",
+            };
+            socket.emit("socket:error", {
+              event: "inspect:join",
+              message: payload.message,
+            });
+            log.warn("socket:join:denied", {
+              socketId: socket.id,
+              userId,
+              slug,
+              reason,
+            });
+            callback(payload);
+            return;
+          }
+
+          await socket.join(room);
+          log.info("socket:join:success", {
+            socketId: socket.id,
+            userId,
+            slug,
+            room,
+          });
+          callback({ success: true, message: "Joined room", slug });
+        } catch (err) {
+          const payload = {
+            success: false,
+            message: "Could not join room. Please try again.",
+          };
+          socket.emit("socket:error", {
+            event: "inspect:join",
+            message: payload.message,
+          });
+          log.error("socket:join:exception", {
+            socketId: socket.id,
+            userId,
+            slug,
+            error: err instanceof Error ? err.message : String(err),
+          });
+          callback(payload);
+        } finally {
+          socket.data.joiningRooms.delete(room);
+        }
+      },
+    );
 
     // inspect:leave
     socket.on("inspect:leave", (rawSlug) => {

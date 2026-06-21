@@ -5,12 +5,13 @@ import type { RequestLog } from "@/features/request/types/request.types";
 import RequestCard from "@/features/request/components/RequestCard";
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { useLiveRequests } from "@/features/request/hook/useLiveRequests";
-
+const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
 function EndpointRequests() {
   const { endpointId } = useParams();
   const endpoint = useCurrentEndpoint();
   const [requests, setRequests] = useState<RequestLog[]>([]);
   const [search, setSearch] = useState("");
+  const [methodFilter, setMethodFilter] = useState("ALL");
   const handleNewRequest = useCallback((newRequest: RequestLog) => {
     setRequests((prev) => [newRequest, ...prev]);
   }, []);
@@ -31,13 +32,17 @@ function EndpointRequests() {
   const filteredRequests = requests.filter((request) => {
     const query = search.toLowerCase();
 
-    return (
+    const matchesSearch =
       request.method.toLowerCase().includes(query) ||
       request.ip.toLowerCase().includes(query) ||
       request.userAgent.toLowerCase().includes(query) ||
       request.contentType?.toLowerCase().includes(query) ||
-      JSON.stringify(request.body).toLowerCase().includes(query)
-    );
+      JSON.stringify(request.body).toLowerCase().includes(query);
+
+    const matchesMethod =
+      methodFilter === "ALL" || request.method === methodFilter;
+
+    return matchesSearch && matchesMethod;
   });
   return (
     <div className="space-y-3">
@@ -48,6 +53,21 @@ function EndpointRequests() {
         onChange={(e) => setSearch(e.target.value)}
         className="w-full rounded-lg border border-border-default px-4 py-2"
       />
+      <div className="flex flex-wrap gap-2">
+        {methods.map((method) => (
+          <button
+            key={method}
+            onClick={() => setMethodFilter(method)}
+            className={`rounded-lg px-3 py-1 text-sm ${
+              methodFilter === method
+                ? "bg-primary text-text-primary"
+                : "border border-border-default"
+            }`}
+          >
+            {method}
+          </button>
+        ))}
+      </div>
       {filteredRequests.map((request) => (
         <RequestCard key={request._id} request={request} />
       ))}

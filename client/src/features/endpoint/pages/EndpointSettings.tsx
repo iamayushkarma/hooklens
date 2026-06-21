@@ -1,22 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Copy, Trash2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { updateEndpoint } from "../api/updateEndpoint";
 import { deleteEndpoint } from "../api/deleteEndpoint";
-import { useNavigate, useParams } from "react-router-dom";
+
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
 
-  const [label, setLabel] = useState(endpoint?.label ?? "");
+  const navigate = useNavigate();
+  const { workspaceId, projectId } = useParams();
 
-  const webhookUrl = `${import.meta.env.VITE_API_BASE_URL}/h/${endpoint?.slug}`;
+  const [label, setLabel] = useState("");
+
+  useEffect(() => {
+    if (endpoint) {
+      setLabel(endpoint.label);
+    }
+  }, [endpoint]);
+
+  if (!endpoint) {
+    return (
+      <div className="rounded-lg border border-border-default p-6">
+        Loading endpoint...
+      </div>
+    );
+  }
+
+  const webhookUrl = `http://localhost:8000/h/${endpoint.slug}`;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(webhookUrl);
+    try {
+      await navigator.clipboard.writeText(webhookUrl);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const handleToggleStatus = async () => {
-    if (!endpoint) return;
 
+  const handleToggleStatus = async () => {
     try {
       await updateEndpoint(endpoint._id, {
         isActive: !endpoint.isActive,
@@ -27,9 +49,8 @@ function EndpointSettings() {
       console.error(error);
     }
   };
-  const handleSave = async () => {
-    if (!endpoint) return;
 
+  const handleSave = async () => {
     try {
       await updateEndpoint(endpoint._id, {
         label,
@@ -42,7 +63,17 @@ function EndpointSettings() {
   };
 
   const handleDelete = async () => {
-    console.log("Delete endpoint");
+    const confirmed = window.confirm("Delete this endpoint permanently?");
+
+    if (!confirmed) return;
+
+    try {
+      await deleteEndpoint(endpoint._id);
+
+      navigate(`/dashboard/workspaces/${workspaceId}/projects/${projectId}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -51,9 +82,9 @@ function EndpointSettings() {
       <div className="rounded-lg border border-border-default p-5">
         <h2 className="mb-4 text-lg font-semibold">Endpoint Information</h2>
 
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div>
-            <label className="mb-1 block text-sm text-text-secondary">
+            <label className="mb-2 block text-sm text-text-secondary">
               Label
             </label>
 
@@ -67,27 +98,42 @@ function EndpointSettings() {
           <div>
             <p className="text-sm text-text-secondary">Endpoint Slug</p>
 
-            <p className="font-mono">{endpoint?.slug}</p>
+            <p className="font-mono text-sm">{endpoint.slug}</p>
           </div>
 
           <div>
-            <p className="text-sm text-text-secondary">Status</p>
+            <p className="text-sm text-text-secondary">Endpoint ID</p>
 
-            <span
-              className={`rounded-full px-2 py-1 text-xs ${
-                endpoint?.isActive
-                  ? "bg-green-500/10 text-green-500"
-                  : "bg-red-500/10 text-red-500"
-              }`}
-            >
-              {endpoint?.isActive ? "Active" : "Disabled"}
-            </span>
-            <button
-              onClick={handleToggleStatus}
-              className="rounded-lg border border-border-default px-4 py-2"
-            >
-              {endpoint?.isActive ? "Disable Endpoint" : "Enable Endpoint"}
-            </button>
+            <p className="font-mono text-sm break-all">{endpoint._id}</p>
+          </div>
+
+          <div>
+            <p className="text-sm text-text-secondary">Total Requests</p>
+
+            <p className="text-xl font-semibold">{endpoint.requestCount}</p>
+          </div>
+
+          <div>
+            <p className="mb-2 text-sm text-text-secondary">Status</p>
+
+            <div className="flex items-center gap-3">
+              <span
+                className={`rounded-full px-2 py-1 text-xs ${
+                  endpoint.isActive
+                    ? "bg-green-500/10 text-green-500"
+                    : "bg-red-500/10 text-red-500"
+                }`}
+              >
+                {endpoint.isActive ? "Active" : "Disabled"}
+              </span>
+
+              <button
+                onClick={handleToggleStatus}
+                className="rounded-lg border border-border-default px-3 py-1 text-sm"
+              >
+                {endpoint.isActive ? "Disable Endpoint" : "Enable Endpoint"}
+              </button>
+            </div>
           </div>
 
           <button
@@ -104,7 +150,7 @@ function EndpointSettings() {
         <h2 className="mb-4 text-lg font-semibold">Webhook URL</h2>
 
         <div className="flex items-center gap-3">
-          <code className="flex-1 overflow-hidden rounded-lg bg-background p-3 text-sm">
+          <code className="flex-1 overflow-x-auto rounded-lg bg-background p-3 text-sm">
             {webhookUrl}
           </code>
 
@@ -122,7 +168,8 @@ function EndpointSettings() {
         <h2 className="mb-4 text-lg font-semibold text-red-500">Danger Zone</h2>
 
         <p className="mb-4 text-sm text-text-secondary">
-          Permanently delete this endpoint and all associated requests.
+          Permanently delete this endpoint and all associated requests. This
+          action cannot be undone.
         </p>
 
         <button

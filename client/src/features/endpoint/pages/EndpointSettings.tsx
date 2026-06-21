@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Copy, Trash2 } from "lucide-react";
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
-
+import { updateEndpoint } from "../api/updateEndpoint";
+import { deleteEndpoint } from "../api/deleteEndpoint";
+import { useNavigate, useParams } from "react-router-dom";
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
 
@@ -12,9 +14,31 @@ function EndpointSettings() {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(webhookUrl);
   };
+  const handleToggleStatus = async () => {
+    if (!endpoint) return;
 
+    try {
+      await updateEndpoint(endpoint._id, {
+        isActive: !endpoint.isActive,
+      });
+
+      alert("Status updated");
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleSave = async () => {
-    console.log("Update endpoint");
+    if (!endpoint) return;
+
+    try {
+      await updateEndpoint(endpoint._id, {
+        label,
+      });
+
+      alert("Endpoint updated");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleDelete = async () => {
@@ -58,6 +82,12 @@ function EndpointSettings() {
             >
               {endpoint?.isActive ? "Active" : "Disabled"}
             </span>
+            <button
+              onClick={handleToggleStatus}
+              className="rounded-lg border border-border-default px-4 py-2"
+            >
+              {endpoint?.isActive ? "Disable Endpoint" : "Enable Endpoint"}
+            </button>
           </div>
 
           <button

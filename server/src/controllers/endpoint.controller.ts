@@ -205,23 +205,41 @@ const sendTestRequest = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Endpoint not found");
   }
 
+  const payload = {
+    event: "hooklens.test",
+    source: "hooklens",
+    timestamp: new Date().toISOString(),
+  };
+
   const request = await RequestLog.create({
     endpointId: endpoint._id,
     workspaceId: endpoint.workspaceId,
+    userId: endpoint.userId,
+
     method: "POST",
+
     headers: {
       "content-type": "application/json",
     },
-    body: {
-      event: "hooklens.test",
-      source: "hooklens",
-      timestamp: new Date().toISOString(),
-    },
+
+    body: payload,
+
+    rawBody: JSON.stringify(payload),
+
     query: {},
+
     ip: "127.0.0.1",
+
     userAgent: "HookLens Test Request",
+
     contentType: "application/json",
+
+    size: Buffer.byteLength(JSON.stringify(payload), "utf8"),
   });
+
+  endpoint.requestCount += 1;
+
+  await endpoint.save();
 
   emitRequestNew(endpoint.slug, request);
 

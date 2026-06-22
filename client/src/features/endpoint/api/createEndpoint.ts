@@ -2,8 +2,8 @@ import api from "@/shared/api/axios";
 
 interface CreateEndpointPayload {
   label: string;
-  projectId: string;
   workspaceId: string;
+  projectId: string;
 }
 
 export async function createEndpoint(data: CreateEndpointPayload) {

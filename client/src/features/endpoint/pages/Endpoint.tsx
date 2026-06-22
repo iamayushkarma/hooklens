@@ -8,9 +8,8 @@ import EndpointCard from "../components/EndpointCard";
 
 function Endpoint() {
   const { projectId } = useParams();
-  const [showCreate, setShowCreate] = useState(false);
   const [endpoints, setEndpoints] = useState<EndpointType[]>([]);
-
+  const [showCreateEndpoint, setShowCreateEndpoint] = useState(false);
   useEffect(() => {
     if (!projectId) return;
 
@@ -24,13 +23,22 @@ function Endpoint() {
   }, [projectId]);
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Endpoints</h2>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold">Endpoints</h2>
 
-        <CreateEndpointBtn onClick={() => setShowCreate(true)} />
+          <p className="text-sm text-text-secondary">
+            Inspect and monitor incoming webhook requests.
+          </p>
+        </div>
+
+        <CreateEndpointBtn onClick={() => setShowCreateEndpoint(true)} />
       </div>
 
-      {showCreate && <CreateEndpoint onClose={() => setShowCreate(false)} />}
+      <CreateEndpoint
+        isOpen={showCreateEndpoint}
+        onClose={() => setShowCreateEndpoint(false)}
+      />
 
       <div className="space-y-4">
         {endpoints.map((endpoint) => (

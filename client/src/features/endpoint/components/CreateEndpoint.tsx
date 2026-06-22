@@ -1,23 +1,33 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import Modal from "@/shared/components/ui/ModalPortal";
+import { Button } from "@/shared/components/ui/Button";
+import { Input } from "@/shared/components/ui/Input";
+
 import { createEndpoint } from "../api/createEndpoint";
 
-interface Props {
+interface CreateEndpointProps {
+  isOpen: boolean;
   onClose: () => void;
 }
 
-function CreateEndpoint({ onClose }: Props) {
+function CreateEndpoint({ isOpen, onClose }: CreateEndpointProps) {
   const navigate = useNavigate();
 
   const { workspaceId, projectId } = useParams();
 
   const [label, setLabel] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleCreate = async () => {
-    if (!workspaceId || !projectId || !label.trim()) return;
+    if (!workspaceId || !projectId || !label.trim()) {
+      return;
+    }
 
     try {
+      setLoading(true);
+
       const endpoint = await createEndpoint({
         label,
         workspaceId,
@@ -31,38 +41,43 @@ function CreateEndpoint({ onClose }: Props) {
       );
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-xl bg-bg-card p-6">
-        <h2 className="mb-4 text-lg font-semibold">Create Endpoint</h2>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="space-y-5">
+        <div>
+          <h2 className="text-lg font-semibold">Create Endpoint</h2>
 
-        <input
+          <p className="text-sm text-text-secondary">
+            Create a webhook endpoint to inspect incoming requests.
+          </p>
+        </div>
+
+        <Input
+          label="Endpoint Name"
+          placeholder="Stripe Webhook"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          placeholder="Stripe Webhook"
-          className="w-full rounded-lg border border-border-default px-4 py-2"
         />
 
-        <div className="mt-4 flex justify-end gap-3">
-          <button
+        <div className="flex justify-end gap-3">
+          <Button
             onClick={onClose}
-            className="rounded-lg border border-border-default px-4 py-2"
+            className="bg-transparent border border-border-default text-text-primary hover:bg-base-hover"
           >
             Cancel
-          </button>
+          </Button>
 
-          <button
-            onClick={handleCreate}
-            className="rounded-lg bg-primary px-4 py-2 text-white"
-          >
-            Create
-          </button>
+          <Button loading={loading} onClick={handleCreate}>
+            Create Endpoint
+          </Button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 

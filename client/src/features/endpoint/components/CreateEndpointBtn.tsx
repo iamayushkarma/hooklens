@@ -1,14 +1,17 @@
-interface Props {
+import { Plus } from "lucide-react";
+
+interface CreateEndpointBtnProps {
   onClick: () => void;
 }
 
-function CreateEndpointBtn({ onClick }: Props) {
+function CreateEndpointBtn({ onClick }: CreateEndpointBtnProps) {
   return (
     <button
       onClick={onClick}
-      className="rounded-lg bg-primary px-4 py-2 text-white"
+      className="h-9 rounded-md bg-accent px-4 text-white hover:bg-accent-hover flex items-center gap-2"
     >
-      + Create Endpoint
+      <Plus size={16} />
+      Create Endpoint
     </button>
   );
 }

@@ -14,6 +14,7 @@ import { Project } from "../models/project.model";
 import { RequestLog } from "../models/requestLog.model";
 import { emitEndpointDisabled } from "../socket/events";
 import { invalidateAccessCache } from "../socket";
+import { emitRequestNew } from "../socket/events";
 
 // Helper Functions
 
@@ -194,10 +195,46 @@ const getEndpointRequests = asyncHandler(
     );
   },
 );
+
+const sendTestRequest = asyncHandler(async (req, res) => {
+  const endpointId = req.params.id;
+
+  const endpoint = await Endpoint.findById(endpointId);
+
+  if (!endpoint) {
+    throw new ApiError(404, "Endpoint not found");
+  }
+
+  const request = await RequestLog.create({
+    endpointId: endpoint._id,
+    workspaceId: endpoint.workspaceId,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: {
+      event: "hooklens.test",
+      source: "hooklens",
+      timestamp: new Date().toISOString(),
+    },
+    query: {},
+    ip: "127.0.0.1",
+    userAgent: "HookLens Test Request",
+    contentType: "application/json",
+  });
+
+  emitRequestNew(endpoint.slug, request);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, request, "Test request generated"));
+});
+
 export {
   getEndpoint,
   createEndpoint,
   updateEndpoint,
   deleteEndpoint,
   getEndpointRequests,
+  sendTestRequest,
 };

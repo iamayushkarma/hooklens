@@ -120,5 +120,34 @@ const explainRequest = asyncHandler(async (req: Request, res: Response) => {
 
   res.json(new ApiResponse(200, { explanation }, "OK"));
 });
+const getProjectRequests = asyncHandler(async (req: Request, res: Response) => {
+  const userId = getUserId(req);
 
-export { getRequest, deleteRequest, replayRequestHandler, explainRequest };
+  const projectId = getParam(req, "projectId");
+
+  const endpoints = await Endpoint.find({
+    projectId,
+  }).lean();
+
+  const endpointIds = endpoints.map((endpoint) => endpoint._id);
+
+  const requests = await RequestLog.find({
+    endpointId: {
+      $in: endpointIds,
+    },
+  })
+    .sort({
+      createdAt: -1,
+    })
+    .limit(500)
+    .lean();
+
+  res.json(new ApiResponse(200, requests, "Project requests fetched"));
+});
+export {
+  getRequest,
+  deleteRequest,
+  replayRequestHandler,
+  explainRequest,
+  getProjectRequests,
+};

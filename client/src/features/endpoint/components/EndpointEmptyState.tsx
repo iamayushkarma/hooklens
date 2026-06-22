@@ -1,7 +1,7 @@
 import { Copy, Send } from "lucide-react";
 
 import { Button } from "@/shared/components/ui/Button";
-
+import CodeExamples from "./CodeExamples";
 import { sendTestRequest } from "../api/sendTestRequest";
 
 interface Props {
@@ -27,10 +27,10 @@ function EndpointEmptyState({ endpointId, slug }: Props) {
   return (
     <div className="rounded-xl border border-border-default p-8">
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-xl font-semibold">No Requests Yet</h2>
+        <h2 className="text-xl font-semibold">Your endpoint is ready</h2>
 
         <p className="mt-2 text-text-secondary">
-          Send requests to your webhook URL and inspect them in real time.
+          Send a webhook request to start inspecting payloads in real time.
         </p>
 
         <div className="mt-6 rounded-lg border border-border-default p-4 text-left">
@@ -40,13 +40,20 @@ function EndpointEmptyState({ endpointId, slug }: Props) {
             {webhookUrl}
           </code>
 
-          <div className="mt-4 flex gap-3">
-            <Button onClick={handleCopy}>
+          <p className="mt-2 text-xs text-text-secondary">
+            Endpoint ID: {slug}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button onClick={handleCopy} className="flex items-center gap-2">
               <Copy size={16} />
               Copy URL
             </Button>
 
-            <Button onClick={handleTestRequest}>
+            <Button
+              onClick={handleTestRequest}
+              className="flex items-center gap-2"
+            >
               <Send size={16} />
               Send Test Request
             </Button>
@@ -68,6 +75,10 @@ function EndpointEmptyState({ endpointId, slug }: Props) {
             <li>• Send requests using Fetch</li>
           </ul>
         </div>
+      </div>
+
+      <div className="mt-8">
+        <CodeExamples webhookUrl={webhookUrl} />
       </div>
     </div>
   );

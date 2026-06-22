@@ -5,6 +5,7 @@ import {
   updateEndpoint,
   deleteEndpoint,
   getEndpointRequests,
+  sendTestRequest,
 } from "../controllers/endpoint.controller";
 import { authenticateUser } from "../middleware/auth.middleware";
 import { apiRateLimit } from "../middleware/rateLimit.middleware";
@@ -19,6 +20,7 @@ router.get("/", getEndpoint);
 router.post("/", createEndpoint);
 router.patch("/:id", updateEndpoint);
 router.delete("/:id", deleteEndpoint);
+router.post("/:id/test", sendTestRequest);
 router.get("/:id/requests", getEndpointRequests);
 
 export default router;

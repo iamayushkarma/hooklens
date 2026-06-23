@@ -112,6 +112,22 @@
   --color-text-muted: #2e2e2e;
   --color-text-accent: #2633cb;
 
+  --color-owner-text: #8b96f0;
+  --color-owner-bg: #0c0e25;
+  --color-owner-border: #1e2460;
+
+  --color-admin-text: #fcd34d;
+  --color-admin-bg: #1c1505;
+  --color-admin-border: #3a2c08;
+
+  --color-member-text: #4ade80;
+  --color-member-bg: #081508;
+  --color-member-border: #0f3a0f;
+
+  --color-viewer-text: #71717a;
+  --color-viewer-bg: #18181b;
+  --color-viewer-border: #27272a;
+
   --color-accent-subtle: #0c0e25;
   --color-base-hover: #171717;
   --color-danger-hover: #b62324;

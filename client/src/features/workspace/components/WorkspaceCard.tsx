@@ -98,13 +98,6 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
 
       {/* Body */}
       <div className="space-y-4 p-4">
-        {/* Role */}
-        <div>
-          <span className="rounded-full bg-bg-sidebar px-2.5 py-1 text-xs font-medium capitalize">
-            {workspace.yourRole}
-          </span>
-        </div>
-
         {/* Stats */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">

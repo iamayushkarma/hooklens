@@ -40,7 +40,11 @@ function Workspace() {
           </p>
         </div>
         {/* Serching */}
-        <Input placeholder="Search for workspace..." />
+        <Input
+          isSearch={true}
+          className="w-82!"
+          placeholder="Search for workspace..."
+        />
       </div>
       <div className="flex flex-wrap gap-3">
         {workspaces.map((workspace) => (

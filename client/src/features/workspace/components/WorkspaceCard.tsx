@@ -56,7 +56,7 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
       }}
       onMouseEnter={() => setShowOpenWorkspace(true)}
       onMouseLeave={() => setShowOpenWorkspace(false)}
-      className="rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm cursor-pointer"
+      className="rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm cursor-pointer h-56"
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border-default p-4">

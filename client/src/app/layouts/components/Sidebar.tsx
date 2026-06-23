@@ -7,17 +7,12 @@ import {
   LayoutDashboard,
   Building2,
   FolderKanban,
-  PlugZap,
-  Inbox,
-  RefreshCw,
-  ChartColumn,
   Users,
   MailPlus,
   Settings,
   Menu,
   BellRing,
   X,
-  ChevronsUpDown,
   LogOut,
   CircleUserRound,
   type LucideIcon,
@@ -69,7 +64,7 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
     fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0
     h-dvh
     ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-    ${collapsed ? "w-14" : "w-70"}
+    ${collapsed ? "w-14" : "w-68"}
   `}
     >
       {/* Top section */}
@@ -132,33 +127,6 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
                 label: "Project",
                 icon: FolderKanban,
                 path: "/dashboard/project",
-              },
-            ]}
-          />
-          {/* Monitoring */}
-          <SideNavigation
-            heading="Monitoring"
-            collapsed={collapsed}
-            routes={[
-              {
-                label: "Endpoints",
-                icon: PlugZap,
-                path: "/dashboard/endpoints",
-              },
-              {
-                label: "Requests",
-                icon: Inbox,
-                path: "/dashboard/requests",
-              },
-              {
-                label: "Replays",
-                icon: RefreshCw,
-                path: "/dashboard/replays",
-              },
-              {
-                label: "Analytics",
-                icon: ChartColumn,
-                path: "/dashboard/analytics",
               },
             ]}
           />

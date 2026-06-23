@@ -1,8 +1,4 @@
-import {
-  roleBadgeClass,
-  roleDotClass,
-  type Role,
-} from "@/shared/lib/role-colors";
+import { roleBadgeClass, type Role } from "@/shared/lib/role-colors";
 
 export function RoleBadge({ role }: { role: Role }) {
   return (
@@ -11,7 +7,6 @@ export function RoleBadge({ role }: { role: Role }) {
       border px-2.5 py-0.5 text-xs font-medium capitalize
       ${roleBadgeClass[role]}`}
     >
-      <span className={`size-1.5 rounded-full ${roleDotClass[role]}`} />
       {role}
     </span>
   );

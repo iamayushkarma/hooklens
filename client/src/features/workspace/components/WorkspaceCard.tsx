@@ -3,6 +3,8 @@ import { useWorkspaceStore } from "@/store/workspace.store";
 import { FolderKanban, Settings, Users } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RoleBadge } from "@/shared/components/ui/role-badge";
+import type { Role } from "@/shared/lib/role-colors";
 
 const pastelColors = [
   { bg: "#E8EAFF", text: "#3D3F8F", darkBg: "#2A2C52", darkText: "#B4B8FF" }, // Periwinkle
@@ -79,9 +81,7 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
             <h2 className="truncate text-base font-semibold">
               {workspace.name}
             </h2>
-            <span className="rounded-full bg-bg-sidebar px-2.5 py-1 text-xs font-medium capitalize">
-              {workspace.yourRole}
-            </span>
+            <RoleBadge role={workspace.yourRole as Role} />
           </div>
         </div>
         {showSetting && (

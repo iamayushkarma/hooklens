@@ -18,13 +18,6 @@ export const roleBadgeClass: Record<Role, string> = {
     "bg-[var(--color-viewer-bg)] text-[var(--color-viewer-text)] border-[var(--color-viewer-border)]",
 };
 
-export const roleDotClass: Record<Role, string> = {
-  owner: "bg-[var(--color-owner-text)]",
-  admin: "bg-[var(--color-admin-text)]",
-  member: "bg-[var(--color-member-text)]",
-  viewer: "bg-[var(--color-viewer-text)]",
-};
-
 export function hasPermission(user: Role, required: Role): boolean {
   return ROLE_LEVEL[user] >= ROLE_LEVEL[required];
 }

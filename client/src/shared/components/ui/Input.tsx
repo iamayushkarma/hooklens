@@ -41,7 +41,7 @@ export function Input({
           placeholder:text-sm
           focus:border-gray-700 focus:border-2
           transition-colors
-          ${isSearch ? "pl-10" : "pl-0"}
+          ${isSearch ? "pl-10" : ""}
           ${error ? "border-red-500" : ""}
           ${className ?? ""}
         `}

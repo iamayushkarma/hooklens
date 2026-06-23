@@ -1,10 +1,11 @@
 import type { WorkspaceProp } from "@/features/workspace/types/workspace.type";
 import { useWorkspaceStore } from "@/store/workspace.store";
-import { FolderKanban, Settings, Users } from "lucide-react";
+import { FolderKanban, Users, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
 import type { Role } from "@/shared/lib/role-colors";
+import { LuArrowUpRight } from "react-icons/lu";
 
 const pastelColors = [
   { bg: "#E8EAFF", text: "#3D3F8F", darkBg: "#2A2C52", darkText: "#B4B8FF" }, // Periwinkle
@@ -17,7 +18,7 @@ const pastelColors = [
   { bg: "#E2F6F0", text: "#1A6B55", darkBg: "#0E2E24", darkText: "#7FD4C0" }, // Seafoam
 ];
 function WorkspaceCard({ ...workspace }: WorkspaceProp) {
-  const [showSetting, setShowSetting] = useState(false);
+  const [showOpenWorkspace, setShowOpenWorkspace] = useState(false);
   const navigate = useNavigate();
   const setCurrentWorkspaceId = useWorkspaceStore(
     (state) => state.setCurrentWorkspaceId,
@@ -53,9 +54,9 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
         setCurrentWorkspaceId(workspace._id);
         navigate(`/dashboard/workspaces/${workspace._id}`);
       }}
-      onMouseEnter={() => setShowSetting(true)}
-      onMouseLeave={() => setShowSetting(false)}
-      className="rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm"
+      onMouseEnter={() => setShowOpenWorkspace(true)}
+      onMouseLeave={() => setShowOpenWorkspace(false)}
+      className="rounded-lg border border-border-default bg-bg-card transition-all hover:border-border-hover hover:shadow-sm cursor-pointer"
     >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border-default p-4">
@@ -81,47 +82,47 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
             <h2 className="truncate text-base font-semibold">
               {workspace.name}
             </h2>
-            <RoleBadge role={workspace.yourRole as Role} />
+            <p className="text-text-secondary text-[.8rem]">
+              Created{" "}
+              {new Date(workspace.createdAt).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+              })}
+            </p>
           </div>
         </div>
-        {showSetting && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className="cursor-pointer text-text-secondary hover:text-text-primary"
-          >
-            <Settings className="size-4" />
-          </button>
-        )}
+
+        <RoleBadge role={workspace.yourRole as Role} />
       </div>
 
-      {/* Body */}
-      <div className="space-y-4 p-4">
-        {/* Stats */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <Users className="size-4 text-text-secondary" />
-            <div>
-              <p className="text-sm font-semibold">{workspace.memberCount}</p>
-              <p className="text-xs text-text-secondary">Members</p>
-            </div>
-          </div>
+      {/* Stats */}
+      <div className="flex items-center p-4 gap-2">
+        <StateCard
+          count={workspace.projectCount}
+          icon={FolderKanban}
+          stateFor="Projects"
+        />
+        <StateCard
+          count={workspace.memberCount}
+          icon={Users}
+          stateFor="Member"
+        />
+      </div>
 
-          <div className="flex items-center gap-2">
-            <FolderKanban className="size-4 text-text-secondary" />
-            <div>
-              <p className="text-sm font-semibold">{workspace.projectCount}</p>
-              <p className="text-xs text-text-secondary">Projects</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-border-default pt-3">
-          <p className="text-xs text-text-secondary">
-            Updated {formatDate(workspace.updatedAt)}
-          </p>
+      {/* Footer */}
+      <div className="border-t p-4 border-border-default pt-3 flex items-center justify-between">
+        <p className="text-xs text-text-secondary">
+          Updated {formatDate(workspace.updatedAt)}
+        </p>
+        <div
+          className={`px-2 py-0.75 bg-bg-sidebar text-[.78rem] rounded-md hover:bg-base-hover flex items-center gap-1 border border-border-default transition-all duration-200 ${
+            showOpenWorkspace
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 translate-x-2 pointer-events-none"
+          }`}
+        >
+          Go to workspace
+          <LuArrowUpRight />
         </div>
       </div>
     </div>
@@ -129,3 +130,20 @@ function WorkspaceCard({ ...workspace }: WorkspaceProp) {
 }
 
 export default WorkspaceCard;
+
+type StateCardProp = {
+  count: number;
+  icon: LucideIcon;
+  stateFor: string;
+};
+const StateCard = ({ count, icon: Icon, stateFor }: StateCardProp) => {
+  return (
+    <div className="flex items-center gap-2 bg-bg-sidebar px-4 py-3 rounded-md  w-full">
+      <Icon className="size-4 text-text-secondary" />
+      <div>
+        <p className="text-xs text-text-secondary">{stateFor}</p>
+        <p className="text-md font-semibold">{count}</p>
+      </div>
+    </div>
+  );
+};

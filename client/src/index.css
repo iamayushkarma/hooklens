@@ -12,6 +12,26 @@
   --radius-xl: 16px;
   --radius-full: 9999px;
 
+  /* owner — uses your accent color */
+  --color-owner-text: #2633cb;
+  --color-owner-bg: #eceeff;
+  --color-owner-border: #c7ccf5;
+
+  /* admin — reuses --color-warning-* */
+  --color-admin-text: #d97706;
+  --color-admin-bg: #fffbeb;
+  --color-admin-border: #fde68a;
+
+  /* member — reuses --color-success-* */
+  --color-member-text: #059669;
+  --color-member-bg: #ecfdf5;
+  --color-member-border: #a7f3d0;
+
+  /* viewer — neutral gray */
+  --color-viewer-text: #71717a;
+  --color-viewer-bg: #f4f4f5;
+  --color-viewer-border: #d4d4d8;
+
   /* Transitions */
   --transition-fast: 100ms ease;
   --transition-base: 150ms ease;

@@ -21,7 +21,7 @@ export function Input({
     setShowPassword((prev) => !prev);
   };
   return (
-    <div className="flex flex-col gap-1 relative">
+    <div className="flex flex-col gap-1 relative bg-bg-card">
       {label && (
         <label className="text-sm font-medium text-text-primary">{label}</label>
       )}
@@ -29,14 +29,15 @@ export function Input({
       <input
         type={isPassword ? (showPassword ? "text" : "password") : props.type}
         className={`
-          h-11 w-full rounded-md border
+          h-11 w-full rounded-lg border
           border-border-subtle
            px-3
+           shadow-sm
           text-sm outline-none
           font-medium
           placeholder:font-medium
           placeholder:text-sm
-          focus:border-border-strong focus:border-2
+          focus:border-gray-700 focus:border-2
           transition-colors
           ${error ? "border-red-500" : ""}
           ${className ?? ""}

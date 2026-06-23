@@ -4,6 +4,7 @@ import WorkspaceCard from "../components/WorkspaceCard";
 import CreateWorkspaceBtn from "../components/CreateWorkspaceBtn";
 import type { WorkspaceProp } from "../types/workspace.type";
 import { useWorkspaceStore } from "@/store/workspace.store";
+import { Input } from "@/shared/components/ui/Input";
 function Workspace() {
   const [workspaces, setWorkspaces] = useState<WorkspaceProp[]>([]);
   const setWorkspaceStore = useWorkspaceStore((state) => state.setWorkspaces);
@@ -28,7 +29,7 @@ function Workspace() {
 
   return (
     <div className="px-3">
-      <div className="">
+      <div className="flex items-center justify-between">
         {/* Heading */}
         <div className="py-2 pb-3 flex gap-1 flex-col">
           <h2 className="font-semibold text-text-primary text-2xl">
@@ -38,6 +39,8 @@ function Workspace() {
             {totalWorkspaces} workspaces · {totalProjects} projects total
           </p>
         </div>
+        {/* Serching */}
+        <Input placeholder="Search for workspace..." />
       </div>
       <div className="flex flex-wrap gap-3">
         {workspaces.map((workspace) => (

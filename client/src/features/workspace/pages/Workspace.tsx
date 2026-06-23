@@ -13,19 +13,39 @@ function Workspace() {
 
       setWorkspaces(data);
       setWorkspaceStore(data);
-      console.log(data);
+      console.log("Workspace data: ", data);
     };
 
     fetchWorkspaces();
   }, []);
 
-  return (
-    <div className="flex flex-wrap gap-3">
-      {workspaces.map((workspace) => (
-        <WorkspaceCard key={workspace._id} {...workspace} />
-      ))}
+  const totalWorkspaces = workspaces.length;
 
-      <CreateWorkspaceBtn />
+  const totalProjects = workspaces.reduce(
+    (sum, workspace) => sum + workspace.projectCount,
+    0,
+  );
+
+  return (
+    <div className="px-3">
+      <div className="">
+        {/* Heading */}
+        <div className="py-2 pb-3 flex gap-1 flex-col">
+          <h2 className="font-semibold text-text-primary text-2xl">
+            Workspaces
+          </h2>
+          <p className="text-text-secondary text-[.9rem]">
+            {totalWorkspaces} workspaces · {totalProjects} projects total
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        {workspaces.map((workspace) => (
+          <WorkspaceCard key={workspace._id} {...workspace} />
+        ))}
+
+        <CreateWorkspaceBtn />
+      </div>
     </div>
   );
 }

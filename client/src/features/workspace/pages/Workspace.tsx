@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getWorkspaces } from "../api/getWorkspaces";
 import WorkspaceCard from "../components/WorkspaceCard";
 import CreateWorkspaceBtn from "../components/CreateWorkspaceBtn";
@@ -7,6 +7,7 @@ import { useWorkspaceStore } from "@/store/workspace.store";
 import { Input } from "@/shared/components/ui/Input";
 function Workspace() {
   const [workspaces, setWorkspaces] = useState<WorkspaceProp[]>([]);
+  const [serchWorkspaces, setSerchWorkspaces] = useState("");
   const setWorkspaceStore = useWorkspaceStore((state) => state.setWorkspaces);
   useEffect(() => {
     const fetchWorkspaces = async () => {
@@ -19,6 +20,12 @@ function Workspace() {
 
     fetchWorkspaces();
   }, []);
+
+  const filteredWorkspaces = useMemo(() => {
+    return workspaces.filter((workspace) =>
+      workspace.name.toLowerCase().includes(serchWorkspaces.toLowerCase()),
+    );
+  }, [workspaces, serchWorkspaces]);
 
   const totalWorkspaces = workspaces.length;
 
@@ -44,15 +51,21 @@ function Workspace() {
           isSearch={true}
           className="w-82!"
           placeholder="Search for workspace..."
+          value={serchWorkspaces}
+          onChange={(e) => setSerchWorkspaces(e.target.value)}
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4 ">
-        {workspaces.map((workspace) => (
-          <WorkspaceCard key={workspace._id} {...workspace} />
-        ))}
+      {filteredWorkspaces.length === 0 ? (
+        <p className="text-text-secondary">No workspaces found.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4 ">
+          {filteredWorkspaces.map((workspace) => (
+            <WorkspaceCard key={workspace._id} {...workspace} />
+          ))}
 
-        <CreateWorkspaceBtn />
-      </div>
+          {!serchWorkspaces.trim() && <CreateWorkspaceBtn />}
+        </div>
+      )}
     </div>
   );
 }

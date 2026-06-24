@@ -361,7 +361,7 @@ const StateCard = ({ count, icon: Icon, stateFor }: StateCardProp) => {
               </div>
             ))}
             {count > 3 && (
-              <span className="bg-owner-bg text-accent text-[10px] font-medium w-5 h-5 rounded-full border border-border-default -ml-1 flex items-center justify-center">
+              <span className="bg-owner-bg text-accent text-[11px] font-medium w-5 h-5 rounded-full border border-border-default -ml-1 flex items-center justify-center">
                 +{count - 3}
               </span>
             )}

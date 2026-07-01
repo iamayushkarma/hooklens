@@ -64,8 +64,9 @@ function CreateWorkspace({
       </p>
 
       <div className="mt-5">
-        <label className="text-sm font-medium">Workspace Name</label>
+        {/* <label className="text-sm font-medium"></label> */}
         <Input
+          label="Workspace Name"
           value={userInput}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -86,7 +87,7 @@ function CreateWorkspace({
       <div className="mt-6 flex justify-end gap-4">
         <button
           onClick={() => closeModal()}
-          className="cursor-pointer font-normal text-text-secondary hover:text-text-primary duration-100 ease-in"
+          className="cursor-pointer font-normal text-sm text-text-secondary hover:text-text-primary duration-100 ease-in"
         >
           Cancel
         </button>
@@ -94,6 +95,7 @@ function CreateWorkspace({
         <Button
           disabled={!userInput.trim() || loading}
           onClick={handleCreateWorkspace}
+          className="text-sm!"
         >
           {loading ? "Creating..." : "Create"}
         </Button>

@@ -15,7 +15,6 @@ function Endpoint() {
 
     const fetchEndpoints = async () => {
       const data = await getEndpoints(projectId);
-
       setEndpoints(data);
     };
 

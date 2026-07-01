@@ -46,17 +46,15 @@ function WorkspaceLayout() {
         </div>
       </div>
       {/* Navigation */}
-      <div className="flex gap-2 border-b border-border-default">
+      <div className="flex gap-2 bg-bg-sidebar border border-border-default w-fit rounded-md p-0.75">
         {tabs.map((tab) => (
           <NavLink
             key={tab.label}
             to={tab.path}
             end
             className={({ isActive }) =>
-              `px-4 py-2 text-sm transition-colors ${
-                isActive
-                  ? "border-b-2 border-blue-500 font-medium"
-                  : "text-text-secondary"
+              `px-2.5 py-1.5 text-sm rounded-[5px] transition-colors ${
+                isActive ? "bg-bg-card font-medium" : "text-text-secondary"
               }`
             }
           >

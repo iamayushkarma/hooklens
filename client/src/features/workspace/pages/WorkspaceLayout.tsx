@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
 import { FolderKanban, UsersRound } from "lucide-react";
+import { motion } from "motion/react";
 
 function WorkspaceLayout() {
   const { currentWorkspace, currentWorkspaceId } = useCurrentWorkspace();
@@ -48,17 +49,31 @@ function WorkspaceLayout() {
       {/* Navigation */}
       <div className="flex gap-2 bg-bg-sidebar border border-border-default w-fit rounded-md p-0.75">
         {tabs.map((tab) => (
-          <NavLink
-            key={tab.label}
-            to={tab.path}
-            end
-            className={({ isActive }) =>
-              `px-2.5 py-1.5 text-sm rounded-[5px] transition-colors ${
-                isActive ? "bg-bg-card font-medium" : "text-text-secondary"
-              }`
-            }
-          >
-            {tab.label}
+          <NavLink key={tab.label} to={tab.path} end className="relative">
+            {({ isActive }) => (
+              <div className="relative px-2.5 py-1.5 text-sm">
+                {isActive && (
+                  <motion.div
+                    layoutId="workspace-tab-pill"
+                    className="absolute inset-0 rounded-[5px] pointer-events-none bg-bg-card shadow-md border border-border-default"
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 30,
+                    }}
+                  />
+                )}
+                <span
+                  className={`relative z-10 transition-colors ${
+                    isActive
+                      ? "font-medium text-text-primary"
+                      : "text-text-secondary"
+                  }`}
+                >
+                  {tab.label}
+                </span>
+              </div>
+            )}
           </NavLink>
         ))}
       </div>

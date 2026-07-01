@@ -1,6 +1,7 @@
 import { Copy } from "lucide-react";
 import { Button } from "@/shared/components/ui/Button";
 import type { Endpoint } from "../types/endpoint.types";
+import CopyButton from "@/shared/components/ui/CopyButton";
 
 interface Props {
   endpoint: Endpoint;
@@ -8,10 +9,6 @@ interface Props {
 
 function EndpointOverview({ endpoint }: Props) {
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint.slug}`;
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(webhookUrl);
-  };
 
   return (
     <div className="rounded-lg border border-border-default p-4">
@@ -37,10 +34,7 @@ function EndpointOverview({ endpoint }: Props) {
             {endpoint.requestCount} Requests
           </span>
 
-          <Button onClick={handleCopy} className="flex items-center gap-2">
-            <Copy size={16} />
-            Copy URL
-          </Button>
+          <CopyButton content={webhookUrl} showLabel />
         </div>
       </div>
     </div>

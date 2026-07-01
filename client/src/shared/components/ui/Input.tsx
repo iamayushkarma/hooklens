@@ -23,7 +23,7 @@ export function Input({
     setShowPassword((prev) => !prev);
   };
   return (
-    <div className="flex flex-col gap-1 relative bg-bg-card rounded-lg">
+    <div className="flex flex-col gap-1 relative rounded-lg">
       {label && (
         <label className="text-sm font-medium text-text-primary">{label}</label>
       )}

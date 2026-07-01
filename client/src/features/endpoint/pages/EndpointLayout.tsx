@@ -1,7 +1,6 @@
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
-import { Copy } from "lucide-react";
-import { Button } from "@/shared/components/ui/Button";
 import { Outlet, NavLink, useParams } from "react-router-dom";
+import { CopyButton } from "@/shared/components/ui/CopyButton";
 
 function EndpointLayout() {
   const endpoint = useCurrentEndpoint();
@@ -10,14 +9,6 @@ function EndpointLayout() {
 
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;
   console.log("webhookUrl: ", webhookUrl);
-
-  const handleCopyWebhook = async () => {
-    try {
-      await navigator.clipboard.writeText(webhookUrl);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const tabs = [
     {
@@ -50,9 +41,12 @@ function EndpointLayout() {
             <div className="flex-1">
               <p className="mb-2 text-sm text-text-secondary">Webhook URL</p>
 
-              <code className="block overflow-auto rounded-lg bg-background p-3 text-sm">
-                {webhookUrl}
-              </code>
+              <div className="flex items-center gap-2">
+                <code className="block overflow-auto rounded-lg bg-background p-3 text-sm">
+                  {webhookUrl}
+                </code>
+                <CopyButton content={webhookUrl} />
+              </div>
 
               <p className="mt-2 text-xs text-text-secondary">
                 Endpoint Slug: {endpoint?.slug}
@@ -73,14 +67,6 @@ function EndpointLayout() {
               <span className="text-sm text-text-secondary">
                 {endpoint?.requestCount ?? 0} Requests
               </span>
-
-              <Button
-                onClick={handleCopyWebhook}
-                className="flex items-center gap-2"
-              >
-                <Copy size={16} />
-                Copy URL
-              </Button>
             </div>
           </div>
 

@@ -1,6 +1,8 @@
+import Tabs from "@/shared/components/ui/Tabs";
 import { useCurrentProject } from "../hooks/useCurrentProject";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { ArrowLeft } from "lucide-react";
+import { motion } from "motion/react";
 
 import { NavLink, Outlet, useParams } from "react-router-dom";
 function ProjectLayout() {
@@ -42,25 +44,7 @@ function ProjectLayout() {
 
           <p className="text-text-secondary">Project Management</p>
         </div>
-
-        <div className="flex gap-2 border-b border-border-default">
-          {tabs.map((tab) => (
-            <NavLink
-              key={tab.label}
-              to={tab.path}
-              end
-              className={({ isActive }) =>
-                `px-4 py-2 text-sm ${
-                  isActive
-                    ? "border-b-2 border-primary font-medium"
-                    : "text-text-secondary"
-                }`
-              }
-            >
-              {tab.label}
-            </NavLink>
-          ))}
-        </div>
+        <Tabs tabs={tabs} />
         <div className="flex items-center gap-4 text-sm text-text-secondary">
           <span>{currentProject?.endpointCount} Endpoints</span>
 

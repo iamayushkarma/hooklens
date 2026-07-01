@@ -10,7 +10,7 @@ interface Props {
 }
 
 function EndpointEmptyState({ endpointId, slug }: Props) {
-  const webhookUrl = `${import.meta.env.VITE_API_BASE_URL}/h/${slug}`;
+  const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${slug}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(webhookUrl);

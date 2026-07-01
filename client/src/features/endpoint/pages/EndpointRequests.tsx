@@ -58,7 +58,7 @@ function EndpointRequests() {
     return matchesSearch && matchesMethod;
   });
 
-  const webhookUrl = `${import.meta.env.VITE_API_BASE_URL}/h/${endpoint?.slug}`;
+  const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;
 
   const handleCopyWebhook = async () => {
     try {

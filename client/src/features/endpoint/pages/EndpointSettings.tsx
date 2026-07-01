@@ -28,7 +28,7 @@ function EndpointSettings() {
     );
   }
 
-  const webhookUrl = `http://localhost:8000/h/${endpoint.slug}`;
+  const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;
 
   const handleCopy = async () => {
     try {

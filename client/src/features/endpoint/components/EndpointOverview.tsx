@@ -7,7 +7,7 @@ interface Props {
 }
 
 function EndpointOverview({ endpoint }: Props) {
-  const webhookUrl = `${import.meta.env.VITE_API_BASE_URL}/h/${endpoint.slug}`;
+  const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint.slug}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(webhookUrl);

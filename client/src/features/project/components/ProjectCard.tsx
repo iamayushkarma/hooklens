@@ -1,7 +1,9 @@
-import { EllipsisVertical } from "lucide-react";
+import { Activity, EllipsisVertical } from "lucide-react";
 import type { Project } from "../types/project.types";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWorkspaceStore } from "@/store/workspace.store";
+import { pastelColors } from "@/features/workspace/components/WorkspaceCard";
+import { TbPlug } from "react-icons/tb";
 
 interface ProjectCardProps {
   project: Project;
@@ -51,6 +53,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
     });
   };
 
+  const getInitials = (name: string) => {
+    const words = name.trim().split(/\s+/);
+    if (words.length === 1) return words[0][0].toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  };
+
+  const getWorkspaceColor = (name: string) => {
+    const hash = name
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return pastelColors[hash % pastelColors.length];
+  };
+
+  const color = getWorkspaceColor(projectInitial);
+
   return (
     <div
       onClick={() => {
@@ -65,8 +82,22 @@ export function ProjectCard({ project }: ProjectCardProps) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary">
-            {projectInitial}
+          <div
+            style={
+              {
+                "--avatar-bg": color.bg,
+                "--avatar-text": color.text,
+                "--avatar-dark-bg": color.darkBg,
+                "--avatar-dark-text": color.darkText,
+                backgroundColor: "var(--avatar-bg)",
+                color: "var(--avatar-text)",
+              } as React.CSSProperties
+            }
+            className="flex items-center text-text-primary justify-center rounded-md size-10"
+          >
+            <span className="p-2.5 text-[.9rem] font-medium">
+              {getInitials(projectInitial)}
+            </span>
           </div>
 
           <div>
@@ -85,12 +116,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </p>
 
       {/* Stats */}
-      <div className="mt-5 flex items-center gap-2 text-sm text-text-secondary">
-        <span>{project.endpointCount} Endpoints</span>
-
-        <span>•</span>
-
-        <span>{project.requestCount} Requests</span>
+      <div className="mt-5 flex items-center gap-5 text-sm text-text-secondary">
+        <div className="flex items-center justify-center gap-1">
+          <TbPlug className="size-4 text-accent" />
+          <span>{project.endpointCount} Endpoints</span>
+        </div>
+        <div className="flex items-center justify-center gap-1.5">
+          <Activity className="size-3.5 text-accent" />
+          <span>{project.requestCount} Requests</span>
+        </div>
       </div>
 
       {/* Footer */}

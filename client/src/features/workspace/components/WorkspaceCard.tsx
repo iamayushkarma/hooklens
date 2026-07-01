@@ -7,7 +7,7 @@ import { RoleBadge } from "@/shared/components/ui/role-badge";
 import type { Role } from "@/shared/lib/role-colors";
 import { LuArrowUpRight } from "react-icons/lu";
 
-const pastelColors = [
+export const pastelColors = [
   { bg: "#E8EAFF", text: "#3D3F8F", darkBg: "#2A2C52", darkText: "#B4B8FF" },
   { bg: "#E4F0E8", text: "#2D6641", darkBg: "#1C3527", darkText: "#92D4A4" },
   { bg: "#FCE8EE", text: "#9C2D4A", darkBg: "#3D1A25", darkText: "#F4A8BE" },

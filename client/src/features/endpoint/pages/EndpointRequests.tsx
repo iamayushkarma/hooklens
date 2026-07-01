@@ -6,6 +6,7 @@ import type { RequestLog } from "@/features/request/types/request.types";
 import RequestCard from "@/features/request/components/RequestCard";
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { useLiveRequests } from "@/features/request/hook/useLiveRequests";
+import CopyButton from "@/shared/components/ui/CopyButton";
 
 const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
 
@@ -60,14 +61,6 @@ function EndpointRequests() {
 
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;
 
-  const handleCopyWebhook = async () => {
-    try {
-      await navigator.clipboard.writeText(webhookUrl);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   if (requests.length === 0) {
     return (
       <div className="space-y-6">
@@ -87,12 +80,7 @@ function EndpointRequests() {
               {webhookUrl}
             </code>
 
-            <button
-              onClick={handleCopyWebhook}
-              className="rounded-lg border border-border-default px-4 py-2"
-            >
-              Copy
-            </button>
+            <CopyButton content={webhookUrl} />
           </div>
         </div>
 

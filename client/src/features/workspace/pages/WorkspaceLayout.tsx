@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
+import { FolderKanban, UsersRound } from "lucide-react";
 
 function WorkspaceLayout() {
   const { currentWorkspace, currentWorkspaceId } = useCurrentWorkspace();
@@ -27,15 +28,21 @@ function WorkspaceLayout() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b border-border-default pb-4">
+      <div className="pb-4">
         <h1 className="text-2xl font-semibold">{currentWorkspace?.name}</h1>
 
-        <div className="mt-2 flex items-center gap-4 text-sm text-text-secondary">
+        <div className="mt-4 flex items-center gap-5 text-sm text-text-secondary">
           <RoleBadge role={currentWorkspace?.yourRole!} />
 
-          <span>{currentWorkspace?.memberCount} Members</span>
+          <div className="flex items-center justify-center gap-1.5">
+            <UsersRound className="size-4" />
+            <span>{currentWorkspace?.memberCount} Members</span>
+          </div>
 
-          <span>{currentWorkspace?.projectCount} Projects</span>
+          <div className="flex items-center justify-center gap-1.5">
+            <FolderKanban className="size-4" />
+            <span>{currentWorkspace?.projectCount} Projects</span>
+          </div>
         </div>
       </div>
       {/* Navigation */}

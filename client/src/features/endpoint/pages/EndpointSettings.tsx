@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { updateEndpoint } from "../api/updateEndpoint";
 import { deleteEndpoint } from "../api/deleteEndpoint";
+import CopyButton from "@/shared/components/ui/CopyButton";
 
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
@@ -29,14 +30,6 @@ function EndpointSettings() {
   }
 
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(webhookUrl);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleToggleStatus = async () => {
     try {
@@ -154,12 +147,7 @@ function EndpointSettings() {
             {webhookUrl}
           </code>
 
-          <button
-            onClick={handleCopy}
-            className="rounded-lg border border-border-default p-3"
-          >
-            <Copy size={16} />
-          </button>
+          <CopyButton content={webhookUrl} />
         </div>
       </div>
 

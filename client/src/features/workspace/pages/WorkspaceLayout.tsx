@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
+import { RoleBadge } from "@/shared/components/ui/role-badge";
 
 function WorkspaceLayout() {
   const { currentWorkspace, currentWorkspaceId } = useCurrentWorkspace();
@@ -30,7 +31,7 @@ function WorkspaceLayout() {
         <h1 className="text-2xl font-semibold">{currentWorkspace?.name}</h1>
 
         <div className="mt-2 flex items-center gap-4 text-sm text-text-secondary">
-          <span className="capitalize">{currentWorkspace?.yourRole}</span>
+          <RoleBadge role={currentWorkspace?.yourRole!} />
 
           <span>{currentWorkspace?.memberCount} Members</span>
 

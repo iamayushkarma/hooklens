@@ -3,6 +3,7 @@ import { Copy, Send } from "lucide-react";
 import { Button } from "@/shared/components/ui/Button";
 import CodeExamples from "./CodeExamples";
 import { sendTestRequest } from "../api/sendTestRequest";
+import CopyButton from "@/shared/components/ui/CopyButton";
 
 interface Props {
   endpointId: string;
@@ -11,10 +12,6 @@ interface Props {
 
 function EndpointEmptyState({ endpointId, slug }: Props) {
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${slug}`;
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(webhookUrl);
-  };
 
   const handleTestRequest = async () => {
     try {
@@ -45,10 +42,7 @@ function EndpointEmptyState({ endpointId, slug }: Props) {
           </p>
 
           <div className="mt-4 flex flex-wrap gap-3">
-            <Button onClick={handleCopy} className="flex items-center gap-2">
-              <Copy size={16} />
-              Copy URL
-            </Button>
+            <CopyButton content={webhookUrl} />
 
             <Button
               onClick={handleTestRequest}

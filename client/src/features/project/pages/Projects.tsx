@@ -16,7 +16,6 @@ function Projects() {
       const res = await getProjects(workspaceId);
       setProjects(res.projects);
       setProjectsStore(res.projects);
-      console.log(res);
     };
     fetchProject();
   }, [workspaceId]);

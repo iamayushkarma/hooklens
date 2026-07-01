@@ -15,7 +15,6 @@ function Workspace() {
 
       setWorkspaces(data);
       setWorkspaceStore(data);
-      console.log("Workspace data: ", data);
     };
 
     fetchWorkspaces();

@@ -47,8 +47,6 @@ function RequestDetail() {
 
     try {
       const result = await replayRequest(request._id);
-
-      console.log(result);
     } catch (error) {
       console.error(error);
     }

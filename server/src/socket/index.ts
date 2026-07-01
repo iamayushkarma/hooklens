@@ -249,7 +249,6 @@ export const setupSocket = (server: http.Server): void => {
   // Runs once per connection before any events.
   // Unauthenticated sockets are rejected here — never reach event handlers.
   io.use((socket: AppSocket, next) => {
-    console.log("Socket auth: ", socket.handshake.auth);
     const token = socket.handshake.auth?.token;
 
     if (!token || typeof token !== "string") {

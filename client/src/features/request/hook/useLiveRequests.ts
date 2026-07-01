@@ -36,18 +36,15 @@ export function useLiveRequests(
 
     const joinRoom = () => {
       if (!shouldEmitJoin(slug)) return;
-      console.log("JOINING ROOM:", slug);
+
       socket.emit("inspect:join", slug, (response: JoinResponse) => {
         if (!response.success) {
           console.error("JOIN FAILED", response);
-        } else {
-          console.log("JOIN SUCCESS", response);
         }
       });
     };
 
     const handleNewRequest = (data: any) => {
-      console.log("REQUEST NEW", data);
       onNewRequest(data.request);
     };
 
@@ -56,7 +53,6 @@ export function useLiveRequests(
     };
 
     const handleConnect = () => {
-      console.log("SOCKET CONNECTED for requests", socket.id);
       joinRoom();
     };
 

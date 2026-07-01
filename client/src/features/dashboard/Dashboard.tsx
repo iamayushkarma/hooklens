@@ -54,7 +54,7 @@ function Dashboard() {
   if (loading) {
     return <div>Loading...</div>;
   }
-  console.log(analytics);
+
   return (
     <>
       <h1>Dashboard Home</h1>

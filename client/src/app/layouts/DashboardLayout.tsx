@@ -8,7 +8,6 @@ function DashboardLayout() {
   useSocketConnection();
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
-    console.log("useEffect running");
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
     } else {

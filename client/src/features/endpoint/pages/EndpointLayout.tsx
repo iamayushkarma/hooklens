@@ -8,7 +8,6 @@ function EndpointLayout() {
   const { workspaceId, projectId, endpointId } = useParams();
 
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;
-  console.log("webhookUrl: ", webhookUrl);
 
   const tabs = [
     {

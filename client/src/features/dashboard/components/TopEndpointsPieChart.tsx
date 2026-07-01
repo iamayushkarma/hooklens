@@ -25,7 +25,6 @@ interface Props {
   data: Endpoint[];
 }
 function TopEndpointsPieChart({ data }: Props) {
-  console.log("data", data);
   const chartConfig = {
     requests: {
       label: "Requests",

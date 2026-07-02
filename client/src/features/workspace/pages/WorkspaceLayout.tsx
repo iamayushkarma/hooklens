@@ -2,7 +2,6 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
 import { FolderKanban, UsersRound } from "lucide-react";
-import { motion } from "motion/react";
 import Tabs from "@/shared/components/ui/Tabs";
 
 function WorkspaceLayout() {
@@ -16,10 +15,6 @@ function WorkspaceLayout() {
     {
       label: "Members",
       path: `/dashboard/workspaces/${currentWorkspaceId}/members`,
-    },
-    {
-      label: "Invitations",
-      path: `/dashboard/workspaces/${currentWorkspaceId}/invitations`,
     },
     {
       label: "Settings",

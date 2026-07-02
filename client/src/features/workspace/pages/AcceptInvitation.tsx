@@ -1,36 +1,75 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import { useAuthStore } from "@/store/auth.store";
+import { useWorkspaceStore } from "@/store/workspace.store";
+
+import { acceptInvitation } from "../api/acceptInvitation";
+import { getWorkspaces } from "../api/getWorkspaces";
 
 const AcceptInvitation = () => {
   const { token } = useParams();
   const navigate = useNavigate();
+  const auth = useAuthStore();
 
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const setCurrentWorkspaceId = useWorkspaceStore(
+    (state) => state.setCurrentWorkspaceId,
+  );
+
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!token) return;
 
-    if (!isAuthenticated) {
+    if (!auth.token) {
       navigate(`/login?invite=${token}`, {
         replace: true,
       });
-    }
-  }, [isAuthenticated, token, navigate]);
 
-  if (!isAuthenticated) {
-    return null;
+      return;
+    }
+
+    joinWorkspace();
+  }, []);
+
+  const joinWorkspace = async () => {
+    try {
+      await acceptInvitation(token!);
+
+      const workspaces = await getWorkspaces();
+
+      const joinedWorkspace = workspaces.find(
+        (workspace: any) =>
+          workspace._id !== useWorkspaceStore.getState().currentWorkspaceId,
+      );
+
+      if (joinedWorkspace) {
+        setCurrentWorkspaceId(joinedWorkspace._id);
+
+        navigate(`/dashboard/workspaces/${joinedWorkspace._id}`, {
+          replace: true,
+        });
+
+        return;
+      }
+
+      navigate("/dashboard");
+    } catch (err: any) {
+      setError(err?.response?.data?.message ?? "Unable to accept invitation.");
+    }
+  };
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        {error}
+      </div>
+    );
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="rounded-xl border p-8">
-        <h1 className="text-2xl font-semibold">Accept Workspace Invitation</h1>
-
-        <p className="mt-4 text-sm text-muted-foreground">Invitation Token</p>
-
-        <code className="mt-2 block rounded bg-muted px-3 py-2">{token}</code>
-      </div>
+      Joining workspace...
     </div>
   );
 };

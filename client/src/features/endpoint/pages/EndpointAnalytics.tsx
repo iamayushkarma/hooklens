@@ -5,7 +5,7 @@ import { getEndpointAnalytics } from "@/features/analytics/api/getEndpointAnalyt
 import AnalyticsChart from "@/features/endpoint/components/AnalyticsChart";
 import type { EndpointAnalytics } from "../types/endpoint.types";
 
-function EndpointAnalytics() {
+export function EndpointAnalytics() {
   const { endpointId } = useParams();
 
   const [analytics, setAnalytics] = useState<EndpointAnalytics | null>(null);
@@ -119,5 +119,3 @@ function EndpointAnalytics() {
     </div>
   );
 }
-
-export default EndpointAnalytics;

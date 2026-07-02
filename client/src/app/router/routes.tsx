@@ -10,7 +10,6 @@ import Workspace from "@/features/workspace/pages/Workspace";
 import Projects from "@/features/project/pages/Projects";
 import WorkspaceLayout from "@/features/workspace/pages/WorkspaceLayout";
 import WorkspaceMembers from "@/features/workspace/pages/WorkspaceMembers";
-import WorkspaceInvitations from "@/features/workspace/pages/WorkspaceInvitations";
 import WorkspaceSettings from "@/features/workspace/pages/WorkspaceSettings";
 import ProjectLayout from "@/features/project/pages/ProjectLayout";
 import ProjectRequests from "@/features/project/pages/ProjectRequests";
@@ -19,7 +18,7 @@ import ProjectAnalytics from "@/features/project/pages/ProjectAnalytics";
 import Endpoint from "@/features/endpoint/pages/Endpoint";
 import EndpointLayout from "@/features/endpoint/pages/EndpointLayout";
 import EndpointRequests from "@/features/endpoint/pages/EndpointRequests";
-import EndpointAnalytics from "@/features/endpoint/pages/EndpointAnalytics";
+import { EndpointAnalytics } from "@/features/endpoint/pages/EndpointAnalytics";
 import AcceptInvitation from "@/features/workspace/pages/AcceptInvitation";
 import EndpointSettings from "@/features/endpoint/pages/EndpointSettings";
 import RequestDetail from "@/features/request/pages/RequestDetail";
@@ -38,7 +37,7 @@ export const appRoutes = (
         <Route index element={<Projects />} />
 
         <Route path="members" element={<WorkspaceMembers />} />
-        <Route path="invitations" element={<WorkspaceInvitations />} />
+        {/* <Route path="invitations" element={<WorkspaceInvitations />} /> */}
         <Route path="settings" element={<WorkspaceSettings />} />
       </Route>
 

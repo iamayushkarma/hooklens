@@ -12,10 +12,12 @@ import {
 } from "../api/getMembers";
 
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
+import { useAuthStore } from "@/store/auth.store";
+import MemberRoleSelect from "../components/MemberRoleSelect";
 
 function WorkspaceMembers() {
   const { currentWorkspaceId } = useCurrentWorkspace();
-
+  const auth = useAuthStore();
   const [members, setMembers] = useState<WorkspaceMember[]>([]);
 
   const [pendingInvites, setPendingInvites] = useState<PendingInvitation[]>([]);
@@ -74,7 +76,16 @@ function WorkspaceMembers() {
               <p className="text-sm text-text-secondary">{member.user.email}</p>
             </div>
 
-            <RoleBadge role={member.role} />
+            {auth.user?.id === member.user._id || member.role === "owner" ? (
+              <RoleBadge role={member.role} />
+            ) : (
+              <MemberRoleSelect
+                workspaceId={currentWorkspaceId!}
+                userId={member.user._id}
+                currentRole={member.role}
+                onSuccess={loadMembers}
+              />
+            )}
           </div>
         ))}
       </div>

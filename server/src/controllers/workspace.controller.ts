@@ -9,6 +9,7 @@ import { WorkspaceMember } from "../models/workspaceMember.model";
 import { Invitation } from "../models/Invitation.model";
 import { Project } from "../models/project.model";
 import { User } from "../models/user.model";
+import { sendInvitationEmail } from "../services/email.service";
 
 // GET /api/workspaces
 const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
@@ -197,10 +198,11 @@ const inviteMember = asyncHandler(async (req: Request, res: Response) => {
   const { email, role } = req.body;
   const invitedByUserId = req.user.userId;
 
-  const workspace = await Workspace.findById(id).select("_id");
+  const workspace = await Workspace.findById(id).select("_id name");
   if (!workspace) throw new ApiError(404, "Workspace not found");
 
-  const currentUser = await User.findById(invitedByUserId).select("email");
+  const currentUser =
+    await User.findById(invitedByUserId).select("email fullName");
   if (currentUser?.email === email) {
     throw new ApiError(400, "You cannot invite yourself");
   }
@@ -235,9 +237,15 @@ const inviteMember = asyncHandler(async (req: Request, res: Response) => {
     expiresAt,
     status: "pending",
   });
+  const inviteLink = `${process.env.CLIENT_URL}/invite/accept/${token}`;
 
-  // TODO: send email with link ${process.env.CLIENT_URL}/invite/accept/${token}
-
+  await sendInvitationEmail({
+    to: email,
+    inviterName: currentUser?.fullName ?? "HookLens",
+    workspaceName: workspace.name ?? "Workspace",
+    role,
+    inviteLink,
+  });
   return created(
     res,
     { invitationId: invitation._id, email, role, expiresAt },

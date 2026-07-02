@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { acceptInvitation } from "../api/acceptInvitation";
+
 import { useAuthStore } from "@/store/auth.store";
 import { useWorkspaceStore } from "@/store/workspace.store";
 
-import { acceptInvitation } from "../api/acceptInvitation";
-import { getWorkspaces } from "../api/getWorkspaces";
-
 const AcceptInvitation = () => {
   const { token } = useParams();
+
   const navigate = useNavigate();
+
   const auth = useAuthStore();
 
   const setCurrentWorkspaceId = useWorkspaceStore(
@@ -34,26 +35,13 @@ const AcceptInvitation = () => {
 
   const joinWorkspace = async () => {
     try {
-      await acceptInvitation(token!);
+      const result = await acceptInvitation(token!);
 
-      const workspaces = await getWorkspaces();
+      setCurrentWorkspaceId(result.workspaceId);
 
-      const joinedWorkspace = workspaces.find(
-        (workspace: any) =>
-          workspace._id !== useWorkspaceStore.getState().currentWorkspaceId,
-      );
-
-      if (joinedWorkspace) {
-        setCurrentWorkspaceId(joinedWorkspace._id);
-
-        navigate(`/dashboard/workspaces/${joinedWorkspace._id}`, {
-          replace: true,
-        });
-
-        return;
-      }
-
-      navigate("/dashboard");
+      navigate(`/dashboard/workspaces/${result.workspaceId}`, {
+        replace: true,
+      });
     } catch (err: any) {
       setError(err?.response?.data?.message ?? "Unable to accept invitation.");
     }

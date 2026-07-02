@@ -4,7 +4,7 @@ import { Button } from "@/shared/components/ui/Button";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
 import RemoveMemberModal from "../components/RemoveMemberModal";
 import InviteMemberModal from "../components/InviteMemberModal";
-
+import { usePermissions } from "@/shared/hooks/usePermissions";
 import {
   getMembers,
   type WorkspaceMember,
@@ -23,6 +23,7 @@ function WorkspaceMembers() {
   const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(
     null,
   );
+  const permissions = usePermissions();
   const [selectedInvite, setSelectedInvite] =
     useState<PendingInvitation | null>(null);
 
@@ -71,7 +72,9 @@ function WorkspaceMembers() {
           </p>
         </div>
 
-        <Button onClick={() => setInviteOpen(true)}>Invite Member</Button>
+        {permissions.canInviteMembers && (
+          <Button onClick={() => setInviteOpen(true)}>Invite Member</Button>
+        )}
       </div>
 
       <div className="rounded-xl border border-border-default">
@@ -87,7 +90,9 @@ function WorkspaceMembers() {
             </div>
 
             <div className="flex items-center gap-3">
-              {auth.user?.id === member.user._id || member.role === "owner" ? (
+              {!permissions.canManageMembers ||
+              auth.user?.id === member.user._id ||
+              member.role === "owner" ? (
                 <RoleBadge role={member.role} />
               ) : (
                 <>
@@ -139,20 +144,24 @@ function WorkspaceMembers() {
                 <div className="flex items-center gap-3">
                   <RoleBadge role={invite.role} />
 
-                  <ResendInvitationButton
-                    workspaceId={currentWorkspaceId!}
-                    invitationId={invite._id}
-                  />
+                  {permissions.canManageMembers && (
+                    <>
+                      <ResendInvitationButton
+                        workspaceId={currentWorkspaceId!}
+                        invitationId={invite._id}
+                      />
 
-                  <Button
-                    className="bg-red-600 hover:bg-red-700"
-                    onClick={() => {
-                      setSelectedInvite(invite);
-                      setCancelOpen(true);
-                    }}
-                  >
-                    Cancel
-                  </Button>
+                      <Button
+                        className="bg-red-600 hover:bg-red-700"
+                        onClick={() => {
+                          setSelectedInvite(invite);
+                          setCancelOpen(true);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             ))

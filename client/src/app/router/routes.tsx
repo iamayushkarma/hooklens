@@ -20,6 +20,7 @@ import Endpoint from "@/features/endpoint/pages/Endpoint";
 import EndpointLayout from "@/features/endpoint/pages/EndpointLayout";
 import EndpointRequests from "@/features/endpoint/pages/EndpointRequests";
 import EndpointAnalytics from "@/features/endpoint/pages/EndpointAnalytics";
+import AcceptInvitation from "@/features/workspace/pages/AcceptInvitation";
 import EndpointSettings from "@/features/endpoint/pages/EndpointSettings";
 import RequestDetail from "@/features/request/pages/RequestDetail";
 export const appRoutes = (
@@ -28,6 +29,7 @@ export const appRoutes = (
       <Route path="/login" element={<LoginPage />} />
 
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/invite/accept/:token" element={<AcceptInvitation />} />
     </Route>
     <Route path="/dashboard" element={<DashboardLayout />}>
       <Route index element={<Dashboard />} />

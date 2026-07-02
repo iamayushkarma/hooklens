@@ -333,6 +333,28 @@ const acceptInvite = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+// DELETE /api/workspaces/:id/invitations/:invitationId
+const cancelInvitation = asyncHandler(async (req: Request, res: Response) => {
+  const { id, invitationId } = req.params;
+
+  const invitation = await Invitation.findOne({
+    _id: invitationId,
+    workspaceId: id,
+  });
+
+  if (!invitation) {
+    throw new ApiError(404, "Invitation not found");
+  }
+
+  if (invitation.status !== "pending") {
+    throw new ApiError(400, "Only pending invitations can be cancelled");
+  }
+
+  await invitation.deleteOne();
+
+  return ok(res, null, "Invitation cancelled successfully");
+});
+
 // PATCH /api/workspaces/:id/members/:userId/role
 const changeMemberRole = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) throw new ApiError(401, "Unauthorized");
@@ -402,6 +424,7 @@ export {
   updateWorkspace,
   deleteWorkspace,
   getMembers,
+  cancelInvitation,
   inviteMember,
   acceptInvite,
   changeMemberRole,

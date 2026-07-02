@@ -174,7 +174,13 @@ function LoginPage() {
                   Don't have an account?{" "}
                   <button
                     type="button"
-                    onClick={() => navigate("/register")}
+                    onClick={() =>
+                      navigate(
+                        inviteToken
+                          ? `/register?invite=${inviteToken}`
+                          : "/register",
+                      )
+                    }
                     className="font-medium text-accent hover:underline"
                   >
                     Register

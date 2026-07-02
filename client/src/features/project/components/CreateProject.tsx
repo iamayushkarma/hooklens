@@ -3,6 +3,7 @@ import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
 import { createProject } from "../api/createProject";
 import { useWorkspaceStore } from "@/store/workspace.store";
+import { usePermissions } from "@/shared/hooks/usePermissions";
 
 interface CreateProjectProps {
   closeModal: () => void;
@@ -16,6 +17,7 @@ function CreateProject({ closeModal }: CreateProjectProps) {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const permissions = usePermissions();
 
   const validateProject = () => {
     const value = name.trim();
@@ -40,6 +42,10 @@ function CreateProject({ closeModal }: CreateProjectProps) {
   };
 
   const handleCreateProject = async () => {
+    if (!permissions.canCreateProject) {
+      setError("You don't have permission to create a project.");
+      return;
+    }
     const validationError = validateProject();
 
     if (validationError) {

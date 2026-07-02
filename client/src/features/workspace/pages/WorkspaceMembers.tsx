@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/shared/components/ui/Button";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
-
+import RemoveMemberModal from "../components/RemoveMemberModal";
 import InviteMemberModal from "../components/InviteMemberModal";
 
 import {
@@ -18,6 +18,11 @@ import MemberRoleSelect from "../components/MemberRoleSelect";
 function WorkspaceMembers() {
   const { currentWorkspaceId } = useCurrentWorkspace();
   const auth = useAuthStore();
+  const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(
+    null,
+  );
+
+  const [removeOpen, setRemoveOpen] = useState(false);
   const [members, setMembers] = useState<WorkspaceMember[]>([]);
 
   const [pendingInvites, setPendingInvites] = useState<PendingInvitation[]>([]);
@@ -76,16 +81,30 @@ function WorkspaceMembers() {
               <p className="text-sm text-text-secondary">{member.user.email}</p>
             </div>
 
-            {auth.user?.id === member.user._id || member.role === "owner" ? (
-              <RoleBadge role={member.role} />
-            ) : (
-              <MemberRoleSelect
-                workspaceId={currentWorkspaceId!}
-                userId={member.user._id}
-                currentRole={member.role}
-                onSuccess={loadMembers}
-              />
-            )}
+            <div className="flex items-center gap-3">
+              {auth.user?.id === member.user._id || member.role === "owner" ? (
+                <RoleBadge role={member.role} />
+              ) : (
+                <>
+                  <MemberRoleSelect
+                    workspaceId={currentWorkspaceId!}
+                    userId={member.user._id}
+                    currentRole={member.role}
+                    onSuccess={loadMembers}
+                  />
+
+                  <Button
+                    className="bg-red-600 hover:bg-red-700"
+                    onClick={() => {
+                      setSelectedMember(member);
+                      setRemoveOpen(true);
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -123,6 +142,15 @@ function WorkspaceMembers() {
         isOpen={inviteOpen}
         onClose={() => setInviteOpen(false)}
         workspaceId={currentWorkspaceId!}
+        onSuccess={loadMembers}
+      />
+
+      <RemoveMemberModal
+        isOpen={removeOpen}
+        onClose={() => setRemoveOpen(false)}
+        workspaceId={currentWorkspaceId!}
+        userId={selectedMember?.user._id ?? ""}
+        memberName={selectedMember?.user.name ?? ""}
         onSuccess={loadMembers}
       />
     </div>

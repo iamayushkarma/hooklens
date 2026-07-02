@@ -10,6 +10,7 @@ import {
   changeMemberRole,
   removeMember,
   cancelInvitation,
+  resendInvitation,
 } from "../controllers/workspace.controller";
 import { authenticateUser } from "../middleware/auth.middleware";
 import { requireWorkspaceRole } from "../middleware/rbac.middleware";
@@ -41,6 +42,11 @@ router.post(
   requireWorkspaceRole("admin"),
   validate(inviteMemberSchema),
   inviteMember,
+);
+router.post(
+  "/:id/invitations/:invitationId/resend",
+  requireWorkspaceRole("admin"),
+  resendInvitation,
 );
 router.delete(
   "/:id/invitations/:invitationId",

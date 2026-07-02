@@ -18,7 +18,7 @@ export async function sendInvitationEmail({
   role,
   inviteLink,
 }: SendInvitationEmailProps) {
-  return resend.emails.send({
+  const response = await resend.emails.send({
     from: process.env.MAIL_FROM!,
     to,
     subject: `${inviterName} invited you to join ${workspaceName}`,
@@ -29,4 +29,8 @@ export async function sendInvitationEmail({
       inviteLink,
     }),
   });
+
+  console.log("Resend Response:", response);
+
+  return response;
 }

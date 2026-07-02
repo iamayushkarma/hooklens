@@ -2,13 +2,16 @@ import Modal from "@/shared/components/ui/ModalPortal";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import CreateProject from "./CreateProject";
-
+import { usePermissions } from "@/shared/hooks/usePermissions";
 function CreateProjectBtn() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const permissions = usePermissions();
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  if (!permissions.canCreateProject) {
+    return null;
+  }
 
   return (
     <>
@@ -22,7 +25,7 @@ function CreateProjectBtn() {
           <p className="font-medium text-text-primary">Create Project</p>
 
           <p className="text-xs text-text-secondary">
-            Start monitoring a new APIcd...
+            Start monitoring a new API...
           </p>
         </div>
       </div>

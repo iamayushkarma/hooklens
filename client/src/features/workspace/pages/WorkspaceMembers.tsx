@@ -14,6 +14,7 @@ import {
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
 import { useAuthStore } from "@/store/auth.store";
 import MemberRoleSelect from "../components/MemberRoleSelect";
+import CancelInvitationModal from "../components/CancelInvitationModal";
 
 function WorkspaceMembers() {
   const { currentWorkspaceId } = useCurrentWorkspace();
@@ -21,7 +22,10 @@ function WorkspaceMembers() {
   const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(
     null,
   );
+  const [selectedInvite, setSelectedInvite] =
+    useState<PendingInvitation | null>(null);
 
+  const [cancelOpen, setCancelOpen] = useState(false);
   const [removeOpen, setRemoveOpen] = useState(false);
   const [members, setMembers] = useState<WorkspaceMember[]>([]);
 
@@ -131,7 +135,19 @@ function WorkspaceMembers() {
                   </p>
                 </div>
 
-                <RoleBadge role={invite.role} />
+                <div className="flex items-center gap-3">
+                  <RoleBadge role={invite.role} />
+
+                  <Button
+                    className="bg-red-600 hover:bg-red-700"
+                    onClick={() => {
+                      setSelectedInvite(invite);
+                      setCancelOpen(true);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
             ))
           )}
@@ -151,6 +167,15 @@ function WorkspaceMembers() {
         workspaceId={currentWorkspaceId!}
         userId={selectedMember?.user._id ?? ""}
         memberName={selectedMember?.user.name ?? ""}
+        onSuccess={loadMembers}
+      />
+
+      <CancelInvitationModal
+        isOpen={cancelOpen}
+        onClose={() => setCancelOpen(false)}
+        workspaceId={currentWorkspaceId!}
+        invitationId={selectedInvite?._id ?? ""}
+        email={selectedInvite?.email ?? ""}
         onSuccess={loadMembers}
       />
     </div>

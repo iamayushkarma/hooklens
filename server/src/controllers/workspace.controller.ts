@@ -284,6 +284,15 @@ const acceptInvite = asyncHandler(async (req: Request, res: Response) => {
   try {
     session.startTransaction();
 
+    const memberExists = await WorkspaceMember.findOne({
+      workspaceId: invitation.workspaceId,
+      userId,
+    }).session(session);
+
+    if (memberExists) {
+      throw new ApiError(409, "You are already a member");
+    }
+
     await WorkspaceMember.create(
       [{ workspaceId: invitation.workspaceId, userId, role: invitation.role }],
       { session },
@@ -295,11 +304,17 @@ const acceptInvite = asyncHandler(async (req: Request, res: Response) => {
       { session },
     );
 
+    const workspace = await Workspace.findById(invitation.workspaceId)
+      .select("name")
+      .lean();
     await session.commitTransaction();
-
     return ok(
       res,
-      { workspaceId: invitation.workspaceId },
+      {
+        workspaceId: invitation.workspaceId,
+        workspaceName: workspace?.name,
+        role: invitation.role,
+      },
       "Joined workspace successfully",
     );
   } catch (error) {

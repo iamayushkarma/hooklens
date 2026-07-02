@@ -1,7 +1,26 @@
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuthStore } from "@/store/auth.store";
 
 const AcceptInvitation = () => {
   const { token } = useParams();
+  const navigate = useNavigate();
+
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  useEffect(() => {
+    if (!token) return;
+
+    if (!isAuthenticated) {
+      navigate(`/login?invite=${token}`, {
+        replace: true,
+      });
+    }
+  }, [isAuthenticated, token, navigate]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center">

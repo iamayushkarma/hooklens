@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
@@ -16,6 +16,8 @@ import {
 function RegisterPage() {
   const loading = useAuthStore((state) => state.loading);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const inviteToken = searchParams.get("invite");
   const googleLogin = useAuthStore((state) => state.googleLogin);
   const register = useAuthStore((state) => state.register);
 
@@ -31,6 +33,12 @@ function RegisterPage() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await register(data.fullName, data.email, data.password);
+      if (inviteToken) {
+        navigate(`/invite/accept/${inviteToken}`, {
+          replace: true,
+        });
+        return;
+      }
       navigate("/login");
     } catch (err: any) {
       setError("root", {
@@ -148,6 +156,13 @@ function RegisterPage() {
                   onClick={async () => {
                     try {
                       await googleLogin();
+                      if (inviteToken) {
+                        navigate(`/invite/accept/${inviteToken}`, {
+                          replace: true,
+                        });
+                        return;
+                      }
+
                       navigate("/dashboard");
                     } catch (error) {
                       console.error(error);
@@ -178,7 +193,11 @@ function RegisterPage() {
                   Already have an account?{" "}
                   <button
                     type="button"
-                    onClick={() => navigate("/login")}
+                    onClick={() =>
+                      navigate(
+                        inviteToken ? `/login?invite=${inviteToken}` : "/login",
+                      )
+                    }
                     className="font-medium text-accent hover:underline"
                   >
                     Sign in

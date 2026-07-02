@@ -418,6 +418,55 @@ const removeMember = asyncHandler(async (req: Request, res: Response) => {
   return ok(res, null, "Member removed");
 });
 
+// POST /api/workspaces/:id/invitations/:invitationId/resend
+const resendInvitation = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
+  const { id, invitationId } = req.params;
+
+  const invitation = await Invitation.findOne({
+    _id: invitationId,
+    workspaceId: id,
+    status: "pending",
+  });
+
+  if (!invitation) {
+    throw new ApiError(404, "Invitation not found");
+  }
+
+  const workspace = await Workspace.findById(id).select("_id name");
+
+  if (!workspace) {
+    throw new ApiError(404, "Workspace not found");
+  }
+
+  const currentUser = await User.findById(req.user.userId).select("fullName");
+
+  const token = randomBytes(32).toString("hex");
+
+  invitation.token = token;
+
+  invitation.expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000);
+
+  await invitation.save();
+
+  const inviteLink = `${process.env.CLIENT_URL}/invite/accept/${token}`;
+
+  const emailResult = await sendInvitationEmail({
+    to: invitation.email,
+    inviterName: currentUser?.fullName ?? "HookLens",
+    workspaceName: workspace.name ?? "Workspace",
+    role: invitation.role,
+    inviteLink,
+  });
+
+  if (emailResult.error) {
+    throw new ApiError(500, emailResult.error.message);
+  }
+
+  return ok(res, null, "Invitation resent successfully");
+});
+
 export {
   getWorkspaces,
   createWorkspace,
@@ -429,4 +478,5 @@ export {
   acceptInvite,
   changeMemberRole,
   removeMember,
+  resendInvitation,
 };

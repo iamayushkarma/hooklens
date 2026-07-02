@@ -15,6 +15,7 @@ import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
 import { useAuthStore } from "@/store/auth.store";
 import MemberRoleSelect from "../components/MemberRoleSelect";
 import CancelInvitationModal from "../components/CancelInvitationModal";
+import ResendInvitationButton from "../components/ResendInvitationButton";
 
 function WorkspaceMembers() {
   const { currentWorkspaceId } = useCurrentWorkspace();
@@ -137,6 +138,11 @@ function WorkspaceMembers() {
 
                 <div className="flex items-center gap-3">
                   <RoleBadge role={invite.role} />
+
+                  <ResendInvitationButton
+                    workspaceId={currentWorkspaceId!}
+                    invitationId={invite._id}
+                  />
 
                   <Button
                     className="bg-red-600 hover:bg-red-700"

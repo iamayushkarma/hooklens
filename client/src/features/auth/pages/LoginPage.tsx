@@ -137,6 +137,12 @@ function LoginPage() {
                   onClick={async () => {
                     try {
                       await googleLogin();
+                      if (inviteToken) {
+                        navigate(`/invite/accept/${inviteToken}`, {
+                          replace: true,
+                        });
+                        return;
+                      }
                       navigate("/dashboard");
                     } catch (error) {
                       console.error(error);

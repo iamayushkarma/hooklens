@@ -7,6 +7,7 @@ import {
   getMembers,
   inviteMember,
   acceptInvite,
+  declineInvite,
   changeMemberRole,
   removeMember,
   cancelInvitation,
@@ -61,6 +62,7 @@ router.patch(
   validate(changeMemberRoleSchema),
   changeMemberRole,
 );
+router.post("/invite/decline/:token", declineInvite);
 router.delete(
   "/:id/members/:userId",
   requireWorkspaceRole("admin"),

@@ -2,11 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { ApiError } from "../utils/api-error";
 import { verifyToken } from "../utils/jwt";
 
-// interface AuthRequest extends Request {
-//   user?: {
-//     userId: string;
-//   };
-// }
 export const authenticateUser = (
   req: Request,
   res: Response,

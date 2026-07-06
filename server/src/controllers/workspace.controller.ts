@@ -349,7 +349,46 @@ const acceptInvite = asyncHandler(async (req: Request, res: Response) => {
     await session.endSession();
   }
 });
+// POST /api/workspaces/invite/decline/:token
+const declineInvite = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) {
+    throw new ApiError(401, "Unauthorized");
+  }
 
+  const { token } = req.params;
+
+  const invitation = await Invitation.findOne({
+    token,
+    status: "pending",
+  });
+
+  if (!invitation) {
+    throw new ApiError(404, "Invitation not found");
+  }
+
+  const currentUser = await User.findById(req.user.userId).select("email");
+
+  if (!currentUser) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (invitation.email !== currentUser.email) {
+    throw new ApiError(403, "This invitation does not belong to you");
+  }
+
+  if (invitation.expiresAt < new Date()) {
+    invitation.status = "expired";
+    await invitation.save();
+
+    throw new ApiError(410, "Invitation has expired");
+  }
+
+  invitation.status = "declined";
+
+  await invitation.save();
+
+  return ok(res, null, "Invitation declined");
+});
 // DELETE /api/workspaces/:id/invitations/:invitationId
 const cancelInvitation = asyncHandler(async (req: Request, res: Response) => {
   const { id, invitationId } = req.params;
@@ -496,4 +535,5 @@ export {
   changeMemberRole,
   removeMember,
   resendInvitation,
+  declineInvite,
 };

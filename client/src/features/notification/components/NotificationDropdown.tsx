@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-
+import { Bell } from "lucide-react";
 import { useNotificationStore } from "@/store/notification.store";
 
 import NotificationItem from "./NotificationItem";
@@ -45,8 +45,20 @@ function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
         {loading ? (
           <div className="p-6 text-center">Loading...</div>
         ) : notifications.length === 0 ? (
-          <div className="p-8 text-center text-text-secondary">
-            No notifications
+          <div className="flex flex-col items-center justify-center gap-3 py-12">
+            <div className="rounded-full bg-bg-hover p-4">
+              <Bell className="size-6 text-text-secondary" />
+            </div>
+
+            <div className="text-center">
+              <h3 className="font-medium text-text-primary">
+                You're all caught up
+              </h3>
+
+              <p className="mt-1 text-sm text-text-secondary">
+                No new notifications.
+              </p>
+            </div>
           </div>
         ) : (
           notifications.map((notification) => (

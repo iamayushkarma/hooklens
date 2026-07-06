@@ -1,17 +1,19 @@
 import { Bell } from "lucide-react";
-import { useState } from "react";
-
 import { useNotificationStore } from "@/store/notification.store";
-
+import { useRef, useState } from "react";
+import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import NotificationDropdown from "./NotificationDropdown";
 
 function NotificationBell() {
   const unreadCount = useNotificationStore((state) => state.unreadCount);
-
   const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
+  useClickOutside(wrapperRef, () => {
+    setOpen(false);
+  });
   return (
-    <div className="relative">
+    <div ref={wrapperRef} className="relative">
       <button
         onClick={() => setOpen((prev) => !prev)}
         className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-bg-hover"

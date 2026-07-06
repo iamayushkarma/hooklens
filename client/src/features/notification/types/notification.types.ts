@@ -22,6 +22,8 @@ export interface Notification {
   data: {
     invitationId?: string;
     workspaceId?: string;
+    workspaceName?: string;
     role?: string;
+    token?: string;
   };
 }

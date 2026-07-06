@@ -1,12 +1,27 @@
 import { Button } from "@/shared/components/ui/Button";
 
 import type { Notification } from "../types/notification.types";
-
+import { acceptInvitation } from "../api/acceptInvitation";
+import { declineInvitation } from "../api/declineInvitation";
+import { useNotificationStore } from "@/store/notification.store";
 interface NotificationItemProps {
   notification: Notification;
 }
 
 function NotificationItem({ notification }: NotificationItemProps) {
+  const { markAsRead } = useNotificationStore();
+
+  const handleAccept = async () => {
+    await acceptInvitation(notification.data.token!);
+
+    await markAsRead(notification._id);
+  };
+
+  const handleDecline = async () => {
+    await declineInvitation(notification.data.token!);
+
+    await markAsRead(notification._id);
+  };
   return (
     <div
       className={`border-b border-border-default p-4 ${
@@ -29,9 +44,14 @@ function NotificationItem({ notification }: NotificationItemProps) {
 
       {notification.actionRequired && (
         <div className="mt-4 flex gap-2">
-          <Button className="flex-1">Accept</Button>
+          <Button className="flex-1" onClick={handleAccept}>
+            Accept
+          </Button>
 
-          <Button className="flex-1 bg-red-600 hover:bg-red-700">
+          <Button
+            className="flex-1 bg-red-600 hover:bg-red-700"
+            onClick={handleDecline}
+          >
             Decline
           </Button>
         </div>

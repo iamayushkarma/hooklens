@@ -245,9 +245,9 @@ const inviteMember = asyncHandler(async (req: Request, res: Response) => {
       type: "workspace_invite",
 
       title: "Workspace Invitation",
+      actionRequired: true,
 
       message: `${currentUser!.fullName} invited you to join ${workspace.name}`,
-
       data: {
         invitationId: invitation._id,
         workspaceId: workspace._id,

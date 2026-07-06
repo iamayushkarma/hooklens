@@ -11,6 +11,7 @@ interface CreateNotificationParams {
     | "endpoint_created";
 
   title: string;
+  actionRequired: boolean;
   message: string;
   data?: Record<string, any>;
 }
@@ -19,6 +20,7 @@ export async function createNotification({
   userId,
   type,
   title,
+  actionRequired,
   message,
   data = {},
 }: CreateNotificationParams) {
@@ -26,6 +28,7 @@ export async function createNotification({
     userId,
     type,
     title,
+    actionRequired,
     message,
     data,
   });

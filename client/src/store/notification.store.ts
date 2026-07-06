@@ -17,6 +17,10 @@ interface NotificationStore {
 
   loading: boolean;
 
+  markAsReadLocal: (notificationId: string) => void;
+
+  removeNotificationLocal: (notificationId: string) => void;
+
   fetchNotifications: () => Promise<void>;
 
   fetchUnreadCount: () => Promise<void>;
@@ -34,6 +38,25 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   unreadCount: 0,
 
   loading: false,
+
+  markAsReadLocal: (notificationId) => {
+    set((state) => ({
+      notifications: state.notifications.map((notification) =>
+        notification._id === notificationId
+          ? { ...notification, isRead: true }
+          : notification,
+      ),
+      unreadCount: Math.max(state.unreadCount - 1, 0),
+    }));
+  },
+
+  removeNotificationLocal: (notificationId) => {
+    set((state) => ({
+      notifications: state.notifications.filter(
+        (notification) => notification._id !== notificationId,
+      ),
+    }));
+  },
 
   fetchNotifications: async () => {
     try {

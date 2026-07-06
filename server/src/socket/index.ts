@@ -18,6 +18,10 @@ export interface ServerToClientEvents {
   "endpoint:disabled": (data: { slug: string }) => void;
   // Explicit error channel, client always knows why something failed
   "socket:error": (data: { event: string; message: string }) => void;
+
+  "notification:new": (data: { notification: unknown }) => void;
+  "notification:read": (data: { notificationId: string }) => void;
+  "notification:deleted": (data: { notificationId: string }) => void;
 }
 
 export interface JoinResponse {

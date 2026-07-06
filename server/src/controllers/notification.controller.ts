@@ -39,6 +39,27 @@ const markNotificationAsRead = asyncHandler(
     return ok(res, notification);
   },
 );
+const markAllNotificationsAsRead = asyncHandler(
+  async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new ApiError(401, "Unauthorized");
+    }
+
+    await Notification.updateMany(
+      {
+        userId: req.user.userId,
+        isRead: false,
+      },
+      {
+        $set: {
+          isRead: true,
+        },
+      },
+    );
+
+    return ok(res, null, "All notifications marked as read");
+  },
+);
 const deleteNotification = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) {
     throw new ApiError(401, "Unauthorized");
@@ -74,6 +95,7 @@ const getUnreadNotificationCount = asyncHandler(
 export {
   getNotifications,
   markNotificationAsRead,
+  markAllNotificationsAsRead,
   deleteNotification,
   getUnreadNotificationCount,
 };

@@ -1,14 +1,24 @@
 import Modal from "@/shared/components/ui/ModalPortal";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import CreateProject from "./CreateProject";
+
 import { usePermissions } from "@/shared/hooks/usePermissions";
-function CreateProjectBtn() {
+
+import CreateProject from "./CreateProject";
+
+interface CreateProjectBtnProps {
+  onSuccess: () => void;
+}
+
+function CreateProjectBtn({ onSuccess }: CreateProjectBtnProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const permissions = usePermissions();
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   if (!permissions.canCreateProject) {
     return null;
   }
@@ -17,7 +27,7 @@ function CreateProjectBtn() {
     <>
       <div
         onClick={() => setIsModalOpen(true)}
-        className="cursor-pointer rounded-xl border-2 border-dashed border-border-default bg-blue-100 h-56 flex flex-col items-center justify-center gap-3 transition-colors hover:bg-blue-300/40"
+        className="flex h-56 cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border-default bg-blue-100 transition-colors hover:bg-blue-300/40"
       >
         <Plus className="size-5" />
 
@@ -31,7 +41,7 @@ function CreateProjectBtn() {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <CreateProject closeModal={closeModal} />
+        <CreateProject closeModal={closeModal} onSuccess={onSuccess} />
       </Modal>
     </>
   );

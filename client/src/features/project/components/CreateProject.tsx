@@ -7,9 +7,10 @@ import { usePermissions } from "@/shared/hooks/usePermissions";
 
 interface CreateProjectProps {
   closeModal: () => void;
+  onSuccess: () => void;
 }
 
-function CreateProject({ closeModal }: CreateProjectProps) {
+function CreateProject({ closeModal, onSuccess }: CreateProjectProps) {
   const workspaceId = useWorkspaceStore((state) => state.currentWorkspaceId);
 
   const [name, setName] = useState("");
@@ -67,7 +68,7 @@ function CreateProject({ closeModal }: CreateProjectProps) {
         name: name.trim(),
         description: description.trim(),
       });
-
+      onSuccess();
       closeModal();
     } catch (error: any) {
       setError(error?.response?.data?.message ?? "Failed to create project");

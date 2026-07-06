@@ -8,9 +8,10 @@ import ProjectActionMenu from "./ProjectActionMenu";
 
 interface ProjectCardProps {
   project: Project;
+  onSuccess: () => void;
 }
 
-export function ProjectCard({ project }: ProjectCardProps) {
+export function ProjectCard({ project, onSuccess }: ProjectCardProps) {
   const navigate = useNavigate();
 
   const { workspaceId } = useParams();

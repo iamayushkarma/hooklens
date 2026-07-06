@@ -106,10 +106,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        {/* <button className="opacity-0 transition-opacity group-hover:opacity-100">
-          <EllipsisVertical className="size-4 text-text-secondary" />
-        </button> */}
-        <ProjectActionMenu project={project} />
+        <ProjectActionMenu
+          project={project}
+          onSuccess={() => {
+            // Refresh projects list
+          }}
+        />
       </div>
 
       {/* Description */}

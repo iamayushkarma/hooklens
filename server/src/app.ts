@@ -14,6 +14,7 @@ import {
 } from "./middleware/rateLimit.middleware";
 import requestRoutes from "./routes/request.routes";
 import { errorHandler } from "./middleware/error.middleware";
+import notificationRoutes from "./routes/notification.routes";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.all("/h/:slug", captureRateLimit, captureHandler);
 // API Routes
 app.use("/api/v1/auth", authRateLimit, authRouter);
 app.use("/api/v1/workspaces", workspaceRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/endpoints", endpointRoutes);
 app.use("/api/v1/analytics", analyticsRoutes);

@@ -10,7 +10,13 @@ interface NotificationDropdownProps {
 }
 
 function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
-  const { notifications, loading, fetchNotifications } = useNotificationStore();
+  const {
+    notifications,
+    loading,
+    unreadCount,
+    fetchNotifications,
+    markAllAsRead,
+  } = useNotificationStore();
 
   useEffect(() => {
     if (open) {
@@ -22,8 +28,17 @@ function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
 
   return (
     <div className="absolute right-0 top-12 z-50 w-96 rounded-xl border border-border-default bg-bg-card shadow-xl">
-      <div className="border-b border-border-default p-4">
+      <div className="flex items-center justify-between border-b border-border-default p-4">
         <h2 className="font-semibold">Notifications</h2>
+
+        {unreadCount > 0 && (
+          <button
+            onClick={markAllAsRead}
+            className="text-sm font-medium text-accent hover:underline"
+          >
+            Mark all as read
+          </button>
+        )}
       </div>
 
       <div className="max-h-125 overflow-y-auto">

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button } from "@/shared/components/ui/Button";
 
 import type { Notification } from "../types/notification.types";
@@ -6,21 +8,43 @@ import { declineInvitation } from "../api/declineInvitation";
 import { useNotificationStore } from "@/store/notification.store";
 interface NotificationItemProps {
   notification: Notification;
+  onActionComplete?: () => void;
 }
 
-function NotificationItem({ notification }: NotificationItemProps) {
-  const { markAsRead } = useNotificationStore();
+function NotificationItem({
+  notification,
+  onActionComplete,
+}: NotificationItemProps) {
+  const { removeNotification } = useNotificationStore();
+  const [isHandling, setIsHandling] = useState(false);
+  const [handled, setHandled] = useState(false);
+
+  const finishAction = async (action: () => Promise<void>) => {
+    try {
+      setIsHandling(true);
+      await action();
+
+      setHandled(true);
+      onActionComplete?.();
+
+      try {
+        await removeNotification(notification._id);
+      } catch (readError) {
+        console.error("Failed to remove notification", readError);
+      }
+    } catch (error) {
+      console.error("Notification action failed", error);
+    } finally {
+      setIsHandling(false);
+    }
+  };
 
   const handleAccept = async () => {
-    await acceptInvitation(notification.data.token!);
-
-    await markAsRead(notification._id);
+    await finishAction(() => acceptInvitation(notification.data.token!));
   };
 
   const handleDecline = async () => {
-    await declineInvitation(notification.data.token!);
-
-    await markAsRead(notification._id);
+    await finishAction(() => declineInvitation(notification.data.token!));
   };
   return (
     <div
@@ -42,17 +66,22 @@ function NotificationItem({ notification }: NotificationItemProps) {
         )}
       </div>
 
-      {notification.actionRequired && (
+      {notification.actionRequired && !handled && (
         <div className="mt-4 flex gap-2">
-          <Button className="flex-1" onClick={handleAccept}>
-            Accept
+          <Button
+            className="flex-1"
+            onClick={handleAccept}
+            disabled={isHandling}
+          >
+            {isHandling ? "Working..." : "Accept"}
           </Button>
 
           <Button
             className="flex-1 bg-red-600 hover:bg-red-700"
             onClick={handleDecline}
+            disabled={isHandling}
           >
-            Decline
+            {isHandling ? "Working..." : "Decline"}
           </Button>
         </div>
       )}

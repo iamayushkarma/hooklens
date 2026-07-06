@@ -9,7 +9,7 @@ interface NotificationDropdownProps {
   onClose: () => void;
 }
 
-function NotificationDropdown({ open }: NotificationDropdownProps) {
+function NotificationDropdown({ open, onClose }: NotificationDropdownProps) {
   const { notifications, loading, fetchNotifications } = useNotificationStore();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function NotificationDropdown({ open }: NotificationDropdownProps) {
         <h2 className="font-semibold">Notifications</h2>
       </div>
 
-      <div className="max-h-[500px] overflow-y-auto">
+      <div className="max-h-125 overflow-y-auto">
         {loading ? (
           <div className="p-6 text-center">Loading...</div>
         ) : notifications.length === 0 ? (
@@ -38,6 +38,7 @@ function NotificationDropdown({ open }: NotificationDropdownProps) {
             <NotificationItem
               key={notification._id}
               notification={notification}
+              onActionComplete={onClose}
             />
           ))
         )}

@@ -56,7 +56,8 @@ const defaultOptions: Partial<Options> = {
 export const authRateLimit = rateLimit({
   ...defaultOptions,
   windowMs: 15 * 60 * 1000,
-  max: 50,
+  // max: 50,
+  max: 10000, //TODO Change in production
   message: {
     success: false,
     message: "Too many attempts. Try again in 15 minutes.",

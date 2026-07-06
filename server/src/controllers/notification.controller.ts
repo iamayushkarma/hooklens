@@ -57,4 +57,23 @@ const deleteNotification = asyncHandler(async (req: Request, res: Response) => {
 
   return ok(res, null, "Notification deleted");
 });
-export { getNotifications, markNotificationAsRead, deleteNotification };
+const getUnreadNotificationCount = asyncHandler(
+  async (req: Request, res: Response) => {
+    if (!req.user) {
+      throw new ApiError(401, "Unauthorized");
+    }
+
+    const count = await Notification.countDocuments({
+      userId: req.user.userId,
+      isRead: false,
+    });
+
+    return ok(res, { count });
+  },
+);
+export {
+  getNotifications,
+  markNotificationAsRead,
+  deleteNotification,
+  getUnreadNotificationCount,
+};

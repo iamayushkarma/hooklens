@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Bell, FolderKanban, Shield, UserPlus, Users } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 import { Button } from "@/shared/components/ui/Button";
 import { useNotificationStore } from "@/store/notification.store";
@@ -22,6 +24,8 @@ function NotificationItem({
   const [isHandling, setIsHandling] = useState(false);
   const [handled, setHandled] = useState(false);
 
+  const token = notification.data.token;
+
   const handleCardClick = async () => {
     if (notification.isRead) return;
 
@@ -32,9 +36,33 @@ function NotificationItem({
     }
   };
 
-  const finishAction = async (action: () => Promise<void>) => {
-    const token = notification.data.token;
+  const timeAgo = formatDistanceToNow(new Date(notification.createdAt), {
+    addSuffix: true,
+  });
 
+  const notificationIcon = () => {
+    switch (notification.type) {
+      case "workspace_invite":
+        return <UserPlus className="size-5 text-blue-500" />;
+
+      case "member_joined":
+        return <Users className="size-5 text-green-500" />;
+
+      case "member_left":
+        return <Users className="size-5 text-red-500" />;
+
+      case "project_created":
+        return <FolderKanban className="size-5 text-yellow-500" />;
+
+      case "role_changed":
+        return <Shield className="size-5 text-purple-500" />;
+
+      default:
+        return <Bell className="size-5 text-text-secondary" />;
+    }
+  };
+
+  const finishAction = async (action: () => Promise<void>) => {
     if (!token) return;
 
     try {
@@ -51,7 +79,7 @@ function NotificationItem({
       try {
         await removeNotification(notification._id);
       } catch (error) {
-        console.error("Failed to remove notification", error);
+        console.error("Failed to remove notification from server", error);
       }
     } catch (error) {
       console.error("Notification action failed", error);
@@ -61,11 +89,15 @@ function NotificationItem({
   };
 
   const handleAccept = async () => {
-    await finishAction(() => acceptInvitation(notification.data.token!));
+    if (!token) return;
+
+    await finishAction(() => acceptInvitation(token));
   };
 
   const handleDecline = async () => {
-    await finishAction(() => declineInvitation(notification.data.token!));
+    if (!token) return;
+
+    await finishAction(() => declineInvitation(token));
   };
 
   return (
@@ -75,47 +107,55 @@ function NotificationItem({
         !notification.isRead ? "bg-accent/5" : ""
       }`}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start gap-3">
+        <div className="mt-1 flex-shrink-0">{notificationIcon()}</div>
+
         <div className="flex-1">
-          <h3 className="font-medium text-text-primary">
-            {notification.title}
-          </h3>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-medium text-text-primary">
+                {notification.title}
+              </h3>
 
-          <p className="mt-1 text-sm text-text-secondary">
-            {notification.message}
-          </p>
+              <p className="mt-1 text-sm text-text-secondary">
+                {notification.message}
+              </p>
+
+              <p className="mt-2 text-xs text-text-secondary">{timeAgo}</p>
+            </div>
+
+            {!notification.isRead && (
+              <div className="mt-1 h-2 w-2 rounded-full bg-accent flex-shrink-0" />
+            )}
+          </div>
+
+          {notification.actionRequired && !handled && (
+            <div className="mt-4 flex gap-2">
+              <Button
+                className="flex-1"
+                disabled={isHandling}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAccept();
+                }}
+              >
+                {isHandling ? "Working..." : "Accept"}
+              </Button>
+
+              <Button
+                className="flex-1 bg-red-600 hover:bg-red-700"
+                disabled={isHandling}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDecline();
+                }}
+              >
+                {isHandling ? "Working..." : "Decline"}
+              </Button>
+            </div>
+          )}
         </div>
-
-        {!notification.isRead && (
-          <div className="mt-1 h-2 w-2 rounded-full bg-accent" />
-        )}
       </div>
-
-      {notification.actionRequired && !handled && (
-        <div className="mt-4 flex gap-2">
-          <Button
-            className="flex-1"
-            disabled={isHandling}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleAccept();
-            }}
-          >
-            {isHandling ? "Working..." : "Accept"}
-          </Button>
-
-          <Button
-            className="flex-1 bg-red-600 hover:bg-red-700"
-            disabled={isHandling}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDecline();
-            }}
-          >
-            {isHandling ? "Working..." : "Decline"}
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

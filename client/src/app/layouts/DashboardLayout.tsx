@@ -3,9 +3,11 @@ import { Header } from "@/app/layouts/components/Header";
 import Sidebar from "@/app/layouts/components/Sidebar";
 import { Outlet } from "react-router-dom";
 import { useSocketConnection } from "@/socket/useSocketConnection";
+import { useNotificationSocket } from "@/features/notification/hooks/useNotificationSocket";
 
 function DashboardLayout() {
   useSocketConnection();
+  useNotificationSocket();
   const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
     if (mobileOpen) {

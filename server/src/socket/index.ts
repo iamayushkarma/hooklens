@@ -52,7 +52,7 @@ type AppSocket = Socket<
 
 // Room name helper
 export const getRoomName = (slug: string): string => `endpoint:${slug}`;
-
+export const getUserRoomName = (userId: string): string => `user:${userId}`;
 // Slug Normalization
 const normalizeSlug = (raw: unknown): string | null => {
   if (typeof raw !== "string") return null;
@@ -273,7 +273,7 @@ export const setupSocket = (server: http.Server): void => {
   io.on("connection", (socket: AppSocket) => {
     const { userId } = socket.data;
     socket.data.joiningRooms = new Set<string>();
-
+    socket.join(getUserRoomName(userId));
     log.info("socket:connected", { socketId: socket.id, userId });
 
     // inspect:join

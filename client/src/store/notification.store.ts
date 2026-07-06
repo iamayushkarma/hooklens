@@ -9,6 +9,7 @@ import { markNotificationRead } from "@/features/notification/api/markNotificati
 import { deleteNotification } from "@/features/notification/api/deleteNotification";
 
 import type { Notification } from "@/features/notification/types/notification.types";
+import { markAllNotificationsRead } from "@/features/notification/api/markAllNotificationsRead";
 
 interface NotificationStore {
   notifications: Notification[];
@@ -24,6 +25,8 @@ interface NotificationStore {
   fetchNotifications: () => Promise<void>;
 
   fetchUnreadCount: () => Promise<void>;
+
+  markAllAsRead: () => Promise<void>;
 
   markAsRead: (notificationId: string) => Promise<void>;
 
@@ -50,6 +53,17 @@ export const useNotificationStore = create<NotificationStore>((set) => ({
     }));
   },
 
+  markAllAsRead: async () => {
+    await markAllNotificationsRead();
+
+    set((state) => ({
+      notifications: state.notifications.map((notification) => ({
+        ...notification,
+        isRead: true,
+      })),
+      unreadCount: 0,
+    }));
+  },
   removeNotificationLocal: (notificationId) => {
     set((state) => ({
       notifications: state.notifications.filter(

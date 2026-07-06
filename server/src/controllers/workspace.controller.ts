@@ -10,7 +10,7 @@ import { Invitation } from "../models/Invitation.model";
 import { Project } from "../models/project.model";
 import { User } from "../models/user.model";
 import { sendInvitationEmail } from "../services/email.service";
-
+import { createNotification } from "../services/notification.service";
 // GET /api/workspaces
 const getWorkspaces = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) throw new ApiError(401, "Unauthorized");
@@ -237,6 +237,24 @@ const inviteMember = asyncHandler(async (req: Request, res: Response) => {
     expiresAt,
     status: "pending",
   });
+
+  if (existingUser) {
+    await createNotification({
+      userId: existingUser._id.toString(),
+
+      type: "workspace_invite",
+
+      title: "Workspace Invitation",
+
+      message: `${currentUser!.fullName} invited you to join ${workspace.name}`,
+
+      data: {
+        invitationId: invitation._id,
+        workspaceId: workspace._id,
+        role,
+      },
+    });
+  }
   const inviteLink = `${process.env.CLIENT_URL}/invite/accept/${token}`;
 
   await sendInvitationEmail({

@@ -36,7 +36,10 @@ const NotificationSchema = new Schema(
       type: Schema.Types.Mixed,
       default: {},
     },
-
+    actionRequired: {
+      type: Boolean,
+      default: false,
+    },
     isRead: {
       type: Boolean,
       default: false,

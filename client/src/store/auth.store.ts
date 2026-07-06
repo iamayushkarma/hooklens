@@ -7,6 +7,8 @@ import { googleLoginApi } from "@/features/auth/api/google-login";
 import { googleAuthApi } from "@/features/auth/api/google-auth";
 import { getWorkspaces } from "@/features/workspace/api/getWorkspaces";
 import { useWorkspaceStore } from "./workspace.store";
+import { useNotificationStore } from "./notification.store";
+
 interface AuthStore {
   user: User | null;
   token: string | null;
@@ -61,7 +63,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
       if (workspaces.length) {
         useWorkspaceStore.getState().setCurrentWorkspaceId(workspaces[0]._id);
       }
+      await useNotificationStore.getState().fetchNotifications();
 
+      await useNotificationStore.getState().fetchUnreadCount();
       set({
         user: response.data.user,
         token: response.data.token,
@@ -134,7 +138,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   logout: () => {
     localStorage.removeItem("token");
-
+    useNotificationStore.setState({
+      notifications: [],
+      unreadCount: 0,
+    });
     set({
       user: null,
       token: null,

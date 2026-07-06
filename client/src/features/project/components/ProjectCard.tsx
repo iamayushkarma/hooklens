@@ -1,4 +1,4 @@
-import { Activity, EllipsisVertical } from "lucide-react";
+import { Activity } from "lucide-react";
 import type { Project } from "../types/project.types";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWorkspaceStore } from "@/store/workspace.store";
@@ -107,12 +107,7 @@ export function ProjectCard({ project, onSuccess }: ProjectCardProps) {
           </div>
         </div>
 
-        <ProjectActionMenu
-          project={project}
-          onSuccess={() => {
-            // Refresh projects list
-          }}
-        />
+        <ProjectActionMenu project={project} onSuccess={onSuccess} />
       </div>
 
       {/* Description */}

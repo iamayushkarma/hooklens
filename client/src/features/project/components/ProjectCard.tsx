@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useWorkspaceStore } from "@/store/workspace.store";
 import { pastelColors } from "@/features/workspace/components/WorkspaceCard";
 import { TbPlug } from "react-icons/tb";
+import ProjectActionMenu from "./ProjectActionMenu";
 
 interface ProjectCardProps {
   project: Project;
@@ -105,9 +106,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        <button className="opacity-0 transition-opacity group-hover:opacity-100">
+        {/* <button className="opacity-0 transition-opacity group-hover:opacity-100">
           <EllipsisVertical className="size-4 text-text-secondary" />
-        </button>
+        </button> */}
+        <ProjectActionMenu project={project} />
       </div>
 
       {/* Description */}

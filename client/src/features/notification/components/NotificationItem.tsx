@@ -15,7 +15,8 @@ function NotificationItem({
   notification,
   onActionComplete,
 }: NotificationItemProps) {
-  const { removeNotification } = useNotificationStore();
+  const { removeNotification, removeNotificationLocal } =
+    useNotificationStore();
   const [isHandling, setIsHandling] = useState(false);
   const [handled, setHandled] = useState(false);
 
@@ -26,11 +27,12 @@ function NotificationItem({
 
       setHandled(true);
       onActionComplete?.();
+      removeNotificationLocal(notification._id);
 
       try {
         await removeNotification(notification._id);
       } catch (readError) {
-        console.error("Failed to remove notification", readError);
+        console.error("Failed to remove notification from server", readError);
       }
     } catch (error) {
       console.error("Notification action failed", error);

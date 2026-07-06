@@ -1,4 +1,4 @@
-import { io, getRoomName } from "./index";
+import { io, getRoomName, getUserRoomName } from "./index";
 import type { IRequestLog } from "../models/requestLog.model";
 
 // All emit calls go through here.
@@ -14,4 +14,31 @@ export const emitRequestDeleted = (slug: string, requestId: string): void => {
 
 export const emitEndpointDisabled = (slug: string): void => {
   io?.to(getRoomName(slug)).emit("endpoint:disabled", { slug });
+};
+
+export const emitNotificationNew = (
+  userId: string,
+  notification: unknown,
+): void => {
+  io?.to(getUserRoomName(userId)).emit("notification:new", {
+    notification,
+  });
+};
+
+export const emitNotificationRead = (
+  userId: string,
+  notificationId: string,
+): void => {
+  io?.to(getUserRoomName(userId)).emit("notification:read", {
+    notificationId,
+  });
+};
+
+export const emitNotificationDeleted = (
+  userId: string,
+  notificationId: string,
+): void => {
+  io?.to(getUserRoomName(userId)).emit("notification:deleted", {
+    notificationId,
+  });
 };

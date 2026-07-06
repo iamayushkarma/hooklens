@@ -241,17 +241,16 @@ const inviteMember = asyncHandler(async (req: Request, res: Response) => {
   if (existingUser) {
     await createNotification({
       userId: existingUser._id.toString(),
-
       type: "workspace_invite",
-
       title: "Workspace Invitation",
-      actionRequired: true,
-
       message: `${currentUser!.fullName} invited you to join ${workspace.name}`,
+      actionRequired: true,
       data: {
         invitationId: invitation._id,
         workspaceId: workspace._id,
+        workspaceName: workspace.name,
         role,
+        token: invitation.token,
       },
     });
   }

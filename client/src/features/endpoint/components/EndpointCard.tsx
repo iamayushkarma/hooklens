@@ -1,13 +1,18 @@
 import type { Endpoint } from "../types/endpoint.types";
 import { useNavigate, useParams } from "react-router-dom";
+
+import EndpointActionMenu from "./EndpointActionMenu";
+
 interface EndpointCardProps {
   endpoint: Endpoint;
+  onSuccess: () => void;
 }
 
-function EndpointCard({ endpoint }: EndpointCardProps) {
+function EndpointCard({ endpoint, onSuccess }: EndpointCardProps) {
   const navigate = useNavigate();
 
   const { workspaceId, projectId } = useParams();
+
   return (
     <div
       onClick={() =>

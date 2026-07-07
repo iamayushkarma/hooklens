@@ -10,9 +10,10 @@ import { createEndpoint } from "../api/createEndpoint";
 interface CreateEndpointProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
-function CreateEndpoint({ isOpen, onClose }: CreateEndpointProps) {
+function CreateEndpoint({ isOpen, onClose, onSuccess }: CreateEndpointProps) {
   const navigate = useNavigate();
 
   const { workspaceId, projectId } = useParams();
@@ -35,7 +36,7 @@ function CreateEndpoint({ isOpen, onClose }: CreateEndpointProps) {
       });
 
       onClose();
-
+      onSuccess();
       navigate(
         `/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints/${endpoint._id}`,
       );

@@ -24,15 +24,19 @@ function EndpointCard({ endpoint }: EndpointCardProps) {
           <p className="mt-1 text-sm text-text-secondary">/{endpoint.slug}</p>
         </div>
 
-        <span
-          className={`rounded-full px-2 py-1 text-xs ${
-            endpoint.isActive
-              ? "bg-green-500/10 text-green-500"
-              : "bg-red-500/10 text-red-500"
-          }`}
-        >
-          {endpoint.isActive ? "Active" : "Disabled"}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={`rounded-full px-2 py-1 text-xs ${
+              endpoint.isActive
+                ? "bg-green-500/10 text-green-500"
+                : "bg-red-500/10 text-red-500"
+            }`}
+          >
+            {endpoint.isActive ? "Active" : "Disabled"}
+          </span>
+
+          <EndpointActionMenu endpoint={endpoint} onSuccess={onSuccess} />
+        </div>
       </div>
 
       <div className="mt-4 flex items-center gap-4 text-sm text-text-secondary">

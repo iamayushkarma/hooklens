@@ -1,25 +1,32 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import CreateEndpoint from "../components/CreateEndpoint";
 import CreateEndpointBtn from "../components/CreateEndpointBtn";
-import { getEndpoints } from "../api/getEndpoints";
-import type { Endpoint as EndpointType } from "../types/endpoint.types";
 import EndpointCard from "../components/EndpointCard";
+
+import { getEndpoints } from "../api/getEndpoints";
+
+import type { Endpoint as EndpointType } from "../types/endpoint.types";
 
 function Endpoint() {
   const { projectId } = useParams();
+
   const [endpoints, setEndpoints] = useState<EndpointType[]>([]);
   const [showCreateEndpoint, setShowCreateEndpoint] = useState(false);
-  useEffect(() => {
+
+  const fetchEndpoints = async () => {
     if (!projectId) return;
 
-    const fetchEndpoints = async () => {
-      const data = await getEndpoints(projectId);
-      setEndpoints(data);
-    };
+    const data = await getEndpoints(projectId);
 
+    setEndpoints(data);
+  };
+
+  useEffect(() => {
     fetchEndpoints();
   }, [projectId]);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -37,11 +44,16 @@ function Endpoint() {
       <CreateEndpoint
         isOpen={showCreateEndpoint}
         onClose={() => setShowCreateEndpoint(false)}
+        onSuccess={fetchEndpoints}
       />
 
       <div className="space-y-4">
         {endpoints.map((endpoint) => (
-          <EndpointCard key={endpoint._id} endpoint={endpoint} />
+          <EndpointCard
+            key={endpoint._id}
+            endpoint={endpoint}
+            onSuccess={fetchEndpoints}
+          />
         ))}
       </div>
     </div>

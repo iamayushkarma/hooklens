@@ -15,8 +15,12 @@ interface RequestResponse {
 
 export async function getRequests(
   endpointId: string,
+  page = 1,
+  limit = 20,
 ): Promise<RequestResponse> {
-  const res = await api.get(`/endpoints/${endpointId}/requests`);
+  const res = await api.get(
+    `/endpoints/${endpointId}/requests?page=${page}&limit=${limit}`,
+  );
 
   return res.data.data;
 }

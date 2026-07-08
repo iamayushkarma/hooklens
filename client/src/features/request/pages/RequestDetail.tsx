@@ -148,7 +148,6 @@ function RequestDetail() {
           </div>
         </div>
       </div>
-
       {/* Metadata */}
       <div className="grid gap-4 rounded-lg border border-border-default p-4 md:grid-cols-2">
         <div>
@@ -181,6 +180,13 @@ function RequestDetail() {
           <p className="break-all">{request.userAgent}</p>
         </div>
       </div>
+      {/* Payload */}
+      <JsonSection title="Headers" data={request.headers ?? {}} />
+
+      <JsonSection title="Body" data={request.body ?? {}} />
+
+      <JsonSection title="Query Params" data={request.query ?? {}} />
+
       {explanation && (
         <div className="rounded-lg border p-4">
           <h3 className="font-medium">AI Explanation</h3>
@@ -188,13 +194,8 @@ function RequestDetail() {
           <p className="mt-2 text-sm">{explanation}</p>
         </div>
       )}
+
       {replayResult && <ReplayResult result={replayResult} />}
-      {/* Payload */}
-      <JsonSection title="Headers" data={request.headers ?? {}} />
-
-      <JsonSection title="Body" data={request.body ?? {}} />
-
-      <JsonSection title="Query Params" data={request.query ?? {}} />
 
       <ReplayDialog
         open={showReplayDialog}

@@ -22,10 +22,6 @@ function ProjectLayout() {
       label: "Replays",
       path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/replays`,
     },
-    {
-      label: "Analytics",
-      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/analytics`,
-    },
   ];
   return (
     <>

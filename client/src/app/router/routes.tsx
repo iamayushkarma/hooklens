@@ -13,7 +13,6 @@ import WorkspaceMembers from "@/features/workspace/pages/WorkspaceMembers";
 import WorkspaceSettings from "@/features/workspace/pages/WorkspaceSettings";
 import ProjectLayout from "@/features/project/pages/ProjectLayout";
 import ProjectRequests from "@/features/project/pages/ProjectRequests";
-import ProjectReplays from "@/features/project/pages/ProjectReplays";
 import Endpoint from "@/features/endpoint/pages/Endpoint";
 import EndpointLayout from "@/features/endpoint/pages/EndpointLayout";
 import EndpointRequests from "@/features/endpoint/pages/EndpointRequests";
@@ -34,7 +33,6 @@ export const appRoutes = (
       <Route path="workspaces" element={<Workspace />} />
       <Route path="workspaces/:workspaceId" element={<WorkspaceLayout />}>
         <Route index element={<Projects />} />
-
         <Route path="members" element={<WorkspaceMembers />} />
         <Route path="settings" element={<WorkspaceSettings />} />
       </Route>
@@ -46,8 +44,6 @@ export const appRoutes = (
         <Route index element={<Endpoint />} />
 
         <Route path="requests" element={<ProjectRequests />} />
-
-        <Route path="replays" element={<ProjectReplays />} />
       </Route>
       <Route
         path="workspaces/:workspaceId/projects/:projectId/endpoints/:endpointId"

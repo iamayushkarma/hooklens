@@ -18,10 +18,6 @@ function ProjectLayout() {
       label: "Requests",
       path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/requests`,
     },
-    {
-      label: "Replays",
-      path: `/dashboard/workspaces/${workspaceId}/projects/${projectId}/replays`,
-    },
   ];
   return (
     <>

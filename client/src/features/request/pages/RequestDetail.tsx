@@ -8,6 +8,7 @@ import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { replayRequest } from "../api/replayRequest";
 import { deleteRequest } from "../api/deleteRequest";
 import { explainRequest } from "../api/explainRequest";
+import ReplayDialog from "../components/ReplayDialog";
 
 function RequestDetail() {
   const { requestId } = useParams();
@@ -15,6 +16,9 @@ function RequestDetail() {
   const [explanation, setExplanation] = useState("");
 
   const [request, setRequest] = useState<RequestLog | null>(null);
+  const [showReplayDialog, setShowReplayDialog] = useState(false);
+  const [replayLoading, setReplayLoading] = useState(false);
+  const [replayResult, setReplayResult] = useState<any>(null);
 
   useEffect(() => {
     if (!requestId) return;
@@ -42,15 +46,24 @@ function RequestDetail() {
       console.error(error);
     }
   };
-  const handleReplay = async () => {
+  const handleReplay = async (targetUrl: string) => {
     if (!request) return;
 
     try {
-      const result = await replayRequest(request._id);
+      setReplayLoading(true);
+
+      const result = await replayRequest(request._id, targetUrl);
+
+      setReplayResult(result);
+
+      setShowReplayDialog(false);
     } catch (error) {
       console.error(error);
+    } finally {
+      setReplayLoading(false);
     }
   };
+
   if (!request) {
     return (
       <div className="rounded-lg border border-border-default p-6">
@@ -107,7 +120,7 @@ function RequestDetail() {
 
           <div className="flex gap-2">
             <button
-              onClick={handleReplay}
+              onClick={() => setShowReplayDialog(true)}
               className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar"
             >
               Replay Request
@@ -175,6 +188,13 @@ function RequestDetail() {
       <JsonSection title="Body" data={request.body ?? {}} />
 
       <JsonSection title="Query Params" data={request.query ?? {}} />
+
+      <ReplayDialog
+        open={showReplayDialog}
+        loading={replayLoading}
+        onOpenChange={setShowReplayDialog}
+        onReplay={handleReplay}
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ interface JsonSectionProps {
   data: unknown;
 }
 
-export function JsonSectreion({ title, data }: JsonSectionProps) {
+export function JsonSection({ title, data }: JsonSectionProps) {
   return (
     <section className="overflow-hidden rounded-lg border border-border-default">
       <div className="flex items-center justify-between border-b border-border-default px-4 py-3">

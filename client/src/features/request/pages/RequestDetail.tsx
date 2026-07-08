@@ -16,7 +16,9 @@ function RequestDetail() {
   const { requestId } = useParams();
   const { goBack } = useAppNavigation();
   const [explanation, setExplanation] = useState("");
-
+  const [activeTab, setActiveTab] = useState<
+    "headers" | "body" | "raw" | "query"
+  >("headers");
   const [request, setRequest] = useState<RequestLog | null>(null);
   const [showReplayDialog, setShowReplayDialog] = useState(false);
   const [replayLoading, setReplayLoading] = useState(false);
@@ -186,11 +188,54 @@ function RequestDetail() {
         </div>
       </div>
       {/* Payload */}
-      <JsonSection title="Headers" data={request.headers ?? {}} />
+      <div className="rounded-lg border border-border-default overflow-hidden">
+        <div className="flex border-b border-border-default bg-bg-sidebar">
+          {[
+            { key: "headers", label: "Headers" },
+            { key: "body", label: "Body" },
+            { key: "raw", label: "Raw Body" },
+            { key: "query", label: "Query Params" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key as typeof activeTab)}
+              className={`px-5 py-3 text-sm transition-colors ${
+                activeTab === tab.key
+                  ? "border-b-2 border-primary text-primary"
+                  : "text-text-secondary hover:text-text-primary"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-      <JsonSection title="Body" data={request.body ?? {}} />
+        {activeTab === "headers" && (
+          <JsonSection title="Headers" data={request.headers ?? {}} />
+        )}
 
-      <JsonSection title="Query Params" data={request.query ?? {}} />
+        {activeTab === "body" && (
+          <JsonSection title="Body" data={request.body ?? {}} />
+        )}
+
+        {activeTab === "query" && (
+          <JsonSection title="Query Params" data={request.query ?? {}} />
+        )}
+
+        {activeTab === "raw" && (
+          <section className="overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
+              <h2 className="font-medium">Raw Body</h2>
+
+              <CopyButton content={request.rawBody ?? ""} />
+            </div>
+
+            <pre className="overflow-auto bg-background p-4 text-sm whitespace-pre-wrap break-all">
+              {request.rawBody || "No raw body available"}
+            </pre>
+          </section>
+        )}
+      </div>
 
       {explanation && (
         <div className="rounded-lg border p-4">

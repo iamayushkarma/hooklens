@@ -11,6 +11,8 @@ export interface RequestLog {
 
   body: unknown;
 
+  rawBody: string;
+
   query: Record<string, unknown>;
 
   ip: string;

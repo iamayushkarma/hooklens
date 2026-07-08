@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import CopyButton from "@/shared/components/ui/CopyButton";
+import { generateCurl } from "../utils/generateCurl";
 import { getRequest } from "@/features/request/api/getRequest";
 import type { RequestLog } from "../types/request.types";
 import { JsonSection } from "../components/JsonSection";
@@ -123,7 +124,11 @@ function RequestDetail() {
 
             <h1 className="text-2xl font-semibold">Request Detail</h1>
           </div>
-
+          <CopyButton
+            content={generateCurl(request)}
+            showLabel
+            copyLabel="Copy as cURL"
+          />
           <div className="flex gap-2">
             <button
               onClick={() => setShowReplayDialog(true)}

@@ -22,9 +22,9 @@ const sizeClasses: Record<CopyButtonSize, string> = {
 };
 
 const paddedSizeClasses: Record<CopyButtonSize, string> = {
-  sm: "h-7 w-20 gap-1.5",
-  md: "h-8 w-24 gap-1.5",
-  lg: "h-10 w-28 gap-2",
+  sm: "h-7 min-w-20 px-2.5 gap-1.5",
+  md: "h-8 min-w-24 px-3 gap-1.5",
+  lg: "h-10 min-w-28 px-3.5 gap-2",
 };
 
 const iconSizes: Record<CopyButtonSize, number> = {
@@ -76,7 +76,7 @@ export function CopyButton({
       onClick={handleCopy}
       whileTap={{ scale: 0.92 }}
       className={`relative flex items-center justify-center cursor-pointer rounded-md
-                  transition-colors duration-150
+                  transition-colors duration-150 whitespace-nowrap
                   ${colorClasses[color]}
                   ${showLabel ? paddedSizeClasses[size] : sizeClasses[size]}`}
     >

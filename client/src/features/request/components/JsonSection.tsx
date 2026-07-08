@@ -1,4 +1,5 @@
 import CopyButton from "@/shared/components/ui/CopyButton";
+import JsonViewer from "./JsonViewer";
 
 interface JsonSectionProps {
   title: string;
@@ -13,9 +14,7 @@ export function JsonSection({ title, data }: JsonSectionProps) {
         <CopyButton content={JSON.stringify(data, null, 2)} />
       </div>
 
-      <pre className="overflow-x-auto bg-background p-4 text-sm">
-        {JSON.stringify(data ?? {}, null, 2)}
-      </pre>
+      <JsonViewer data={data} />
     </section>
   );
 }

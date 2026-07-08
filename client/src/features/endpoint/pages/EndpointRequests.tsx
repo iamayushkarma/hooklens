@@ -7,6 +7,7 @@ import RequestCard from "@/features/request/components/RequestCard";
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { useLiveRequests } from "@/features/request/hook/useLiveRequests";
 import CopyButton from "@/shared/components/ui/CopyButton";
+import { Input } from "@/shared/components/ui/Input";
 
 const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
 
@@ -99,12 +100,11 @@ function EndpointRequests() {
 
   return (
     <div className="space-y-3">
-      <input
-        type="text"
-        placeholder="Search requests..."
+      <Input
+        isSearch
+        placeholder="Search by method, IP, content type, body..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full rounded-lg border border-border-default px-4 py-2"
       />
 
       <div className="flex flex-wrap gap-2">

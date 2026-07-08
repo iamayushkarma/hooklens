@@ -5,10 +5,11 @@ import { getRequest } from "@/features/request/api/getRequest";
 import type { RequestLog } from "../types/request.types";
 import { JsonSection } from "../components/JsonSection";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
-import { replayRequest } from "../api/replayRequest";
+import { replayRequest, type ReplayResponse } from "../api/replayRequest";
 import { deleteRequest } from "../api/deleteRequest";
 import { explainRequest } from "../api/explainRequest";
 import ReplayDialog from "../components/ReplayDialog";
+import ReplayResult from "../components/ReplayResult";
 
 function RequestDetail() {
   const { requestId } = useParams();
@@ -18,8 +19,8 @@ function RequestDetail() {
   const [request, setRequest] = useState<RequestLog | null>(null);
   const [showReplayDialog, setShowReplayDialog] = useState(false);
   const [replayLoading, setReplayLoading] = useState(false);
-  const [replayResult, setReplayResult] = useState<any>(null);
 
+  const [replayResult, setReplayResult] = useState<ReplayResponse | null>(null);
   useEffect(() => {
     if (!requestId) return;
 
@@ -55,6 +56,11 @@ function RequestDetail() {
       const result = await replayRequest(request._id, targetUrl);
 
       setReplayResult(result);
+
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
 
       setShowReplayDialog(false);
     } catch (error) {
@@ -123,7 +129,7 @@ function RequestDetail() {
               onClick={() => setShowReplayDialog(true)}
               className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar"
             >
-              Replay Request
+              Replay
             </button>
 
             <button
@@ -182,6 +188,7 @@ function RequestDetail() {
           <p className="mt-2 text-sm">{explanation}</p>
         </div>
       )}
+      {replayResult && <ReplayResult result={replayResult} />}
       {/* Payload */}
       <JsonSection title="Headers" data={request.headers ?? {}} />
 

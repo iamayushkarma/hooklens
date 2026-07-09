@@ -1,6 +1,11 @@
 import { asyncHandler } from "../utils/async-handler";
 import { Request, Response } from "express";
-import { loginSchema, registerSchema } from "../validators/auth.validator";
+import {
+  changePasswordSchema,
+  loginSchema,
+  registerSchema,
+  updateProfileSchema,
+} from "../validators/auth.validator";
 import { User } from "../models/user.model";
 import { ApiError } from "../utils/api-error";
 import bcrypt from "bcryptjs";
@@ -10,6 +15,8 @@ import { Workspace } from "../models/workspace.model";
 import { WorkspaceMember } from "../models/workspaceMember.model";
 import { AUTH_PROVIDER } from "../utils/auth-provider";
 import admin from "../config/firebase-admin";
+import mongoose from "mongoose";
+import { Notification } from "../models/notification.model";
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const { fullName, email, password } = registerSchema.parse(req.body); // using zod register schema to validate req.body
@@ -160,5 +167,102 @@ const googleLogin = asyncHandler(async (req: Request, res: Response) => {
     ),
   );
 });
+// PATCH /api/v1/auth/me
+const updateProfile = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
 
-export { registerUser, loginUser, getCurrentUser, googleLogin };
+  const { fullName, avatarUrl } = updateProfileSchema.parse(req.body);
+
+  const update: { fullName: string; avatarUrl?: string } = { fullName };
+  if (avatarUrl) update.avatarUrl = avatarUrl;
+
+  const user = await User.findByIdAndUpdate(req.user.userId, update, {
+    new: true,
+    runValidators: true,
+  }).select("-passwordHash -googleId");
+
+  if (!user) throw new ApiError(404, "User not found");
+
+  return res.json(new ApiResponse(200, user, "Profile updated successfully"));
+});
+
+// PATCH /api/v1/auth/me/password
+const changePassword = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
+  const { currentPassword, newPassword } = changePasswordSchema.parse(req.body);
+
+  const user = await User.findById(req.user.userId);
+  if (!user) throw new ApiError(404, "User not found");
+
+  if (user.authProvider === AUTH_PROVIDER.GOOGLE || !user.passwordHash) {
+    throw new ApiError(
+      400,
+      "This account uses Google Sign-In and doesn't have a password to change",
+    );
+  }
+
+  const isCurrentPasswordValid = await bcrypt.compare(
+    currentPassword,
+    user.passwordHash,
+  );
+  if (!isCurrentPasswordValid) {
+    throw new ApiError(401, "Current password is incorrect");
+  }
+
+  user.passwordHash = await bcrypt.hash(
+    newPassword,
+    Number(process.env.BCRYPT_SALT_ROUNDS),
+  );
+  await user.save();
+
+  return res.json(new ApiResponse(200, null, "Password updated successfully"));
+});
+
+// DELETE /api/v1/auth/me
+const deleteAccount = asyncHandler(async (req: Request, res: Response) => {
+  if (!req.user) throw new ApiError(401, "Unauthorized");
+
+  const userId = req.user.userId;
+
+  const ownedWorkspaceCount = await Workspace.countDocuments({
+    ownerId: userId,
+  });
+
+  if (ownedWorkspaceCount > 0) {
+    throw new ApiError(
+      400,
+      "You own one or more workspaces. Transfer ownership or delete them before deleting your account.",
+    );
+  }
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    await Promise.all([
+      WorkspaceMember.deleteMany({ userId }).session(session),
+      Notification.deleteMany({ userId }).session(session),
+      User.findByIdAndDelete(userId).session(session),
+    ]);
+
+    await session.commitTransaction();
+
+    return res.json(new ApiResponse(200, null, "Account deleted successfully"));
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+});
+export {
+  registerUser,
+  loginUser,
+  getCurrentUser,
+  googleLogin,
+  changePassword,
+  deleteAccount,
+  updateProfile,
+};

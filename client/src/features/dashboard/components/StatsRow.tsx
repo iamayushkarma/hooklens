@@ -1,5 +1,5 @@
-import { Activity, Zap, Server, GitBranch } from "lucide-react";
 import { StatCard } from "./StatCard";
+import { ActiveEndpointsBar } from "./ActiveEndpointsBar";
 import type { WorkspaceAnalytics } from "@/features/analytics/types/analytics.types";
 
 interface StatsRowProps {
@@ -10,50 +10,62 @@ export function StatsRow({ analytics }: StatsRowProps) {
   if (!analytics) return null;
 
   const {
-    totalThisWeek,
     requestsToday,
+    requestsYesterday,
     requestsDeltaPct,
+    totalThisWeek,
+    totalLastWeek,
     activeEndpointCount,
-    methodBreakdown,
+    totalEndpointCount,
+    replaysLast30Days,
+    replaysDeltaPct,
     dailyTimeline,
   } = analytics;
 
-  // sparkline for total requests: last 7 days from dailyTimeline
   const weekSparkline = dailyTimeline
     .slice(-7)
     .map((d) => ({ value: d.count }));
-
-  // top method + its share of total
-  const totalMethodCount = methodBreakdown.reduce((sum, m) => sum + m.count, 0);
-  const topMethod = methodBreakdown[0];
-  const topMethodPct =
-    topMethod && totalMethodCount
-      ? Math.round((topMethod.count / totalMethodCount) * 100)
-      : 0;
+  const weekDeltaPct =
+    totalLastWeek === 0
+      ? null
+      : Math.round(((totalThisWeek - totalLastWeek) / totalLastWeek) * 100);
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard
-        label="Requests This Week"
-        value={totalThisWeek}
-        icon={<Activity className="size-4" />}
-        sparklineData={weekSparkline}
-      />
-      <StatCard
-        label="Requests Today"
-        value={requestsToday}
+        label="Requests today"
+        value={requestsToday.toLocaleString()}
         deltaPct={requestsDeltaPct}
-        icon={<Zap className="size-4" />}
+        caption={`from ${requestsYesterday.toLocaleString()} yesterday`}
+        sparklineData={weekSparkline}
+        accent="emerald"
       />
       <StatCard
-        label="Active Endpoints"
+        label="This week"
+        value={totalThisWeek.toLocaleString()}
+        deltaPct={weekDeltaPct}
+        caption={`from ${totalLastWeek.toLocaleString()} last week`}
+        sparklineData={weekSparkline}
+        accent="blue"
+      />
+      <StatCard
+        label="Active endpoints"
         value={activeEndpointCount}
-        icon={<Server className="size-4" />}
+        caption={`${totalEndpointCount - activeEndpointCount} inactive`}
+        rightSlot={
+          <ActiveEndpointsBar
+            active={activeEndpointCount}
+            total={totalEndpointCount}
+          />
+        }
       />
       <StatCard
-        label="Top Method"
-        value={topMethod ? `${topMethod.method} · ${topMethodPct}%` : "—"}
-        icon={<GitBranch className="size-4" />}
+        label="Replays run"
+        value={replaysLast30Days}
+        deltaPct={replaysDeltaPct}
+        caption="from last 30 days"
+        sparklineData={weekSparkline}
+        accent="rose"
       />
     </div>
   );

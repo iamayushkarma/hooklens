@@ -37,6 +37,138 @@ const daysAgo = (n: number): Date => {
 
 // Workspace Analytics
 
+// const getWorkspaceAnalytics = asyncHandler(
+//   async (req: Request, res: Response) => {
+//     const userId = getUserId(req);
+//     const workspaceId = getParam(req, "id");
+
+//     if (!isValidObjectId(workspaceId))
+//       throw new ApiError(400, "Invalid workspace ID");
+
+//     const workspaceObjectId = new mongoose.Types.ObjectId(workspaceId);
+//     // Verify user is a member of this workspace
+//     const member = await WorkspaceMember.findOne({
+//       workspaceId,
+//       userId,
+//     }).lean();
+//     if (!member) throw new ApiError(403, "Access denied");
+
+//     const today = startOfToday();
+//     // const twoWeeksAgo = daysAgo(14);
+//     const twoMonthsAgo = daysAgo(60);
+
+//     const testCount = await RequestLog.countDocuments({
+//       workspaceId,
+//     });
+
+//     const [
+//       requestsToday,
+//       methodBreakdown,
+//       dailyTimeline,
+//       topEndpoints,
+//       totalThisWeek,
+//     ] = await Promise.all([
+//       // Count requests that arrived today
+//       RequestLog.countDocuments({
+//         workspaceId,
+//         createdAt: { $gte: today },
+//       }),
+
+//       // HTTP method breakdown
+//       RequestLog.aggregate([
+//         {
+//           $match: {
+//             workspaceId: workspaceObjectId,
+//             createdAt: { $gte: twoMonthsAgo },
+//           },
+//         },
+//         {
+//           $group: {
+//             _id: "$method",
+//             count: { $sum: 1 },
+//           },
+//         },
+//         {
+//           $project: {
+//             _id: 0,
+//             method: "$_id",
+//             count: 1,
+//           },
+//         },
+//         {
+//           $sort: {
+//             count: -1,
+//           },
+//         },
+//       ]),
+
+//       // Requests per day (last 14 days)
+//       RequestLog.aggregate([
+//         {
+//           $match: {
+//             workspaceId: workspaceObjectId,
+//             createdAt: { $gte: twoMonthsAgo },
+//           },
+//         },
+//         {
+//           $group: {
+//             _id: {
+//               $dateToString: {
+//                 format: "%Y-%m-%d",
+//                 date: "$createdAt",
+//               },
+//             },
+//             count: {
+//               $sum: 1,
+//             },
+//           },
+//         },
+//         {
+//           $project: {
+//             _id: 0,
+//             date: "$_id",
+//             count: 1,
+//           },
+//         },
+//         {
+//           $sort: {
+//             date: 1,
+//           },
+//         },
+//       ]),
+
+//       // Top endpoints
+//       Endpoint.find({
+//         workspaceId,
+//         isActive: true,
+//       })
+//         .sort({ requestCount: -1 })
+//         .limit(5)
+//         .select("label slug requestCount")
+//         .lean(),
+
+//       // Requests in last 7 days
+//       RequestLog.countDocuments({
+//         workspaceId,
+//         createdAt: { $gte: daysAgo(7) },
+//       }),
+//     ]);
+
+//     res.json(
+//       new ApiResponse(
+//         200,
+//         {
+//           requestsToday,
+//           totalThisWeek,
+//           methodBreakdown,
+//           dailyTimeline,
+//           topEndpoints,
+//         },
+//         "OK",
+//       ),
+//     );
+//   },
+// );
 const getWorkspaceAnalytics = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = getUserId(req);
@@ -54,24 +186,28 @@ const getWorkspaceAnalytics = asyncHandler(
     if (!member) throw new ApiError(403, "Access denied");
 
     const today = startOfToday();
-    // const twoWeeksAgo = daysAgo(14);
+    const yesterday = daysAgo(1);
     const twoMonthsAgo = daysAgo(60);
-
-    const testCount = await RequestLog.countDocuments({
-      workspaceId,
-    });
 
     const [
       requestsToday,
+      requestsYesterday,
       methodBreakdown,
       dailyTimeline,
       topEndpoints,
       totalThisWeek,
+      activeEndpointCount,
     ] = await Promise.all([
       // Count requests that arrived today
       RequestLog.countDocuments({
         workspaceId,
         createdAt: { $gte: today },
+      }),
+
+      // Count requests that arrived yesterday (for day-over-day delta)
+      RequestLog.countDocuments({
+        workspaceId,
+        createdAt: { $gte: yesterday, $lt: today },
       }),
 
       // HTTP method breakdown
@@ -82,27 +218,12 @@ const getWorkspaceAnalytics = asyncHandler(
             createdAt: { $gte: twoMonthsAgo },
           },
         },
-        {
-          $group: {
-            _id: "$method",
-            count: { $sum: 1 },
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            method: "$_id",
-            count: 1,
-          },
-        },
-        {
-          $sort: {
-            count: -1,
-          },
-        },
+        { $group: { _id: "$method", count: { $sum: 1 } } },
+        { $project: { _id: 0, method: "$_id", count: 1 } },
+        { $sort: { count: -1 } },
       ]),
 
-      // Requests per day (last 14 days)
+      // Requests per day (last 60 days, filtered client-side by timeRange)
       RequestLog.aggregate([
         {
           $match: {
@@ -112,36 +233,16 @@ const getWorkspaceAnalytics = asyncHandler(
         },
         {
           $group: {
-            _id: {
-              $dateToString: {
-                format: "%Y-%m-%d",
-                date: "$createdAt",
-              },
-            },
-            count: {
-              $sum: 1,
-            },
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+            count: { $sum: 1 },
           },
         },
-        {
-          $project: {
-            _id: 0,
-            date: "$_id",
-            count: 1,
-          },
-        },
-        {
-          $sort: {
-            date: 1,
-          },
-        },
+        { $project: { _id: 0, date: "$_id", count: 1 } },
+        { $sort: { date: 1 } },
       ]),
 
       // Top endpoints
-      Endpoint.find({
-        workspaceId,
-        isActive: true,
-      })
+      Endpoint.find({ workspaceId, isActive: true })
         .sort({ requestCount: -1 })
         .limit(5)
         .select("label slug requestCount")
@@ -152,14 +253,27 @@ const getWorkspaceAnalytics = asyncHandler(
         workspaceId,
         createdAt: { $gte: daysAgo(7) },
       }),
+
+      // Active endpoint count — used by the stat card, not just the top-5 list
+      Endpoint.countDocuments({ workspaceId, isActive: true }),
     ]);
+
+    const requestsDeltaPct =
+      requestsYesterday === 0
+        ? null
+        : Math.round(
+            ((requestsToday - requestsYesterday) / requestsYesterday) * 100,
+          );
 
     res.json(
       new ApiResponse(
         200,
         {
           requestsToday,
+          requestsYesterday,
+          requestsDeltaPct,
           totalThisWeek,
+          activeEndpointCount,
           methodBreakdown,
           dailyTimeline,
           topEndpoints,

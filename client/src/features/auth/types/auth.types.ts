@@ -3,6 +3,7 @@ interface User {
   fullName: string;
   email: string;
   avatarUrl: string;
+  authProvider?: "local" | "google";
 }
 
 interface AuthResponse {

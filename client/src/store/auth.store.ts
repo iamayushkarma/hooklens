@@ -24,6 +24,8 @@ interface AuthStore {
 
   initialize: () => Promise<void>;
 
+  updateUser: (user: User) => void;
+
   logout: () => void;
 }
 
@@ -134,6 +136,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
         initialized: true,
       });
     }
+  },
+
+  updateUser: (user) => {
+    set({ user });
   },
 
   logout: () => {

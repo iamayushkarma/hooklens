@@ -20,8 +20,17 @@ export interface WorkspaceAnalytics {
   requestsYesterday: number;
   requestsDeltaPct: number | null;
   totalThisWeek: number;
+  totalLastWeek: number;
   activeEndpointCount: number;
-  methodBreakdown: MethodBreakdown[];
-  dailyTimeline: DailyTimelinePoint[];
-  topEndpoints: TopEndpoint[];
+  totalEndpointCount: number;
+  replaysLast30Days: number;
+  replaysDeltaPct: number | null;
+  methodBreakdown: { method: string; count: number }[];
+  dailyTimeline: { date: string; count: number }[];
+  topEndpoints: {
+    _id: string;
+    label: string;
+    slug: string;
+    requestCount: number;
+  }[];
 }

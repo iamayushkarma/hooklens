@@ -134,23 +134,6 @@ function Dashboard() {
         recentActivity={[]} // wire once the live-feed source is confirmed
         activeWorkspaceId={workspaces[0]?._id ?? ""}
       />
-      {/* Top endpoints */}
-      <div className="border bg-bg-card border-border-default rounded-lg py-2 px-4">
-        <div className="py-6 px-2">
-          <h2 className="font-semibold text-[1.2rem] text-text-primary">
-            Top Endpoints
-          </h2>
-          <p className="text-text-secondary text-[.85rem]">
-            Most active endpoints by request volume
-          </p>
-        </div>
-        <div className="pb-4 px-2">
-          <TopEndpointsTable
-            data={analytics?.topEndpoints ?? []}
-            workspaceId={workspaces[0]?._id ?? ""}
-          />
-        </div>
-      </div>
     </div>
   );
 }

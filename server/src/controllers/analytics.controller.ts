@@ -7,6 +7,7 @@ import { ApiResponse } from "../utils/api-response";
 import { ApiError } from "../utils/api-error";
 import { asyncHandler } from "../utils/async-handler";
 import mongoose from "mongoose";
+import { ReplayLog } from "../models/replayLog.model";
 
 // Helper Functions
 const getUserId = (req: Request): string => {
@@ -37,138 +38,6 @@ const daysAgo = (n: number): Date => {
 
 // Workspace Analytics
 
-// const getWorkspaceAnalytics = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     const userId = getUserId(req);
-//     const workspaceId = getParam(req, "id");
-
-//     if (!isValidObjectId(workspaceId))
-//       throw new ApiError(400, "Invalid workspace ID");
-
-//     const workspaceObjectId = new mongoose.Types.ObjectId(workspaceId);
-//     // Verify user is a member of this workspace
-//     const member = await WorkspaceMember.findOne({
-//       workspaceId,
-//       userId,
-//     }).lean();
-//     if (!member) throw new ApiError(403, "Access denied");
-
-//     const today = startOfToday();
-//     // const twoWeeksAgo = daysAgo(14);
-//     const twoMonthsAgo = daysAgo(60);
-
-//     const testCount = await RequestLog.countDocuments({
-//       workspaceId,
-//     });
-
-//     const [
-//       requestsToday,
-//       methodBreakdown,
-//       dailyTimeline,
-//       topEndpoints,
-//       totalThisWeek,
-//     ] = await Promise.all([
-//       // Count requests that arrived today
-//       RequestLog.countDocuments({
-//         workspaceId,
-//         createdAt: { $gte: today },
-//       }),
-
-//       // HTTP method breakdown
-//       RequestLog.aggregate([
-//         {
-//           $match: {
-//             workspaceId: workspaceObjectId,
-//             createdAt: { $gte: twoMonthsAgo },
-//           },
-//         },
-//         {
-//           $group: {
-//             _id: "$method",
-//             count: { $sum: 1 },
-//           },
-//         },
-//         {
-//           $project: {
-//             _id: 0,
-//             method: "$_id",
-//             count: 1,
-//           },
-//         },
-//         {
-//           $sort: {
-//             count: -1,
-//           },
-//         },
-//       ]),
-
-//       // Requests per day (last 14 days)
-//       RequestLog.aggregate([
-//         {
-//           $match: {
-//             workspaceId: workspaceObjectId,
-//             createdAt: { $gte: twoMonthsAgo },
-//           },
-//         },
-//         {
-//           $group: {
-//             _id: {
-//               $dateToString: {
-//                 format: "%Y-%m-%d",
-//                 date: "$createdAt",
-//               },
-//             },
-//             count: {
-//               $sum: 1,
-//             },
-//           },
-//         },
-//         {
-//           $project: {
-//             _id: 0,
-//             date: "$_id",
-//             count: 1,
-//           },
-//         },
-//         {
-//           $sort: {
-//             date: 1,
-//           },
-//         },
-//       ]),
-
-//       // Top endpoints
-//       Endpoint.find({
-//         workspaceId,
-//         isActive: true,
-//       })
-//         .sort({ requestCount: -1 })
-//         .limit(5)
-//         .select("label slug requestCount")
-//         .lean(),
-
-//       // Requests in last 7 days
-//       RequestLog.countDocuments({
-//         workspaceId,
-//         createdAt: { $gte: daysAgo(7) },
-//       }),
-//     ]);
-
-//     res.json(
-//       new ApiResponse(
-//         200,
-//         {
-//           requestsToday,
-//           totalThisWeek,
-//           methodBreakdown,
-//           dailyTimeline,
-//           topEndpoints,
-//         },
-//         "OK",
-//       ),
-//     );
-//   },
-// );
 const getWorkspaceAnalytics = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = getUserId(req);
@@ -188,6 +57,10 @@ const getWorkspaceAnalytics = asyncHandler(
     const today = startOfToday();
     const yesterday = daysAgo(1);
     const twoMonthsAgo = daysAgo(60);
+    const oneWeekAgo = daysAgo(7);
+    const twoWeeksAgo = daysAgo(14);
+    const thirtyDaysAgo = daysAgo(30);
+    const sixtyDaysAgoForReplays = daysAgo(60);
 
     const [
       requestsToday,
@@ -196,7 +69,11 @@ const getWorkspaceAnalytics = asyncHandler(
       dailyTimeline,
       topEndpoints,
       totalThisWeek,
+      totalLastWeek,
       activeEndpointCount,
+      totalEndpointCount,
+      replaysLast30Days,
+      replaysPrev30Days,
     ] = await Promise.all([
       // Count requests that arrived today
       RequestLog.countDocuments({
@@ -251,11 +128,32 @@ const getWorkspaceAnalytics = asyncHandler(
       // Requests in last 7 days
       RequestLog.countDocuments({
         workspaceId,
-        createdAt: { $gte: daysAgo(7) },
+        createdAt: { $gte: oneWeekAgo },
+      }),
+
+      // Requests in the 7 days before that — powers the "This week" delta
+      RequestLog.countDocuments({
+        workspaceId,
+        createdAt: { $gte: twoWeeksAgo, $lt: oneWeekAgo },
       }),
 
       // Active endpoint count — used by the stat card, not just the top-5 list
       Endpoint.countDocuments({ workspaceId, isActive: true }),
+
+      // Total endpoint count (active + inactive) — used to show "3 inactive"
+      Endpoint.countDocuments({ workspaceId }),
+
+      // Replays run in the last 30 days
+      ReplayLog.countDocuments({
+        workspaceId,
+        createdAt: { $gte: thirtyDaysAgo },
+      }),
+
+      // Replays run in the 30 days before that — powers the replays delta
+      ReplayLog.countDocuments({
+        workspaceId,
+        createdAt: { $gte: sixtyDaysAgoForReplays, $lt: thirtyDaysAgo },
+      }),
     ]);
 
     const requestsDeltaPct =
@@ -263,6 +161,18 @@ const getWorkspaceAnalytics = asyncHandler(
         ? null
         : Math.round(
             ((requestsToday - requestsYesterday) / requestsYesterday) * 100,
+          );
+
+    const weekDeltaPct =
+      totalLastWeek === 0
+        ? null
+        : Math.round(((totalThisWeek - totalLastWeek) / totalLastWeek) * 100);
+
+    const replaysDeltaPct =
+      replaysPrev30Days === 0
+        ? null
+        : Math.round(
+            ((replaysLast30Days - replaysPrev30Days) / replaysPrev30Days) * 100,
           );
 
     res.json(
@@ -273,7 +183,12 @@ const getWorkspaceAnalytics = asyncHandler(
           requestsYesterday,
           requestsDeltaPct,
           totalThisWeek,
+          totalLastWeek,
+          weekDeltaPct,
           activeEndpointCount,
+          totalEndpointCount,
+          replaysLast30Days,
+          replaysDeltaPct,
           methodBreakdown,
           dailyTimeline,
           topEndpoints,

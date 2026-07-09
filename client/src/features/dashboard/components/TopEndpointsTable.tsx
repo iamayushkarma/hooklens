@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { TopEndpoint } from "@/features/analytics/types/analytics.types";
+import { ArrowRight } from "lucide-react";
 
 interface TopEndpointsTableProps {
   data: TopEndpoint[];
@@ -37,10 +38,11 @@ export function TopEndpointsTable({
       </div>
 
       <Link
-        to={`/dashboard/workspace/${workspaceId}/endpoints`}
-        className="mt-3 text-[.8rem] font-medium text-primary hover:underline self-start"
+        to={`/dashboard/workspaces/${workspaceId}`}
+        className="mt-3 inline-flex items-center gap-1 self-start text-[.8rem] font-medium text-primary hover:underline"
       >
-        View all endpoints
+        <span>View all endpoints</span>
+        <ArrowRight className="size-4" />
       </Link>
     </div>
   );

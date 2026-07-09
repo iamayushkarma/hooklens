@@ -377,8 +377,9 @@ const UserMenu = ({ user, routes, collapsed }: useMenueProps) => {
                 <li key={route.label}>
                   <NavLink
                     to={route.path}
+                    end
                     className={({ isActive }) =>
-                      `flex items-center gap-2 py-1.5 px-3  rounded-md transition-colors ${
+                      `flex items-center gap-2 py-1.5 px-3 mb-0.75  rounded-md transition-colors ${
                         isActive ? "bg-base-hover " : "hover:bg-base-hover"
                       }`
                     }

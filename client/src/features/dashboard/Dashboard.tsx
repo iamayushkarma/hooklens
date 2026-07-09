@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-import ThemeSwitcher from "@/shared/components/ui/ThemeToggler";
 import { AnalyticsChart } from "./components/AnalyticsChart";
 import { getWorkspaces } from "@/features/workspace/api/getWorkspaces";
 import { getWorkspaceAnalytics } from "../analytics/api/getWorkspaceAnalytics";
@@ -59,7 +58,6 @@ function Dashboard() {
     <>
       <h1>Dashboard Home</h1>
       {/* <DashboardHeader /> */}
-      <ThemeSwitcher />
       {/* Analytics Chart */}
       {/* <TopEndpointsPieChart data={analytics?.topEndpoints ?? []} /> */}
       <div className="mt-5 border bg-bg-card border-border-default rounded-lg py-2 px-4">

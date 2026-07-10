@@ -9,6 +9,7 @@ import { useLiveRequests } from "@/features/request/hook/useLiveRequests";
 import CopyButton from "@/shared/components/ui/CopyButton";
 import { LayoutGroup, motion } from "motion/react";
 import { Input } from "@/shared/components/ui/Input";
+import Pagination from "@/shared/components/ui/Pagination";
 
 const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
 
@@ -163,27 +164,8 @@ function EndpointRequests() {
           <RequestCard key={request._id} request={request} />
         ))
       )}
-      <div className="mt-6 flex items-center justify-between rounded-lg border border-border-default p-4">
-        <button
-          disabled={!pagination.hasPrev}
-          onClick={() => setPage((p) => p - 1)}
-          className="rounded-lg border border-border-default px-4 py-2 disabled:opacity-50"
-        >
-          Previous
-        </button>
-
-        <span className="text-sm text-text-secondary">
-          Page {pagination.page} of {pagination.pages}
-        </span>
-
-        <button
-          disabled={!pagination.hasNext}
-          onClick={() => setPage((p) => p + 1)}
-          className="rounded-lg border border-border-default px-4 py-2 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+      {/* Pagination */}
+      <Pagination pagination={pagination} setPage={setPage} />
     </div>
   );
 }

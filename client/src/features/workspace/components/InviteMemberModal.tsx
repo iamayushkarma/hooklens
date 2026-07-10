@@ -106,7 +106,7 @@ function InviteMemberModal({
         <div className="flex justify-end gap-3">
           <Button
             type="button"
-            className="bg-transparent border border-border-subtle text-text-primary hover:bg-bg-hover"
+            className="bg-transparent border border-border-subtle hover:text-white! text-text-primary! hover:bg-bg-hover"
             onClick={onClose}
           >
             Cancel

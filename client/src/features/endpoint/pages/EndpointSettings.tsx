@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Pause, Play, Trash2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
@@ -7,6 +7,8 @@ import { updateEndpoint } from "../api/updateEndpoint";
 import { deleteEndpoint } from "../api/deleteEndpoint";
 import CopyButton from "@/shared/components/ui/CopyButton";
 import EndpointSettingsSkeleton from "@/shared/components/skletons/EndpointSettingsSkeleton";
+import { Input } from "@/shared/components/ui/Input";
+import { Button } from "@/shared/components/ui/Button";
 
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
@@ -79,14 +81,10 @@ function EndpointSettings() {
 
         <div className="space-y-5">
           <div>
-            <label className="mb-2 block text-sm font-medium text-text-primary">
-              Endpoint Label
-            </label>
-
-            <input
+            <Input
+              label="Endpoint Label"
               value={label}
               onChange={(e) => setLabel(e.target.value)}
-              className="w-full rounded-lg border border-border-default bg-bg-base px-3 py-2 text-text-primary transition-fast focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent"
             />
 
             <p className="mt-1.5 text-xs text-text-secondary">
@@ -122,12 +120,7 @@ function EndpointSettings() {
           </div>
 
           <div className="flex justify-end">
-            <button
-              onClick={handleSave}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-fast hover:bg-accent-hover active:bg-accent-pressed"
-            >
-              Save Changes
-            </button>
+            <Button onClick={handleSave}> Save Changes</Button>
           </div>
         </div>
       </div>
@@ -179,8 +172,13 @@ function EndpointSettings() {
 
           <button
             onClick={handleToggleStatus}
-            className="shrink-0 rounded-lg border border-border-default px-4 py-2 text-sm font-medium text-text-primary transition-fast hover:bg-base-hover"
+            className={`flex shrink-0 items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-fast ${
+              endpoint.isActive
+                ? "border-warning-border bg-warning-bg text-warning hover:bg-warning-border/40"
+                : "border-success-border bg-success-bg text-success hover:bg-success-border/40"
+            }`}
           >
+            {endpoint.isActive ? <Pause size={16} /> : <Play size={16} />}
             {endpoint.isActive ? "Pause Endpoint" : "Enable Endpoint"}
           </button>
         </div>
@@ -201,13 +199,13 @@ function EndpointSettings() {
             </p>
           </div>
 
-          <button
+          <Button
+            className="bg-danger hover:bg-danger-hover"
             onClick={handleDelete}
-            className="flex shrink-0 items-center gap-2 rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white transition-fast hover:bg-danger-hover"
           >
             <Trash2 size={16} />
             Delete Endpoint
-          </button>
+          </Button>
         </div>
       </div>
     </div>

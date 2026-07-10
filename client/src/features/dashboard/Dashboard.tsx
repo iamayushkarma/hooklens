@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { AnalyticsChart } from "./components/AnalyticsChart";
 import { StatsRow } from "./components/StatsRow";
 import { MethodPieChart } from "./components/MethodPieChart";
-import { TopEndpointsTable } from "./components/TopEndpointsTable";
 import { getWorkspaces } from "@/features/workspace/api/getWorkspaces";
 import { getWorkspaceAnalytics } from "../analytics/api/getWorkspaceAnalytics";
 import type { WorkspaceAnalytics } from "@/features/analytics/types/analytics.types";
@@ -131,7 +130,7 @@ function Dashboard() {
       <BentoSection
         topEndpoints={analytics?.topEndpoints ?? []}
         workspaces={workspaces}
-        recentActivity={[]} // wire once the live-feed source is confirmed
+        recentActivity={[]}
         activeWorkspaceId={workspaces[0]?._id ?? ""}
       />
     </div>

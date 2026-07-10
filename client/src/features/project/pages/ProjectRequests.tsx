@@ -7,6 +7,7 @@ import { Search, Webhook } from "lucide-react";
 import { getProjectRequests } from "@/features/request/api/getProjectRequests";
 import type { RequestLog } from "@/features/request/types/request.types";
 import RequestCard from "@/features/request/components/RequestCard";
+import RequestCardSkeletonList from "@/shared/components/skletons/RequestCardSkeletonList";
 
 const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
 
@@ -14,6 +15,7 @@ function ProjectRequests() {
   const { projectId } = useParams();
 
   const [requests, setRequests] = useState<RequestLog[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [methodFilter, setMethodFilter] = useState("ALL");
 
@@ -22,10 +24,13 @@ function ProjectRequests() {
 
     const fetchRequests = async () => {
       try {
+        setIsLoading(true);
         const data = await getProjectRequests(projectId);
         setRequests(data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -107,7 +112,9 @@ function ProjectRequests() {
       </div>
 
       {/* Requests list */}
-      {filteredRequests.length === 0 ? (
+      {isLoading ? (
+        <RequestCardSkeletonList count={5} />
+      ) : filteredRequests.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border-default bg-bg-sidebar/40 px-6 py-14 text-center">
           <div className="mb-4 flex size-14 items-center justify-center rounded-full bg-bg-card">
             <Webhook className="size-6 text-text-secondary" />

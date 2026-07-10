@@ -17,6 +17,7 @@ import { useAuthStore } from "@/store/auth.store";
 import MemberRoleSelect from "../components/MemberRoleSelect";
 import CancelInvitationModal from "../components/CancelInvitationModal";
 import ResendInvitationButton from "../components/ResendInvitationButton";
+import { WorkspaceMembersSkeleton } from "@/shared/components/skletons/WorkspaceMembersSkeleton";
 
 function getInitials(name?: string, email?: string) {
   if (name) {
@@ -77,7 +78,7 @@ function WorkspaceMembers() {
   }, [currentWorkspaceId]);
 
   if (loading) {
-    return <div className="py-16 text-center">Loading...</div>;
+    return <WorkspaceMembersSkeleton />;
   }
 
   return (

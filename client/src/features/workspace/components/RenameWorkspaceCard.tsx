@@ -5,6 +5,7 @@ import { Input } from "@/shared/components/ui/Input";
 
 import { updateWorkspace } from "../api/updateWorkspace";
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
+import { RenameWorkspaceCardSkeleton } from "@/shared/components/skletons/WorkspaceSettingsSkeleton";
 
 function RenameWorkspaceCard() {
   const { currentWorkspace, currentWorkspaceId } = useCurrentWorkspace();
@@ -50,6 +51,9 @@ function RenameWorkspaceCard() {
       setLoading(false);
     }
   };
+  if (!currentWorkspace) {
+    return <RenameWorkspaceCardSkeleton />;
+  }
 
   return (
     <div className="rounded-xl border border-border-default bg-bg-card p-6">

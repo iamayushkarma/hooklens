@@ -4,7 +4,7 @@ export interface WorkspaceMember {
   memberId: string;
   role: "owner" | "admin" | "member" | "viewer";
   joinedAt: string;
-
+  lastActiveAt?: string;
   user: {
     _id: string;
     name: string;

@@ -1,4 +1,4 @@
-import { Clock, FileText } from "lucide-react";
+import { HardDrive, FileText } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { RequestLog } from "../types/request.types";
 
@@ -70,10 +70,9 @@ function RequestCard({ request }: RequestCardProps) {
 
       <div className="mt-2.5 flex items-center gap-4 text-xs text-text-secondary">
         <span className="flex items-center gap-1.5">
-          <Clock className="size-3.5" />
+          <HardDrive className="size-3.5" />
           {formatSize(request.size)}
         </span>
-
         {request.contentType && (
           <span className="flex items-center gap-1.5">
             <FileText className="size-3.5" />

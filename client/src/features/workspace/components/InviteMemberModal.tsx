@@ -3,7 +3,9 @@ import { useState } from "react";
 import Modal from "@/shared/components/ui/ModalPortal";
 import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
-import { Select } from "@/shared/components/ui/Select";
+import RoleSelect, {
+  type SelectableRole,
+} from "@/shared/components/ui/RoleSelect";
 
 import { inviteMember, type InviteMemberPayload } from "../api/inviteMember";
 
@@ -14,21 +16,6 @@ interface InviteMemberModalProps {
   onSuccess?: () => void;
 }
 
-const roleOptions = [
-  {
-    label: "Member",
-    value: "member",
-  },
-  {
-    label: "Admin",
-    value: "admin",
-  },
-  {
-    label: "Viewer",
-    value: "viewer",
-  },
-];
-
 function InviteMemberModal({
   isOpen,
   onClose,
@@ -36,11 +23,8 @@ function InviteMemberModal({
   onSuccess,
 }: InviteMemberModalProps) {
   const [email, setEmail] = useState("");
-
   const [role, setRole] = useState<InviteMemberPayload["role"]>("member");
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
 
   const handleInvite = async () => {
@@ -92,13 +76,12 @@ function InviteMemberModal({
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <Select
+        <RoleSelect
           label="Role"
-          value={role}
-          onChange={(e) =>
-            setRole(e.target.value as InviteMemberPayload["role"])
-          }
-          options={roleOptions}
+          fullWidth
+          roles={["member", "admin", "viewer"]}
+          value={role as SelectableRole}
+          onChange={(value) => setRole(value as InviteMemberPayload["role"])}
         />
 
         {error && <p className="text-sm text-red-500">{error}</p>}

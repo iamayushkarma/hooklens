@@ -7,6 +7,7 @@ import RequestCard from "@/features/request/components/RequestCard";
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { useLiveRequests } from "@/features/request/hook/useLiveRequests";
 import CopyButton from "@/shared/components/ui/CopyButton";
+import { LayoutGroup, motion } from "motion/react";
 import { Input } from "@/shared/components/ui/Input";
 
 const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
@@ -115,29 +116,46 @@ function EndpointRequests() {
 
   return (
     <div className="space-y-3">
-      <Input
-        isSearch
-        placeholder="Search by method, IP, content type, body..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-
-      <div className="flex flex-wrap gap-2">
-        {methods.map((method) => (
-          <button
-            key={method}
-            onClick={() => setMethodFilter(method)}
-            className={`rounded-lg px-3 py-1 text-sm ${
-              methodFilter === method
-                ? "bg-primary text-text-primary"
-                : "border border-border-default"
-            }`}
-          >
-            {method}
-          </button>
-        ))}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Input
+            placeholder="Search requests (method, IP, path...)"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <LayoutGroup id="method-filter">
+          <div className="flex flex-wrap items-center gap-1 rounded-md border border-border-default bg-bg-card p-1">
+            {methods.map((method) => (
+              <button
+                key={method}
+                onClick={() => setMethodFilter(method)}
+                className="relative rounded-md px-3.5 cursor-pointer py-1.5 text-sm font-medium"
+              >
+                {methodFilter === method && (
+                  <motion.div
+                    layoutId="method-filter-pill"
+                    className="absolute inset-0 rounded-[5px] bg-blue-600 pointer-events-none"
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 30,
+                    }}
+                  />
+                )}
+                <span
+                  className={`relative z-10 transition-colors ${
+                    methodFilter === method
+                      ? "text-white"
+                      : "text-text-secondary hover:text-text-primary"
+                  }`}
+                >
+                  {method}
+                </span>
+              </button>
+            ))}
+          </div>
+        </LayoutGroup>
       </div>
-
       {requests.length === 0 && endpoint ? (
         <EndpointEmptyState endpointId={endpoint._id} slug={endpoint.slug} />
       ) : (

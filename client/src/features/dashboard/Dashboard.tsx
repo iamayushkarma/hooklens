@@ -7,6 +7,7 @@ import { getWorkspaceAnalytics } from "../analytics/api/getWorkspaceAnalytics";
 import type { WorkspaceAnalytics } from "@/features/analytics/types/analytics.types";
 import { ChevronDown } from "lucide-react";
 import { BentoSection } from "./components/BentoSection";
+import { DashboardSkeleton } from "@/shared/components/skletons/DashboardSkeleton";
 
 function Dashboard() {
   const [analytics, setAnalytics] = useState<WorkspaceAnalytics | null>(null);
@@ -49,9 +50,8 @@ function Dashboard() {
     }) ?? [];
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <DashboardSkeleton />;
   }
-
   if (!hasWorkspace) {
     return (
       <div className="mt-10 text-center text-text-secondary">

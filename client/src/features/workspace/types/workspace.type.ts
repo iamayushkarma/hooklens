@@ -4,6 +4,7 @@ export interface WorkspaceProp {
   yourRole: "owner" | "admin" | "member" | "viewer";
   memberCount: number;
   projectCount: number;
+
   createdAt: string;
   updatedAt: string;
 }

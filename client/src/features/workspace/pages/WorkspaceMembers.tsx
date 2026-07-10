@@ -205,17 +205,14 @@ function WorkspaceMembers() {
             <h3 className="text-base font-semibold text-text-primary">
               No pending invitations
             </h3>
-            <p className="mt-1 text-sm text-text-secondary">
+            <p className="mt-1 text-sm text-text-secondary mb-2">
               When you invite someone to your workspace, they will appear here.
             </p>
             {permissions.canInviteMembers && (
-              <button
-                onClick={() => setInviteOpen(true)}
-                className="mt-4 flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover hover:underline"
-              >
+              <Button onClick={() => setInviteOpen(true)}>
                 <Plus className="h-4 w-4" />
                 Send a new invitation
-              </button>
+              </Button>
             )}
           </div>
         ) : (

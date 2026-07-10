@@ -2,7 +2,7 @@ import { LayoutGroup, motion } from "motion/react";
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Search, Webhook, Plus } from "lucide-react";
+import { Search, Webhook } from "lucide-react";
 
 import { getProjectRequests } from "@/features/request/api/getProjectRequests";
 import type { RequestLog } from "@/features/request/types/request.types";

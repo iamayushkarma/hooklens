@@ -6,6 +6,7 @@ import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { updateEndpoint } from "../api/updateEndpoint";
 import { deleteEndpoint } from "../api/deleteEndpoint";
 import CopyButton from "@/shared/components/ui/CopyButton";
+import EndpointSettingsSkeleton from "@/shared/components/skletons/EndpointSettingsSkeleton";
 
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
@@ -22,11 +23,7 @@ function EndpointSettings() {
   }, [endpoint]);
 
   if (!endpoint) {
-    return (
-      <div className="rounded-lg border border-border-default bg-bg-card p-6 text-text-secondary">
-        Loading endpoint...
-      </div>
-    );
+    return <EndpointSettingsSkeleton />;
   }
 
   const webhookUrl = `${import.meta.env.VITE_WEBHOOK_BASE_URL}/h/${endpoint?.slug}`;

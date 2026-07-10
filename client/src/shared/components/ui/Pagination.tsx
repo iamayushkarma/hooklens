@@ -30,22 +30,22 @@ function Pagination({ pagination, setPage }: PaginationProps) {
   };
 
   return (
-    <div className="mt-6 flex items-center justify-between rounded-xl border border-border-default bg-bg-card px-4 py-3">
+    <div className="flex items-center justify-end gap-1.5">
       <button
         disabled={!hasPrev}
         onClick={() => setPage((p) => p - 1)}
-        className="flex items-center gap-1.5 rounded-lg border border-border-default px-3 py-1.5 text-sm text-text-primary transition-colors hover:bg-bg-sidebar disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+        className="flex h-8 items-center gap-1 rounded-md border border-border-default bg-bg-card px-3 text-sm font-medium text-text-primary transition-colors hover:bg-base-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-bg-card"
       >
-        <ChevronLeft className="size-4" />
-        Previous
+        <ChevronLeft className="size-3.5" />
+        Back
       </button>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         {getPageNumbers().map((n, i) =>
           n === "..." ? (
             <span
               key={`ellipsis-${i}`}
-              className="px-1.5 text-sm text-text-muted"
+              className="flex h-8 w-8 items-center justify-center text-sm text-text-muted"
             >
               …
             </span>
@@ -53,10 +53,11 @@ function Pagination({ pagination, setPage }: PaginationProps) {
             <button
               key={n}
               onClick={() => setPage(n)}
-              className={`flex size-8 items-center justify-center rounded-lg text-sm transition-colors ${
+              aria-current={n === page ? "page" : undefined}
+              className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
                 n === page
-                  ? "bg-accent text-white font-medium"
-                  : "text-text-secondary hover:bg-bg-sidebar hover:text-text-primary"
+                  ? "bg-text-primary text-bg-base"
+                  : "border border-border-default bg-bg-card text-text-primary hover:bg-base-hover"
               }`}
             >
               {n}
@@ -68,10 +69,10 @@ function Pagination({ pagination, setPage }: PaginationProps) {
       <button
         disabled={!hasNext}
         onClick={() => setPage((p) => p + 1)}
-        className="flex items-center gap-1.5 rounded-lg border border-border-default px-3 py-1.5 text-sm text-text-primary transition-colors hover:bg-bg-sidebar disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+        className="flex h-8 items-center gap-1 rounded-md border border-border-default bg-bg-card px-3 text-sm font-medium text-text-primary transition-colors hover:bg-base-hover disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-bg-card"
       >
         Next
-        <ChevronRight className="size-4" />
+        <ChevronRight className="size-3.5" />
       </button>
     </div>
   );

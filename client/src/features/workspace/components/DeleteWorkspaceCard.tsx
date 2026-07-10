@@ -1,17 +1,17 @@
 import { useState } from "react";
-
 import { Button } from "@/shared/components/ui/Button";
-
 import DeleteWorkspaceModal from "./DeleteWorkspaceModal";
-
 import { useCurrentWorkspace } from "../hooks/useCurrentWorkspace";
+import { DeleteWorkspaceCardSkeleton } from "@/shared/components/skletons/WorkspaceSettingsSkeleton";
 
 function DeleteWorkspaceCard() {
   const { currentWorkspace } = useCurrentWorkspace();
 
   const [open, setOpen] = useState(false);
 
-  if (!currentWorkspace) return null;
+  if (!currentWorkspace) {
+    return <DeleteWorkspaceCardSkeleton />;
+  }
 
   return (
     <>

@@ -13,6 +13,8 @@ export function Button({
     <button
       disabled={disabled || loading}
       className={`
+        inline-flex w-fit shrink-0 items-center justify-center gap-2
+        whitespace-nowrap
         h-9 rounded-md
         bg-accent
         px-4

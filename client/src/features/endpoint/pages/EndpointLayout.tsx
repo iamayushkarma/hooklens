@@ -1,7 +1,7 @@
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { Outlet, useParams } from "react-router-dom";
 import { CopyButton } from "@/shared/components/ui/CopyButton";
-import { Webhook, Radio, Inbox, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 import Tabs from "@/shared/components/ui/Tabs";
 
 function EndpointLayout() {

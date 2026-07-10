@@ -5,18 +5,23 @@ import CreateWorkspaceBtn from "../components/CreateWorkspaceBtn";
 import type { WorkspaceProp } from "../types/workspace.type";
 import { useWorkspaceStore } from "@/store/workspace.store";
 import { Input } from "@/shared/components/ui/Input";
+import { WorkspacePageSkeleton } from "@/shared/components/skletons/WorkspacePageSkeleton";
 function Workspace() {
   const [workspaces, setWorkspaces] = useState<WorkspaceProp[]>([]);
   const [serchWorkspaces, setSerchWorkspaces] = useState("");
+  const [loading, setLoading] = useState(true);
   const setWorkspaceStore = useWorkspaceStore((state) => state.setWorkspaces);
+
   useEffect(() => {
     const fetchWorkspaces = async () => {
-      const data = await getWorkspaces();
-
-      setWorkspaces(data);
-      setWorkspaceStore(data);
+      try {
+        const data = await getWorkspaces();
+        setWorkspaces(data);
+        setWorkspaceStore(data);
+      } finally {
+        setLoading(false);
+      }
     };
-
     fetchWorkspaces();
   }, []);
 
@@ -27,11 +32,14 @@ function Workspace() {
   }, [workspaces, serchWorkspaces]);
 
   const totalWorkspaces = workspaces.length;
-
   const totalProjects = workspaces.reduce(
     (sum, workspace) => sum + workspace.projectCount,
     0,
   );
+
+  if (loading) {
+    return <WorkspacePageSkeleton />;
+  }
 
   return (
     <div className="px-3">

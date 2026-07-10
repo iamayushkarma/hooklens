@@ -198,11 +198,11 @@ export function EndpointAnalytics() {
             <span className="inline-flex items-center gap-2">
               {isLive && (
                 <span className="relative flex size-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-success" />
                 </span>
               )}
-              {isLive ? "Live" : "Disabled"}
+              <span className="text-2xl"> {isLive ? "Live" : "Disabled"}</span>
             </span>
           }
           accent={isLive ? "success" : "danger"}

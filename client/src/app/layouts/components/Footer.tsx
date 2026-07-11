@@ -1,4 +1,5 @@
 import logo from "@/assets/icons/logo-icon.png";
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 const columns = [
   {
@@ -10,13 +11,17 @@ const columns = [
 ];
 
 function Footer() {
+  const { goToHome } = useAppNavigation();
   return (
     <footer className="w-full bg-bg-sidebar border-t border-border-default">
       <div className="max-w-7xl mx-auto px-6 py-14">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12">
           {/* Left: logo, tagline, icons */}
           <div className="max-w-xs">
-            <div className="flex items-center gap-2">
+            <div
+              onClick={goToHome}
+              className="flex items-center gap-2 cursor-pointer"
+            >
               <img src={logo} alt="HookLens" className="w-6 h-6" />
               <span className="font-semibold text-text-primary text-xl">
                 HookLens

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
 import logo from "@/assets/icons/logo-icon.png";
+import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 const navLinks = [
   { label: "Features", href: "#" },
@@ -11,12 +12,15 @@ const navLinks = [
 
 function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
-
+  const { goToHome } = useAppNavigation();
   return (
     <nav className="w-full border-b border-border-default bg-bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
         <div className="flex items-center justify-center gap-10">
-          <div className="flex items-center gap-2 shrink-0">
+          <div
+            onClick={goToHome}
+            className="flex items-center gap-2 shrink-0 cursor-pointer"
+          >
             <img src={logo} alt="HookLens" className="w-6 h-6" />
             <span className="font-semibold text-text-primary text-[15px]">
               HookLens

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
 import logo from "@/assets/icons/logo-icon.png";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
+import { Button } from "@/shared/components/ui/Button";
 
 const navLinks = [
   { label: "Features", href: "#" },
@@ -12,7 +13,7 @@ const navLinks = [
 
 function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
-  const { goToHome } = useAppNavigation();
+  const { goToHome, goToRegister } = useAppNavigation();
   return (
     <nav className="w-full border-b border-border-default bg-bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
@@ -72,9 +73,8 @@ function Navbar() {
           >
             Login
           </a>
-          <button className="h-9 px-4 rounded-md bg-accent text-white text-sm hover:bg-accent-hover transition-colors cursor-pointer">
-            Get Started
-          </button>
+
+          <Button onClick={goToRegister}>Get Started</Button>
         </div>
       </div>
     </nav>

@@ -13,7 +13,7 @@ const columns = [
 function Footer() {
   const { goToHome } = useAppNavigation();
   return (
-    <footer className="w-full bg-bg-sidebar border-t border-border-default">
+    <footer className="w-full bg-[#0a0a0a] border-t border-[#262626]">
       <div className="max-w-7xl mx-auto px-6 py-14">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12">
           {/* Left: logo, tagline, icons */}
@@ -23,11 +23,11 @@ function Footer() {
               className="flex items-center gap-2 cursor-pointer"
             >
               <img src={logo} alt="HookLens" className="w-6 h-6" />
-              <span className="font-semibold text-text-primary text-xl">
+              <span className="font-semibold text-[#ececec] text-xl">
                 HookLens
               </span>
             </div>
-            <p className="text-sm text-text-secondary mt-4 leading-relaxed">
+            <p className="text-sm text-[#a1a1aa] mt-4 leading-relaxed">
               HookLens captures and replays webhooks in real time - making
               integration debugging faster and easier.
             </p>
@@ -36,7 +36,7 @@ function Footer() {
               <a
                 href="#"
                 aria-label="GitHub"
-                className="text-text-muted hover:text-text-primary transition-colors"
+                className="text-[#71717a] hover:text-[#ececec] transition-colors"
               >
                 <svg
                   width="18"
@@ -52,7 +52,7 @@ function Footer() {
               <a
                 href="#"
                 aria-label="Email"
-                className="text-text-muted hover:text-text-primary transition-colors"
+                className="text-[#71717a] hover:text-[#ececec] transition-colors"
               >
                 <svg
                   width="18"
@@ -73,15 +73,13 @@ function Footer() {
           <div className="flex flex-wrap gap-x-20 gap-y-10">
             {columns.map((col) => (
               <div key={col.title}>
-                <p className="font-semibold text-text-primary mb-4">
-                  {col.title}
-                </p>
+                <p className="font-semibold text-[#ececec] mb-4">{col.title}</p>
                 <ul className="space-y-3">
                   {col.links.map((link) => (
                     <li key={link}>
                       <a
                         href="#"
-                        className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+                        className="text-sm text-[#a1a1aa] hover:text-[#ececec] transition-colors"
                       >
                         {link}
                       </a>
@@ -95,13 +93,13 @@ function Footer() {
 
         {/* Giant wordmark */}
         <div className="mt-10 select-none pointer-events-none overflow-hidden">
-          <p className="font-semibold leading-none tracking-tight text-text-muted/20 text-[22vw] sm:text-[16vw] whitespace-nowrap">
+          <p className="font-semibold leading-none tracking-tight text-white/5 text-[22vw] sm:text-[16vw] whitespace-nowrap">
             HookLens
           </p>
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-6 border-t border-border-default text-xs tracking-wide text-text-muted">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-6 border-t border-[#262626] text-xs tracking-wide text-[#71717a]">
           <p>© 2026 HookLens. All rights reserved.</p>
           <p>Built for developers who ship integrations.</p>
         </div>

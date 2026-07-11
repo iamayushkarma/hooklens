@@ -1,8 +1,10 @@
+import HeroSection from "../section/HeroSection";
+
 function HomePage() {
   return (
-    <div>
-      <a href="/login">Login</a>
-    </div>
+    <>
+      <HeroSection />
+    </>
   );
 }
 

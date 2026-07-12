@@ -6,7 +6,7 @@ import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 function HeroSection() {
   const { goToLogin } = useAppNavigation();
   return (
-    <section className="relative overflow-hidden h-svh">
+    <section className="relative overflow-hidden h-dvh">
       <img
         src={HeroSectionBackground}
         alt=""

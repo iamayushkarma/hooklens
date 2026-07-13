@@ -14,6 +14,7 @@ const BlueskyIcon = ({ className = "" }: { className?: string }) => (
     <path d="M12 10.8c-.7-1.42-2.65-4.06-4.45-5.36C5.83 4.2 5.1 4.35 4.62 4.6c-.55.28-.62.98-.62 1.36 0 2.68.44 6.5 2.24 8.16.5.47 1.06.7 1.6.7-.7.02-1.4.35-1.9.9-.62.68-.9 1.65-.5 2.63.3.72 1.05 1.4 2.4 1.4 1.9 0 3.5-1.9 4.16-3.1.66 1.2 2.26 3.1 4.16 3.1 1.35 0 2.1-.68 2.4-1.4.4-.98.12-1.95-.5-2.63-.5-.55-1.2-.88-1.9-.9.54 0 1.1-.23 1.6-.7 1.8-1.66 2.24-5.48 2.24-8.16 0-.38-.07-1.08-.62-1.36-.48-.25-1.21-.4-2.93.84C14.65 6.74 12.7 9.38 12 10.8z" />
   </svg>
 );
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Platform = {
   key: string;
@@ -83,10 +84,43 @@ export default function PublishEverywhereCard() {
 
   return (
     <div
-      className="w-full max-w-sm rounded-2xl bg-neutral-50 px-8 py-4"
+      className="w-full max-w-sm rounded-2xl bg-neutral-50 px-8 py-4 relative overflow-hidden h-82 border border-border-default cursor-default
+      "
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-10 -top-10 h-56 w-56 rounded-full bg-blue-200 blur-[70px]"
+        initial={false}
+        animate={{
+          opacity: isHovered ? 0.9 : 0,
+          scale: isHovered ? 1.1 : 0.8,
+        }}
+        transition={{ duration: 0.6, ease: EASE }}
+      />
+
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -right-12 top-4 h-52 w-52 rounded-full bg-violet-200 blur-[80px]"
+        initial={false}
+        animate={{
+          opacity: isHovered ? 0.8 : 0,
+          scale: isHovered ? 1.1 : 0.75,
+        }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.05 }}
+      />
+
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute left-1/3 top-16 h-40 w-64 rounded-full bg-cyan-200 blur-[90px]"
+        initial={false}
+        animate={{
+          opacity: isHovered ? 0.5 : 0,
+          scale: isHovered ? 1.05 : 0.8,
+        }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+      />
       {/* Card stack */}
       <div className="relative h-35 mb-6 mt-2 ml-3">
         {platforms.map((platform, i) => (

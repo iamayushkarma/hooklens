@@ -10,7 +10,7 @@ function CollaborationCard() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative h-82 group bg-gray-50 border border-border-default rounded-md overflow-hidden flex items-center justify-center flex-col"
+      className="relative h-82 group bg-gray-50 border border-border-default rounded-md overflow-hidden flex items-center justify-center flex-col cursor-default"
     >
       <motion.div
         aria-hidden

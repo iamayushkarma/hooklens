@@ -47,7 +47,7 @@ function CollaborationCard() {
         <motion.div
           layout
           initial={false}
-          animate={{ scale: isHovered ? 1.13 : 1 }}
+          animate={{ scale: isHovered ? 1.1 : 1 }}
           style={{ transformOrigin: "center" }}
           transition={{
             layout: { type: "spring", stiffness: 260, damping: 30, mass: 0.9 },

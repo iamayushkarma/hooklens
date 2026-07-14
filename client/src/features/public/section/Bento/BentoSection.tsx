@@ -1,3 +1,4 @@
+import AutoGenrateCard from "./cards/AutoGenrateCard";
 import CollaborationCard from "./cards/CollaborationCard";
 import IntegrationsCard from "./cards/Integrationscard";
 import WebhookCaptureCard from "./cards/WebhookCaptureCard";
@@ -10,7 +11,7 @@ function BentoSection() {
       <WebhookCaptureCard />
       <WriteBetterCard />
       <IntegrationsCard style="col-span-2!" />
-      <WriteBetterCard />
+      <AutoGenrateCard />
     </div>
   );
 }

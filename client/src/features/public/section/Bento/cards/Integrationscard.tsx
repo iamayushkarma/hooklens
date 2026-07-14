@@ -1,4 +1,5 @@
 import { useRef, useState, useLayoutEffect } from "react";
+import { motion } from "motion/react";
 
 export default function IntegrationsCard({ style }: { style: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,36 +59,53 @@ export default function IntegrationsCard({ style }: { style: string }) {
   return (
     <div
       className={`${style} h-83 bg-gray-50 rounded-md border border-border-default`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div
         ref={containerRef}
         className="relative h-3/4 flex items-center justify-center"
       >
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
-          {lines.map((line, i) => (
-            <path
-              key={i}
-              d={buildRoundedElbowPath(
-                line.x1,
-                line.y1,
-                line.x2,
-                line.y2,
-                line.y2,
-                10,
-              )}
-              fill="none"
-              stroke={isHovered ? "#3B82F6" : "#E5E7EB"}
-              strokeWidth="1.5"
-              strokeDasharray={isHovered ? "4 4" : "0"}
-              style={{ transition: "stroke 0.2s ease" }}
-            />
-          ))}
+          {lines.map((line, i) => {
+            // whichever side the line comes from, dash offset should move
+            // *toward* x2 (the icon) for a "flowing into the box" feel.
+            // For left-side lines the path runs left->right (offset decreases = flows right/into box).
+            // For right-side lines the path runs right->left in screen space but SVG path still
+            // draws x1->x2, so decreasing offset always flows from badge to icon.
+            return (
+              <motion.path
+                key={i}
+                d={buildRoundedElbowPath(
+                  line.x1,
+                  line.y1,
+                  line.x2,
+                  line.y2,
+                  line.y2,
+                  10,
+                )}
+                fill="none"
+                stroke={isHovered ? "#3B82F6" : "#E5E7EB"}
+                strokeWidth="1.5"
+                strokeDasharray={isHovered ? "4 4" : "0"}
+                animate={
+                  isHovered
+                    ? { strokeDashoffset: [0, -8] }
+                    : { strokeDashoffset: 0 }
+                }
+                transition={
+                  isHovered
+                    ? { duration: 0.5, repeat: Infinity, ease: "linear" }
+                    : { duration: 0.2 }
+                }
+                style={{ transition: "stroke 0.2s ease" }}
+              />
+            );
+          })}
         </svg>
 
         <div
           ref={iconRef}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
           className={`size-12 bg-accent rounded-sm relative z-10 transition-shadow duration-200 ${
             isHovered ? "ring-4 ring-accent/30" : ""
           }`}

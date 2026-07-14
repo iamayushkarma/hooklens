@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { BsStripe } from "react-icons/bs";
 import { FaGithub, FaSlack } from "react-icons/fa";
 import { TbBrandTwilio } from "react-icons/tb";
+import HookLensLogo from "@/assets/icons/logo-icon.png";
 
 export default function IntegrationsCard({ style }: { style: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -104,8 +105,10 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
         <div
           ref={iconRef}
-          className={`size-12 bg-accent rounded-sm relative z-10 transition-shadow duration-200 `}
-        ></div>
+          className={`size-11 flex items-center justify-center rounded-sm relative z-10 transition-shadow duration-200 `}
+        >
+          <img src={HookLensLogo} className="size-12" />
+        </div>
 
         {badges.map(({ label, style, icon }) => (
           <BadgePill

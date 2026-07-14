@@ -68,11 +68,6 @@ export default function IntegrationsCard({ style }: { style: string }) {
       >
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {lines.map((line, i) => {
-            // whichever side the line comes from, dash offset should move
-            // *toward* x2 (the icon) for a "flowing into the box" feel.
-            // For left-side lines the path runs left->right (offset decreases = flows right/into box).
-            // For right-side lines the path runs right->left in screen space but SVG path still
-            // draws x1->x2, so decreasing offset always flows from badge to icon.
             return (
               <motion.path
                 key={i}
@@ -106,9 +101,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
         <div
           ref={iconRef}
-          className={`size-12 bg-accent rounded-sm relative z-10 transition-shadow duration-200 ${
-            isHovered ? "ring-4 ring-accent/30" : ""
-          }`}
+          className={`size-12 bg-accent rounded-sm relative z-10 transition-shadow duration-200 `}
         ></div>
 
         {badges.map(({ label, style }) => (

@@ -62,13 +62,13 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
   return (
     <div
-      className={`${style} flex flex-col justify-between py-3 h-83 bg-gray-50 rounded-md border border-border-default`}
+      className={`${style} flex flex-col justify-between py-3 h-83 bg-gray-50 rounded-md border border-border-default group`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
         ref={containerRef}
-        className="relative h-3/4 flex items-center justify-center"
+        className="relative h-3/4 flex items-center justify-center group-hover:scale-[1.08] transition-all duration-500 ease-in-out"
       >
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {lines.map((line, i) => {

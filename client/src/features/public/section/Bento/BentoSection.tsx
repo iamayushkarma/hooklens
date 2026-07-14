@@ -3,6 +3,7 @@ import CalendarSchedulingCard from "./cards/Calendarschedulingcard";
 import CollaborationCard from "./cards/CollaborationCard";
 import IntegrationsCard from "./cards/Integrationscard";
 import PostCard from "./cards/PostCard";
+import PreviewCars from "./cards/PreviewCars";
 import WebhookCaptureCard from "./cards/WebhookCaptureCard";
 import WriteBetterCard from "./cards/WriteBetterCard";
 
@@ -16,6 +17,7 @@ function BentoSection() {
       <AutoGenrateCard />
       <CalendarSchedulingCard />
       <PostCard style="col-span-2!" />
+      <PreviewCars style="col-span-2!" />
     </div>
   );
 }

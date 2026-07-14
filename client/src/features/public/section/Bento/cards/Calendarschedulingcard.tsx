@@ -60,10 +60,6 @@ const pillStyles = {
 
 export default function CalendarSchedulingCard() {
   const [isHovered, setIsHovered] = useState(false);
-  // Tracks the green pill's actual row. It flips to "below" the moment
-  // you hover, but only flips back "up" once the three revealed pills
-  // have fully finished exiting — see onExitComplete below. That's what
-  // stops it from sliding into the same cell a fading pill still occupies.
   const [greenBelow, setGreenBelow] = useState(false);
 
   useEffect(() => {
@@ -71,9 +67,6 @@ export default function CalendarSchedulingCard() {
   }, [isHovered]);
 
   return (
-    // Hover is bound to this outer card — the whole tile reacts, not
-    // just the inner white panel, so the interaction feels like part
-    // of the surface rather than a hitbox around the calendar alone.
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -92,9 +85,7 @@ export default function CalendarSchedulingCard() {
       >
         {/* Header row */}
         <div className="flex items-center justify-between">
-          <span className="text-[17px] font-semibold text-gray-900">
-            July 14
-          </span>
+          <span className="text-[17px] font-semibold text-gray-900">Feb 6</span>
           <svg
             width="18"
             height="18"
@@ -118,17 +109,10 @@ export default function CalendarSchedulingCard() {
           <span className="text-[13px] text-gray-400">Tue</span>
           <span className="text-[13px] text-gray-400">Wed</span>
         </div>
-
-        {/* Pill grid: 3 columns, 2 rows.
-            At rest only 3 pills are visible (Mon 1, Tue 1 = green, Mon 2).
-            On hover the green pill slides down into the Tue 2 slot, and
-            the three remaining pills pop in with a playful, staggered
-            bounce to fill the rest of the grid. */}
         <div
           className="grid grid-cols-3 gap-3 mt-2"
           style={{ gridTemplateRows: "repeat(2, minmax(0, 2rem))" }}
         >
-          {/* Mon 1 - always visible */}
           <motion.div
             layout
             transition={shiftSpring}
@@ -136,9 +120,6 @@ export default function CalendarSchedulingCard() {
             className={`h-8 rounded-md border ${pillStyles.blue}`}
           />
 
-          {/* Green pill - visible from the start at Tue 1, animates down
-              to Tue 2 on hover, and only animates back up once the
-              revealed pills have fully finished exiting. */}
           <motion.div
             layout
             transition={shiftSpring}
@@ -146,7 +127,6 @@ export default function CalendarSchedulingCard() {
             className={`h-8 rounded-md border ${pillStyles.emerald}`}
           />
 
-          {/* Mon 2 - always visible */}
           <motion.div
             layout
             transition={shiftSpring}
@@ -154,12 +134,6 @@ export default function CalendarSchedulingCard() {
             className={`h-8 rounded-md border ${pillStyles.amber}`}
           />
 
-          {/* The three pills revealed on hover: staggered, bouncy, and
-              each with its own slight rotation/offset so they feel
-              tossed into place rather than mechanically faded in.
-              onExitComplete is what actually gates the green pill's
-              move back up — it only fires once every child here has
-              finished leaving. */}
           <AnimatePresence onExitComplete={() => setGreenBelow(false)}>
             {isHovered && (
               <motion.div

@@ -14,6 +14,8 @@ export default function IntegrationsCard({ style }: { style: string }) {
     { x1: number; y1: number; x2: number; y2: number }[]
   >([]);
 
+  const EASE = [0.22, 1, 0.36, 1] as const;
+
   const badges = [
     { label: "Stripe", style: "top-9 left-22", icon: <BsStripe /> },
     { label: "GitHub", style: "top-9 right-43", icon: <FaGithub /> },
@@ -62,13 +64,48 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
   return (
     <div
-      className={`${style} flex flex-col justify-between py-3 h-83 bg-gray-50 rounded-md border border-border-default group`}
+      className={`${style} flex flex-col justify-between py-3 h-83 bg-gray-50 rounded-md border border-border-default group relative overflow-hidden`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/3 h-44 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[50px]"
+        style={{
+          background:
+            "radial-gradient(closest-side, rgba(37,99,235,0.5), rgba(37,99,235,0) 70%)",
+        }}
+        initial={false}
+        animate={{
+          opacity: isHovered ? 1 : 0,
+          scale: isHovered ? 1 : 0.85,
+        }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -right-12 top-4 h-52 w-52 rounded-full bg-danger-bg blur-[80px]"
+        initial={false}
+        animate={{
+          opacity: isHovered ? 0.8 : 0,
+          scale: isHovered ? 1.1 : 0.75,
+        }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.05 }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute left-1/3 top-16 h-40 w-64 rounded-full bg-warning-bg blur-[90px]"
+        initial={false}
+        animate={{
+          opacity: isHovered ? 0.5 : 0,
+          scale: isHovered ? 1.05 : 0.8,
+        }}
+        transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+      />
+
       <div
         ref={containerRef}
-        className="relative h-3/4 flex items-center justify-center group-hover:scale-[1.08] transition-all duration-500 ease-in-out"
+        className="relative h-3/4 flex items-center justify-center group-hover:scale-[1.04] transition-all duration-500 ease-in-out"
       >
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {lines.map((line, i) => {

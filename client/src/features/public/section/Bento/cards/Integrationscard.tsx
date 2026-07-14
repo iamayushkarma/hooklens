@@ -9,62 +9,40 @@ export default function IntegrationsCard({ style }: { style: string }) {
   >([]);
 
   const badges = [
-    { label: "slack", style: "top-9 left-22" },
-    { label: "Stripe", style: "bottom-6 left-40" },
-    { label: "Github", style: "top-9 right-43" },
-    { label: "Adidas", style: "bottom-4 right-25" },
+    { label: "MCP", style: "top-9 left-22" },
+    { label: "API", style: "top-9 right-43" },
+    { label: "OpenClaw", style: "bottom-6 left-40" },
+    { label: "Claude", style: "bottom-4 right-25" },
   ];
-  const buildRoundedElbowPath = (
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
-    radius = 8,
-  ) => {
-    const midY = (y1 + y2) / 2;
-    const dir1 = y2 > y1 ? 1 : -1; // vertical direction of travel
-    const dirX = x2 > x1 ? 1 : -1; // horizontal direction of travel
 
-    // if start and end are basically aligned, just draw a straight line
-    if (Math.abs(x1 - x2) < 1) {
-      return `M ${x1} ${y1} L ${x2} ${y2}`;
-    }
-
-    const r = Math.min(radius, Math.abs(midY - y1), Math.abs(x2 - x1) / 2);
-
-    return `
-    M ${x1} ${y1}
-    L ${x1} ${midY - r * dir1}
-    Q ${x1} ${midY} ${x1 + r * dirX} ${midY}
-    L ${x2 - r * dirX} ${midY}
-    Q ${x2} ${midY} ${x2} ${midY + r * dir1}
-    L ${x2} ${y2}
-  `;
-  };
   useLayoutEffect(() => {
     const measure = () => {
       const containerRect = containerRef.current?.getBoundingClientRect();
       const iconRect = iconRef.current?.getBoundingClientRect();
       if (!containerRect || !iconRect) return;
 
-      const iconCenter = {
-        x: iconRect.left + iconRect.width / 2 - containerRect.left,
-        y: iconRect.top + iconRect.height / 2 - containerRect.top,
-      };
+      const iconCenterY =
+        iconRect.top + iconRect.height / 2 - containerRect.top;
+      const iconLeft = iconRect.left - containerRect.left;
+      const iconRight = iconRect.right - containerRect.left;
 
       const newLines = badges.map(({ label }) => {
         const el = badgeRefs.current[label];
         const rect = el?.getBoundingClientRect();
         if (!rect) return { x1: 0, y1: 0, x2: 0, y2: 0 };
-        // connect to nearest edge of badge (bottom edge if badge is above icon, top edge if below)
+
         const isAbove = rect.top < iconRect.top;
+        const badgeCenterX = rect.left + rect.width / 2 - containerRect.left;
+        // pick left or right icon edge depending on which side the badge is on
+        const isLeftSide = badgeCenterX < iconLeft + (iconRight - iconLeft) / 2;
+
         return {
-          x1: rect.left + rect.width / 2 - containerRect.left,
+          x1: badgeCenterX,
           y1: isAbove
             ? rect.bottom - containerRect.top
             : rect.top - containerRect.top,
-          x2: iconCenter.x,
-          y2: iconCenter.y,
+          x2: isLeftSide ? iconLeft : iconRight,
+          y2: iconCenterY,
         };
       });
 
@@ -89,7 +67,14 @@ export default function IntegrationsCard({ style }: { style: string }) {
           {lines.map((line, i) => (
             <path
               key={i}
-              d={buildRoundedElbowPath(line.x1, line.y1, line.x2, line.y2, 10)}
+              d={buildRoundedElbowPath(
+                line.x1,
+                line.y1,
+                line.x2,
+                line.y2,
+                line.y2,
+                10,
+              )}
               fill="none"
               stroke="#E5E7EB"
               strokeWidth="1.5"
@@ -115,6 +100,43 @@ export default function IntegrationsCard({ style }: { style: string }) {
     </div>
   );
 }
+
+const buildRoundedElbowPath = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  bendY: number,
+  radius = 8,
+) => {
+  if (Math.abs(x1 - x2) < 1) return `M ${x1} ${y1} L ${x2} ${y2}`;
+
+  const dir1 = bendY > y1 ? 1 : -1;
+  const dirX = x2 > x1 ? 1 : -1;
+  const r = Math.min(radius, Math.abs(bendY - y1), Math.abs(x2 - x1) / 2);
+
+  // if the bend height IS the end height, the final leg is already
+  // perfectly horizontal — no second curve needed
+  const sameLevel = Math.abs(bendY - y2) < 0.5;
+
+  if (sameLevel) {
+    return `
+      M ${x1} ${y1}
+      L ${x1} ${bendY - r * dir1}
+      Q ${x1} ${bendY} ${x1 + r * dirX} ${bendY}
+      L ${x2} ${bendY}
+    `;
+  }
+
+  return `
+    M ${x1} ${y1}
+    L ${x1} ${bendY - r * dir1}
+    Q ${x1} ${bendY} ${x1 + r * dirX} ${bendY}
+    L ${x2 - r * dirX} ${bendY}
+    Q ${x2} ${bendY} ${x2} ${bendY + r * dir1}
+    L ${x2} ${y2}
+  `;
+};
 
 const BadgePill = ({
   label,

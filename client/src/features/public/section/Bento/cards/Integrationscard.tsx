@@ -11,10 +11,10 @@ export default function IntegrationsCard({ style }: { style: string }) {
   >([]);
 
   const badges = [
-    { label: "MCP", style: "top-9 left-22" },
-    { label: "API", style: "top-9 right-43" },
-    { label: "OpenClaw", style: "bottom-6 left-40" },
-    { label: "Claude", style: "bottom-4 right-25" },
+    { label: "Stripe", style: "top-9 left-22" },
+    { label: "GitHub", style: "top-9 right-43" },
+    { label: "Slack", style: "bottom-6 left-40" },
+    { label: "Twilio", style: "bottom-4 right-25" },
   ];
 
   useLayoutEffect(() => {
@@ -58,7 +58,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
   return (
     <div
-      className={`${style} h-83 bg-gray-50 rounded-md border border-border-default`}
+      className={`${style} flex flex-col justify-between py-3 h-83 bg-gray-50 rounded-md border border-border-default`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -113,7 +113,15 @@ export default function IntegrationsCard({ style }: { style: string }) {
           />
         ))}
       </div>
-      <div></div>
+      <div className="px-5">
+        <h3 className="mb-1 text-lg font-semibold text-neutral-900">
+          Works with everything that sends a webhook
+        </h3>
+        <p className="text-sm leading-relaxed text-neutral-500 w-[95%]">
+          Stripe, GitHub, Slack, Twilio if it can POST to a URL, HookLens
+          captures it. No SDKs, no setup, just point and receive.
+        </p>
+      </div>
     </div>
   );
 }

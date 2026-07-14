@@ -182,7 +182,7 @@ const BadgePill = ({
   return (
     <div
       ref={refCallback}
-      className={`${style} flex items-center justify-between gap-2 bg-white rounded-lg px-5 py-2 absolute border border-border-default shadow-md z-10`}
+      className={`${style} flex items-center justify-between gap-1.5 bg-white rounded-lg px-5 py-2 absolute border border-border-default shadow-md z-10`}
     >
       {icon}
       {label}

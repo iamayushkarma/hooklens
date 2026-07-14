@@ -1,5 +1,8 @@
-import { useRef, useState, useLayoutEffect } from "react";
+import { useRef, useState, useLayoutEffect, type ReactNode } from "react";
 import { motion } from "motion/react";
+import { BsStripe } from "react-icons/bs";
+import { FaGithub, FaSlack } from "react-icons/fa";
+import { TbBrandTwilio } from "react-icons/tb";
 
 export default function IntegrationsCard({ style }: { style: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,10 +14,10 @@ export default function IntegrationsCard({ style }: { style: string }) {
   >([]);
 
   const badges = [
-    { label: "Stripe", style: "top-9 left-22" },
-    { label: "GitHub", style: "top-9 right-43" },
-    { label: "Slack", style: "bottom-6 left-40" },
-    { label: "Twilio", style: "bottom-4 right-25" },
+    { label: "Stripe", style: "top-9 left-22", icon: <BsStripe /> },
+    { label: "GitHub", style: "top-9 right-43", icon: <FaGithub /> },
+    { label: "Slack", style: "bottom-6 left-40", icon: <FaSlack /> },
+    { label: "Twilio", style: "bottom-4 right-25", icon: <TbBrandTwilio /> },
   ];
 
   useLayoutEffect(() => {
@@ -104,11 +107,12 @@ export default function IntegrationsCard({ style }: { style: string }) {
           className={`size-12 bg-accent rounded-sm relative z-10 transition-shadow duration-200 `}
         ></div>
 
-        {badges.map(({ label, style }) => (
+        {badges.map(({ label, style, icon }) => (
           <BadgePill
             key={label}
             label={label}
             style={style}
+            icon={icon}
             refCallback={(el) => (badgeRefs.current[label] = el)}
           />
         ))}
@@ -164,17 +168,20 @@ const buildRoundedElbowPath = (
 const BadgePill = ({
   label,
   style,
+  icon,
   refCallback,
 }: {
   label: string;
   style: string;
+  icon: ReactNode;
   refCallback: (el: HTMLDivElement | null) => void;
 }) => {
   return (
     <div
       ref={refCallback}
-      className={`${style} bg-white rounded-lg px-5 py-2 absolute border border-border-default shadow-md z-10`}
+      className={`${style} flex items-center justify-between gap-2 bg-white rounded-lg px-5 py-2 absolute border border-border-default shadow-md z-10`}
     >
+      {icon}
       {label}
     </div>
   );

@@ -1,53 +1,59 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { ListFilter } from "lucide-react";
 
 // Smooth, restrained spring — used for the "always on" pills and for
-// the green pill's slide between rows.
+// the green pill's slide between rows. Slightly lower stiffness and
+// higher damping than before so the layout shift settles instead of
+// snapping into place.
 const shiftSpring = {
   type: "spring" as const,
-  stiffness: 380,
-  damping: 32,
+  stiffness: 300,
+  damping: 34,
   mass: 0.9,
 };
 
-// Bouncier, lower-damping spring — reserved for the pills that pop in
-// on hover, so their entrance reads as playful rather than mechanical.
-const playfulSpring = {
+// Spring for the pills that appear on hover. Damping is close enough
+// to critical that there's only the faintest settle at the end — a
+// soft landing rather than a bounce, but still alive rather than
+// linear/eased.
+const revealSpring = {
   type: "spring" as const,
-  stiffness: 260,
-  damping: 16,
-  mass: 0.7,
+  stiffness: 220,
+  damping: 28,
+  mass: 0.8,
 };
 
 // Orchestrates the stagger: each child pill waits its turn rather
-// than all three appearing (or leaving) in lockstep.
+// than all three appearing (or leaving) in lockstep. Slightly gentler
+// stagger gaps read as calmer than the original.
 const revealGroupVariants = {
   hidden: {
-    transition: { staggerChildren: 0.07, staggerDirection: -1 },
+    transition: { staggerChildren: 0.05, staggerDirection: -1 },
   },
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.06 },
+    transition: { staggerChildren: 0.09, delayChildren: 0.05 },
   },
 };
 
 // Each revealed pill gets its own tiny bit of personality — a
-// different starting rotation/offset — so all three don't move like
-// one rigid unit. Combined with the bouncy spring this is what gives
-// the "pop in" feel instead of a flat fade.
-const makeRevealVariants = (rotate: number, y: number) => ({
-  hidden: { opacity: 0, scale: 0.45, y, rotate },
+// different starting offset — so all three don't move like one rigid
+// unit. Offsets and rotation are smaller than before (no rotation at
+// all, and less travel) so the motion reads as smooth rather than
+// snappy/playful.
+const makeRevealVariants = (y: number) => ({
+  hidden: { opacity: 0, scale: 0.85, y },
   visible: {
     opacity: 1,
     scale: 1,
     y: 0,
-    rotate: 0,
-    transition: playfulSpring,
+    transition: revealSpring,
   },
 });
 
-const violetVariants = makeRevealVariants(-10, 14);
-const blueVariants = makeRevealVariants(8, 18);
-const amberVariants = makeRevealVariants(-6, 10);
+const violetVariants = makeRevealVariants(8);
+const blueVariants = makeRevealVariants(10);
+const amberVariants = makeRevealVariants(6);
 
 // Gradient + border tokens shared by every pill so the palette stays
 // consistent between the "always on" pills and the revealed ones.
@@ -62,13 +68,17 @@ export default function CalendarSchedulingCard() {
   const [isHovered, setIsHovered] = useState(false);
   const [greenBelow, setGreenBelow] = useState(false);
 
-  useEffect(() => {
-    if (isHovered) setGreenBelow(true);
-  }, [isHovered]);
-
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {
+        // Set both in the same event so they land in the same render.
+        // Doing this via a useEffect instead causes an extra frame
+        // where the violet pill (which enters at the cell the green
+        // pill starts in) and the green pill briefly overlap — that
+        // one-frame overlap was the source of the glitch.
+        setIsHovered(true);
+        setGreenBelow(true);
+      }}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full max-w-sm mx-auto rounded-3xl bg-[#fafafa] p-6 transition-colors duration-300"
     >
@@ -86,21 +96,7 @@ export default function CalendarSchedulingCard() {
         {/* Header row */}
         <div className="flex items-center justify-between">
           <span className="text-[17px] font-semibold text-gray-900">Feb 6</span>
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-gray-400"
-          >
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="7" y1="12" x2="17" y2="12" />
-            <line x1="10" y1="18" x2="14" y2="18" />
-          </svg>
+          <ListFilter className="size-4" />
         </div>
 
         {/* Day labels */}
@@ -110,28 +106,28 @@ export default function CalendarSchedulingCard() {
           <span className="text-[13px] text-gray-400">Wed</span>
         </div>
         <div
-          className="grid grid-cols-3 gap-3 mt-2"
+          className="grid grid-cols-3 gap-2 mt-2"
           style={{ gridTemplateRows: "repeat(2, minmax(0, 2rem))" }}
         >
           <motion.div
             layout
             transition={shiftSpring}
             style={{ gridColumn: 1, gridRow: 1 }}
-            className={`h-8 rounded-md border ${pillStyles.blue}`}
+            className={`h-7 rounded-md border ${pillStyles.blue}`}
           />
 
           <motion.div
             layout
             transition={shiftSpring}
             style={{ gridColumn: 2, gridRow: greenBelow ? 2 : 1 }}
-            className={`h-8 rounded-md border ${pillStyles.emerald}`}
+            className={`h-7 rounded-md border ${pillStyles.emerald}`}
           />
 
           <motion.div
             layout
             transition={shiftSpring}
             style={{ gridColumn: 1, gridRow: 2 }}
-            className={`h-8 rounded-md border ${pillStyles.amber}`}
+            className={`h-7 rounded-md border ${pillStyles.amber}`}
           />
 
           <AnimatePresence onExitComplete={() => setGreenBelow(false)}>
@@ -145,22 +141,19 @@ export default function CalendarSchedulingCard() {
                 exit="hidden"
               >
                 <motion.div
-                  layout
                   variants={violetVariants}
                   style={{ gridColumn: 2, gridRow: 1 }}
-                  className={`h-8 rounded-md border ${pillStyles.violet}`}
+                  className={`h-7 rounded-md border ${pillStyles.violet}`}
                 />
                 <motion.div
-                  layout
                   variants={blueVariants}
                   style={{ gridColumn: 3, gridRow: 1 }}
-                  className={`h-8 rounded-md border ${pillStyles.blue}`}
+                  className={`h-7 rounded-md border ${pillStyles.blue}`}
                 />
                 <motion.div
-                  layout
                   variants={amberVariants}
                   style={{ gridColumn: 3, gridRow: 2 }}
-                  className={`h-8 rounded-md border ${pillStyles.amber}`}
+                  className={`h-7 rounded-md border ${pillStyles.amber}`}
                 />
               </motion.div>
             )}

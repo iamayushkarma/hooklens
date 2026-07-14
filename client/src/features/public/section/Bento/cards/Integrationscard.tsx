@@ -84,7 +84,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
                   10,
                 )}
                 fill="none"
-                stroke={isHovered ? "#3B82F6" : "#E5E7EB"}
+                stroke={isHovered ? "#213fd1" : "#E5E7EB"}
                 strokeWidth="1.5"
                 strokeDasharray={isHovered ? "4 4" : "0"}
                 animate={

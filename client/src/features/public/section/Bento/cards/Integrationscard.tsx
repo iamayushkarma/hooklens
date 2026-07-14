@@ -4,6 +4,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
   const badgeRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [isHovered, setIsHovered] = useState(false);
   const [lines, setLines] = useState<
     { x1: number; y1: number; x2: number; y2: number }[]
   >([]);
@@ -33,7 +34,6 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
         const isAbove = rect.top < iconRect.top;
         const badgeCenterX = rect.left + rect.width / 2 - containerRect.left;
-        // pick left or right icon edge depending on which side the badge is on
         const isLeftSide = badgeCenterX < iconLeft + (iconRight - iconLeft) / 2;
 
         return {
@@ -76,15 +76,21 @@ export default function IntegrationsCard({ style }: { style: string }) {
                 10,
               )}
               fill="none"
-              stroke="#E5E7EB"
+              stroke={isHovered ? "#3B82F6" : "#E5E7EB"}
               strokeWidth="1.5"
+              strokeDasharray={isHovered ? "4 4" : "0"}
+              style={{ transition: "stroke 0.2s ease" }}
             />
           ))}
         </svg>
 
         <div
           ref={iconRef}
-          className="size-12 bg-accent rounded-sm relative z-10"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className={`size-12 bg-accent rounded-sm relative z-10 transition-shadow duration-200 ${
+            isHovered ? "ring-4 ring-accent/30" : ""
+          }`}
         ></div>
 
         {badges.map(({ label, style }) => (
@@ -115,8 +121,6 @@ const buildRoundedElbowPath = (
   const dirX = x2 > x1 ? 1 : -1;
   const r = Math.min(radius, Math.abs(bendY - y1), Math.abs(x2 - x1) / 2);
 
-  // if the bend height IS the end height, the final leg is already
-  // perfectly horizontal — no second curve needed
   const sameLevel = Math.abs(bendY - y2) < 0.5;
 
   if (sameLevel) {

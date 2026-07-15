@@ -3,11 +3,20 @@ import { AnimatePresence, motion, type Variants } from "motion/react";
 import { MessageCircle, Repeat2, Heart } from "lucide-react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+// One spring, used everywhere. This is the key change: every element whose
+// size changes on hover now animates through this SAME spring via the
+// `layout` prop, instead of the card animating on `layout` while its
+// children separately animate `height: 0 -> "auto"` / `width: 0 -> 32`.
+// Mixing those two systems is what caused the stutter/rubber-banding —
+// the parent's FLIP measurement and the children's own size tweens were
+// fighting each other every frame. Letting everything share one layout
+// transition is what makes the whole card move as a single, fluid piece.
 const SPRING = {
   type: "spring",
-  stiffness: 260,
-  damping: 26,
-  mass: 0.9,
+  stiffness: 380,
+  damping: 32,
+  mass: 0.8,
 } as const;
 
 const orbA: Variants = {
@@ -44,6 +53,18 @@ const cardZoom: Variants = {
   hover: { scale: 1.05, transition: SPRING },
 };
 
+// Only opacity (+ a tiny y-nudge) is animated explicitly on the elements
+// that mount/unmount. Their *size* is handled by `layout`, so it resizes
+// in the same spring as the card instead of tweening height separately.
+const fadeIn: Variants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: { duration: 0.18, ease: EASE, delay: 0.05 },
+  },
+  exit: { opacity: 0, transition: { duration: 0.12, ease: EASE } },
+};
+
 function PreviewCars({ style }: { style: string }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -53,7 +74,7 @@ function PreviewCars({ style }: { style: string }) {
       onHoverEnd={() => setIsHovered(false)}
       initial="rest"
       animate={isHovered ? "hover" : "rest"}
-      className={`${style} h-83 flex flex-col justify-around py-3 bg-gray-50 rounded-md border border-border-default relative overflow-hidden`}
+      className={`${style} h-[20.75rem] flex flex-col justify-around py-3 bg-gray-50 rounded-md border border-border-default relative overflow-hidden`}
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <motion.div
@@ -77,20 +98,20 @@ function PreviewCars({ style }: { style: string }) {
       >
         <motion.div
           layout
-          transition={{ layout: SPRING }}
-          style={{ transformOrigin: "center" }}
-          className={`relative ${isHovered ? "w-78" : "w-63"} p-4 rounded-md bg-bg-card border border-border-default shadow-sm`}
+          transition={SPRING}
+          style={{ transformOrigin: "center", width: isHovered ? 312 : 252 }}
+          className="relative p-4 rounded-md bg-bg-card border border-border-default shadow-sm"
         >
           <AnimatePresence initial={false}>
             {isHovered && (
               <motion.div
                 key="preview-badge"
-                initial={{ opacity: 0 }}
-                animate={{
-                  opacity: 1,
-                  transition: { duration: 0.2, ease: EASE, delay: 0.22 },
-                }}
-                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                layout
+                variants={fadeIn}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={SPRING}
                 className="absolute right-3 top-3 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-text-secondary"
               >
                 Preview
@@ -99,50 +120,42 @@ function PreviewCars({ style }: { style: string }) {
           </AnimatePresence>
 
           {/* Two-column layout: avatar column | content column */}
-          <div className="flex gap-2.5">
+          <motion.div layout transition={SPRING} className="flex gap-2.5">
             {/* Left column — avatar only exists on hover */}
-            <AnimatePresence initial={false}>
+            <AnimatePresence initial={false} mode="popLayout">
               {isHovered && (
                 <motion.img
                   key="avatar"
+                  layout
                   src="/avatar.jpg"
                   alt=""
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{
-                    opacity: 1,
-                    width: 32,
-                    transition: { duration: 0.25, ease: EASE, delay: 0.22 },
-                  }}
-                  exit={{
-                    opacity: 0,
-                    width: 0,
-                    transition: { duration: 0.15, ease: EASE },
-                  }}
+                  variants={fadeIn}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={SPRING}
                   className="size-8 rounded-full shrink-0 object-cover overflow-hidden"
                 />
               )}
             </AnimatePresence>
 
             {/* Right column — name/handle, paragraphs, stats all share this left edge */}
-            <div className="flex-1 min-w-0 space-y-2 pr-14">
-              <AnimatePresence initial={false}>
+            <motion.div
+              layout
+              transition={SPRING}
+              className="flex-1 min-w-0 space-y-2 pr-14"
+            >
+              <AnimatePresence initial={false} mode="popLayout">
                 {isHovered && (
                   <motion.div
                     key="header"
-                    initial={{ opacity: 0, y: -6, height: 0 }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      height: "auto",
-                      transition: { duration: 0.25, ease: EASE, delay: 0.22 },
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: -6,
-                      height: 0,
-                      transition: { duration: 0.15, ease: EASE },
-                    }}
-                    className="overflow-hidden leading-tight"
+                    layout
+                    variants={fadeIn}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={SPRING}
+                    className="leading-tight"
                   >
                     <span className="font-semibold">Fabrizio Rinaldi</span>{" "}
                     <span className="text-text-secondary">@linuz90</span>
@@ -150,27 +163,22 @@ function PreviewCars({ style }: { style: string }) {
                 )}
               </AnimatePresence>
 
-              <motion.p layout="position" transition={{ layout: SPRING }}>
+              <motion.p layout transition={SPRING}>
                 With Typefully, you know that what you write is exactly what
                 you'll get 👌
               </motion.p>
 
-              <AnimatePresence initial={false}>
+              <AnimatePresence initial={false} mode="popLayout">
                 {isHovered && (
                   <motion.div
                     key="stats"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{
-                      opacity: 1,
-                      height: "auto",
-                      transition: { duration: 0.2, ease: EASE, delay: 0.3 },
-                    }}
-                    exit={{
-                      opacity: 0,
-                      height: 0,
-                      transition: { duration: 0.12, ease: EASE },
-                    }}
-                    className="flex items-center gap-4 overflow-hidden text-sm text-text-secondary"
+                    layout
+                    variants={fadeIn}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={SPRING}
+                    className="flex items-center gap-4 text-sm text-text-secondary"
                   >
                     <span className="flex items-center gap-1.5">
                       <MessageCircle className="size-4" /> 52
@@ -184,8 +192,8 @@ function PreviewCars({ style }: { style: string }) {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </motion.div>
 

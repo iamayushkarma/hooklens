@@ -12,6 +12,8 @@ interface CardLayoutProp {
   onHoverEnd?: () => void;
   transition?: Transition;
   layout?: boolean;
+  initial?: string;
+  animate?: string;
 }
 
 function CardLayout({
@@ -25,6 +27,8 @@ function CardLayout({
   onHoverEnd,
   transition,
   layout,
+  initial,
+  animate,
 }: CardLayoutProp) {
   return (
     <motion.div
@@ -34,6 +38,8 @@ function CardLayout({
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
       transition={transition}
+      initial={initial}
+      animate={animate}
       className={`${className} relative h-82 group bg-[#fafafa] border border-border-default rounded-3xl overflow-hidden  cursor-default p-6`}
     >
       {children}

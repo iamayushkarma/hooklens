@@ -60,8 +60,13 @@ export default function BentoFooter() {
       <h3 className="text-xl font-medium text-text-primary mb-6">
         Get started free no credit card required
       </h3>
-      <Button onClick={goToLogin}>
-        Get started free <ArrowRight size={16} strokeWidth={2} />
+      <Button onClick={goToLogin} className="group">
+        Get started free
+        <ArrowRight
+          size={16}
+          strokeWidth={2}
+          className="transition-transform duration-200 group-hover:translate-x-0.5"
+        />
       </Button>
     </section>
   );

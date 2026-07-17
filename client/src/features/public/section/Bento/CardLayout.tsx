@@ -11,6 +11,7 @@ interface CardLayoutProp {
   onHoverStart?: () => void;
   onHoverEnd?: () => void;
   transition?: Transition;
+  layout?: boolean;
 }
 
 function CardLayout({
@@ -23,9 +24,11 @@ function CardLayout({
   onHoverStart,
   onHoverEnd,
   transition,
+  layout,
 }: CardLayoutProp) {
   return (
     <motion.div
+      layout={layout}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onHoverStart={onHoverStart}

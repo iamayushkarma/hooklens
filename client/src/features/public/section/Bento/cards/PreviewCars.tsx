@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { Clock3, Database } from "lucide-react";
+import { Clock3, Database, GitBranch } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import CardLayout from "../CardLayout";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -59,12 +60,14 @@ function PreviewCars({ style }: { style: string }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div
+    <CardLayout
+      heading="Preview request details"
+      subHeading="Reveal key metadata like timing, branch, and payload size before opening the full request."
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       initial="rest"
       animate={isHovered ? "hover" : "rest"}
-      className={`${style} h-[20.75rem] flex flex-col justify-around py-3 bg-gray-50 rounded-md border border-border-default relative overflow-hidden`}
+      className={style}
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <motion.div
@@ -153,14 +156,20 @@ function PreviewCars({ style }: { style: string }) {
               </div>
 
               {/* Event badge + structured detail, replacing the dense run-on sentence */}
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <span className="inline-block text-[10.5px] text-text-secondary bg-surface-1 py-0.75 rounded">
                   pull_request.opened
                 </span>
-                <p className="text-text-primary">
+                <p className="text-text-primary leading-relaxed">
                   Review requested for{" "}
-                  <span className="font-medium">feature/auth</span> in{" "}
-                  <span className="font-medium">hooklens-app</span>
+                  <span className="inline-flex items-center gap-1 align-middle font-mono text-[12.5px] font-medium bg-surface-1 text-text-primary px-1.5 py-px rounded border border-border-default">
+                    <GitBranch className="size-3 text-text-muted" />
+                    feature/auth
+                  </span>{" "}
+                  <span className="text-text-secondary">in</span>{" "}
+                  <span className="text-text-secondary font-mono text-[12.5px]">
+                    hooklens-app
+                  </span>
                 </p>
               </div>
 
@@ -192,7 +201,7 @@ function PreviewCars({ style }: { style: string }) {
           </motion.div>
         </motion.div>
       </motion.div>
-    </motion.div>
+    </CardLayout>
   );
 }
 

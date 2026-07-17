@@ -4,6 +4,7 @@ import { BsStripe } from "react-icons/bs";
 import { FaGithub, FaSlack } from "react-icons/fa";
 import { TbBrandTwilio } from "react-icons/tb";
 import HookLensLogo from "@/assets/icons/logo-icon.png";
+import CardLayout from "../CardLayout";
 
 export default function IntegrationsCard({ style }: { style: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,10 +64,12 @@ export default function IntegrationsCard({ style }: { style: string }) {
   }, []);
 
   return (
-    <div
-      className={`${style} flex flex-col justify-between py-3 h-83 bg-gray-50 rounded-md border border-border-default group relative overflow-hidden`}
+    <CardLayout
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      className={style}
+      heading="Connect in seconds"
+      subHeading="Add your webhook endpoint once and start capturing incoming requests instantly. No SDKs, no configuration, just point and receive."
     >
       <motion.div
         aria-hidden
@@ -157,16 +160,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
           />
         ))}
       </div>
-      <div className="px-5">
-        <h3 className="mb-1 text-lg font-semibold text-neutral-900">
-          Works with everything that sends a webhook
-        </h3>
-        <p className="text-sm leading-relaxed text-neutral-500 w-[95%]">
-          Stripe, GitHub, Slack, Twilio if it can POST to a URL, HookLens
-          captures it. No SDKs, no setup, just point and receive.
-        </p>
-      </div>
-    </div>
+    </CardLayout>
   );
 }
 

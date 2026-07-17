@@ -127,7 +127,7 @@ export default function WriteBetterCard() {
       {/* mock editor panel */}
       <div className="relative mx-auto mt-2 h-[60%] w-[85%]">
         <motion.div
-          className="relative z-10 h-full origin-center rounded-xl border border-gray-200 bg-white"
+          className="relative z-10 h-full origin-center rounded-2xl border border-gray-200 bg-white"
           animate={{
             scale: isHovered ? 1.055 : 1,
             rotate: isHovered ? 0.5 : 0,

@@ -92,8 +92,14 @@ function PreviewCars({ style }: { style: string }) {
         <motion.div
           layout
           transition={SPRING}
-          style={{ transformOrigin: "center", width: isHovered ? 312 : 252 }}
-          className="relative p-4 rounded-md bg-bg-card border border-border-default shadow-sm"
+          className="relative p-4 rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300"
+          style={{
+            transformOrigin: "center",
+            width: isHovered ? 312 : 252,
+            boxShadow: isHovered
+              ? "0 4px 10px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.09)"
+              : undefined,
+          }}
         >
           <motion.div layout transition={SPRING} className="flex gap-2.5">
             {isHovered && (

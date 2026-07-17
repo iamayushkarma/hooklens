@@ -12,7 +12,7 @@ function CollaborationCard() {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative h-82 group bg-gray-50 border border-border-default rounded-md overflow-hidden flex items-center justify-center flex-col cursor-default"
+      className="relative h-82 group bg-[#fafafa] border border-border-default rounded-3xl overflow-hidden flex items-center justify-center flex-col cursor-default p-6"
     >
       <motion.div
         aria-hidden
@@ -55,16 +55,21 @@ function CollaborationCard() {
             layout: { type: "spring", stiffness: 260, damping: 30, mass: 0.9 },
             scale: { type: "spring", stiffness: 260, damping: 24 },
           }}
-          className="relative p-4 rounded-md space-y-2 bg-bg-card border border-border-default"
+          className="relative p-4 rounded-md bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300 flex flex-col gap-3"
         >
-          <div className="flex gap-1 items-center">
-            <div className="size-6 rounded-full shrink-0 flex items-center justify-center">
-              <FaCcStripe className="size-5" />
+          <div className="flex gap-1 flex-col">
+            <div className="flex gap-1 items-center">
+              <div className="size-6 rounded-full shrink-0 flex items-center justify-center">
+                <FaCcStripe className="size-5" />
+              </div>
+              <h4 className="text-text-primary font-medium">Stripe</h4>
+              <span className="bg-red-100 text-red-700 h-4.5 text-[9px] font-medium px-2.5 rounded-full ml-1 flex items-center">
+                Failed
+              </span>
             </div>
-            <h4 className="text-text-primary font-medium">Stripe</h4>
-          </div>
-          <div className="text-text-secondary text-[14.5px]">
-            Stripe payment failed.
+            <div className="text-text-secondary text-[14.5px] pl-7">
+              Stripe payment failed.
+            </div>
           </div>
 
           <AnimatePresence>
@@ -90,7 +95,7 @@ function CollaborationCard() {
                     },
                   },
                 }}
-                className="space-y-2"
+                className="space-y-0.5"
               >
                 <motion.div
                   variants={{
@@ -120,7 +125,7 @@ function CollaborationCard() {
                   </h2>
                 </motion.div>
                 <motion.div
-                  className="text-text-secondary text-[14.5px]"
+                  className="text-text-secondary text-[14.5px]  pl-7"
                   variants={{
                     hidden: {
                       opacity: 0,
@@ -144,7 +149,7 @@ function CollaborationCard() {
         </motion.div>
       </div>
 
-      <div className="relative px-3">
+      <div className="relative">
         <h3 className="text-text-primary font-semibold">
           Resolve incidents as a team,
         </h3>

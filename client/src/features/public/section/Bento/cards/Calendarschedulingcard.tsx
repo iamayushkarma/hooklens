@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ListFilter } from "lucide-react";
+import CardLayout from "../CardLayout";
 
 // Smooth, restrained spring — used for the "always on" pills and for
 // the green pill's slide between rows. Slightly lower stiffness and
@@ -69,20 +70,15 @@ export default function CalendarSchedulingCard() {
   const [greenBelow, setGreenBelow] = useState(false);
 
   return (
-    <div
+    <CardLayout
       onMouseEnter={() => {
-        // Set both in the same event so they land in the same render.
-        // Doing this via a useEffect instead causes an extra frame
-        // where the violet pill (which enters at the cell the green
-        // pill starts in) and the green pill briefly overlap — that
-        // one-frame overlap was the source of the glitch.
         setIsHovered(true);
         setGreenBelow(true);
       }}
       onMouseLeave={() => setIsHovered(false)}
-      className="w-full max-w-sm mx-auto rounded-3xl bg-[#fafafa] p-6 transition-colors duration-300"
+      heading="Keep work moving"
+      subHeading="Monitor incoming webhooks, inspect requests, and keep every integration on track."
     >
-      {/* Inner calendar card */}
       <motion.div
         animate={{ scale: isHovered ? 1.015 : 1 }}
         transition={shiftSpring}
@@ -160,17 +156,6 @@ export default function CalendarSchedulingCard() {
           </AnimatePresence>
         </div>
       </motion.div>
-
-      {/* Text content below the card */}
-      <div className="mt-8">
-        <h3 className="text-[19px] font-semibold text-gray-900 leading-snug">
-          A calendar built for scheduling
-        </h3>
-        <p className="mt-2 text-[15px] leading-relaxed text-gray-500">
-          See what's scheduled, in review, and ready to ship, across the whole
-          team.
-        </p>
-      </div>
-    </div>
+    </CardLayout>
   );
 }

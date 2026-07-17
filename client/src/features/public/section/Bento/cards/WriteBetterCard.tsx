@@ -276,11 +276,10 @@ export default function WriteBetterCard() {
         {/* text content */}
         <div className="relative mt-6 px-1">
           <h3 className="text-[17px] font-semibold text-gray-900">
-            A better place to write
+            Verify every webhook
           </h3>
           <p className="mt-1.5 text-[14px] leading-relaxed text-gray-500">
-            Turn rough ideas into polished posts with a focused, high-fidelity
-            editor.
+            Validate signatures and payloads with confidence.
           </p>
         </div>
       </motion.div>

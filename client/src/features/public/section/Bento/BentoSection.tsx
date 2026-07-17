@@ -10,7 +10,7 @@ import WriteBetterCard from "./cards/WriteBetterCard";
 
 function BentoSection() {
   return (
-    <div className="w-6xl grid grid-cols-3 gap-2.5 bg-white">
+    <section className="w-6xl grid grid-cols-3 gap-2.5 bg-white">
       <CollaborationCard />
       <WebhookCaptureCard />
       <WriteBetterCard />
@@ -20,7 +20,7 @@ function BentoSection() {
       <PostCard style="col-span-2!" />
       <PreviewCars style="col-span-2!" />
       <FollowerGrowthCard />
-    </div>
+    </section>
   );
 }
 

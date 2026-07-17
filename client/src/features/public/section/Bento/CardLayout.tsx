@@ -1,11 +1,7 @@
-import { Outlet } from "react-router-dom";
+import { type ReactNode } from "react";
 
-function CardLayout() {
-  return (
-    <div>
-      <Outlet />
-    </div>
-  );
+function CardLayout({ children }: { children: ReactNode }) {
+  return <div>{children}</div>;
 }
 
 export default CardLayout;

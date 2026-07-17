@@ -117,9 +117,14 @@ function PostCard({ style }: { style: string }) {
       <motion.div layout className="flex items-start justify-center py-3 h-48">
         <motion.div
           layout
-          className="w-[60%] rounded-xl border border-border-default bg-white px-3.5 pb-3 flex flex-col overflow-hidden group-hover:scale-[1.08] duration-200 transition-all ease-in-out"
+          className="w-[60%] rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] p-5 transition-shadow duration-300 px-3.5 pb-3 flex flex-col overflow-hidden group-hover:scale-[1.08] transition-all ease-in-out"
+          style={{
+            boxShadow: hovered
+              ? "0 4px 10px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.09)"
+              : undefined,
+          }}
         >
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between pb-3">
             <h4 className="font-medium text-sm">#Payments</h4>
             <div className="flex place-items-center justify-center gap-2">
               <Search className="size-4 text-text-secondary" />

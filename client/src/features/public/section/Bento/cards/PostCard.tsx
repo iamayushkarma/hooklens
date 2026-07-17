@@ -7,6 +7,9 @@ import {
   animate,
 } from "motion/react";
 import { useEffect, useState } from "react";
+import CardLayout from "../CardLayout";
+import { Eye, RotateCcw, BadgeCheck, MessageSquare } from "lucide-react";
+import { FaStripeS } from "react-icons/fa";
 
 function CountUp({
   target,
@@ -43,12 +46,11 @@ function CountUp({
 }
 
 const reactions = [
-  { emoji: "🚀", count: 24 },
-  { emoji: "🔥", count: 17 },
-  { emoji: "🎉", count: 11 },
-  { emoji: "❤️", count: 7 },
+  { icon: Eye, count: 42 },
+  { icon: RotateCcw, count: 18 },
+  { icon: BadgeCheck, count: 12 },
+  { icon: MessageSquare, count: 5 },
 ];
-
 function ReactionPills({
   show,
   hoverKey,
@@ -68,23 +70,27 @@ function ReactionPills({
           className="overflow-hidden"
         >
           <div className="flex flex-wrap gap-1.5 pt-3">
-            {reactions.map((r, i) => (
-              <motion.span
-                key={r.emoji}
-                initial={{ opacity: 0, scale: 0.6, y: 6 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.6, y: 6 }}
-                transition={{
-                  duration: 0.25,
-                  delay: i * 0.25,
-                  ease: "easeOut",
-                }}
-                className="flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-medium px-2.5 py-1 rounded-full border border-border-default"
-              >
-                <span>{r.emoji}</span>
-                <CountUp target={r.count} start={show} delay={i * 0.25} />
-              </motion.span>
-            ))}
+            {reactions.map((r, i) => {
+              const Icon = r.icon;
+
+              return (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.6, y: 6 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.6, y: 6 }}
+                  transition={{
+                    duration: 0.25,
+                    delay: i * 0.25,
+                    ease: "easeOut",
+                  }}
+                  className="flex items-center gap-1.5 rounded-full border border-border-default bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
+                >
+                  <Icon className="size-3.5" />
+                  <CountUp target={r.count} start={show} delay={i * 0.25} />
+                </motion.span>
+              );
+            })}
           </div>
         </motion.div>
       )}
@@ -97,14 +103,16 @@ function PostCard({ style }: { style: string }) {
   const [hoverKey, setHoverKey] = useState(0);
 
   return (
-    <motion.div
+    <CardLayout
+      heading="Debug webhooks together"
+      subHeading="Capture, replay, and debug webhooks together."
       layout
+      className={style}
       onMouseEnter={() => {
         setHovered(true);
-        setHoverKey((k) => k + 1); // forces a fresh mount -> count restarts every hover
+        setHoverKey((k) => k + 1);
       }}
       onMouseLeave={() => setHovered(false)}
-      className={`${style} flex flex-col justify-around py-3 bg-gray-50 rounded-md border border-border-default relative overflow-hidden group`}
     >
       <motion.div layout className="flex items-start justify-center py-3 h-48">
         <motion.div
@@ -112,42 +120,38 @@ function PostCard({ style }: { style: string }) {
           className="w-[60%] rounded-xl border border-border-default bg-white px-3.5 pb-3 flex flex-col overflow-hidden group-hover:scale-[1.08] duration-200 transition-all ease-in-out"
         >
           <div className="flex items-center justify-between py-3">
-            <h4 className="font-medium text-sm">#Content</h4>
+            <h4 className="font-medium text-sm">#Payments</h4>
             <div className="flex place-items-center justify-center gap-2">
               <Search className="size-4 text-text-secondary" />
               <Bell className="size-4 text-text-secondary" />
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="bg-accent size-10 rounded-md shrink-0"></div>
+            <div className="bg-bg-base size-10 rounded-md shrink-0 flex items-center justify-center">
+              <FaStripeS className="size-5" />
+            </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 text-sm">
-                <h4 className="text-text-primary">Hooklens</h4>
-                <p className="text-text-secondary">2:13</p>
+                <h4 className="text-text-primary font-semibold text-sm">
+                  Stripe
+                </h4>
+                <p className="text-text-secondary text-sm">2:13</p>
               </div>
               <p className="text-sm truncate">
-                Typefully's post published on X, LinkedIn, and Threads
+                payment_intent.succeeded received from Stripe.
               </p>
             </div>
           </div>
           <div className="pl-12 flex gap-2 mt-3">
-            <span className="w-[3.5px] h-10 bg-gray-400 rounded-full shrink-0"></span>
+            <span className="w-0.5 h-10 bg-gray-400 rounded-full shrink-0"></span>
             <p className="text-sm w-3/4">
-              Typefully's post published on X, LinkedIn, and Threads
+              Payload inspected and replayed successfully.
             </p>
           </div>
           <ReactionPills show={hovered} hoverKey={hoverKey} />
         </motion.div>
       </motion.div>
-      <div className="relative px-3 pt-3">
-        <h3 className="text-text-primary font-semibold">
-          Debug webhooks together
-        </h3>
-        <p className="text-text-secondary">
-          Capture, replay, and debug webhooks together.
-        </p>
-      </div>
-    </motion.div>
+    </CardLayout>
   );
 }
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { FaCcStripe } from "react-icons/fa";
 import HooklensLogo from "@/assets/icons/logo-icon.png";
+import CardLayout from "../CardLayout";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -9,10 +10,11 @@ function CollaborationCard() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   return (
-    <div
+    <CardLayout
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative h-82 group bg-[#fafafa] border border-border-default rounded-3xl overflow-hidden flex items-center justify-center flex-col cursor-default p-6"
+      heading="Resolve incidents as a team,"
+      subHeading="Replay, inspect, and resolve webhooks together."
     >
       <motion.div
         aria-hidden
@@ -148,16 +150,7 @@ function CollaborationCard() {
           </AnimatePresence>
         </motion.div>
       </div>
-
-      <div className="relative">
-        <h3 className="text-text-primary font-semibold">
-          Resolve incidents as a team,
-        </h3>
-        <p className="text-text-secondary">
-          Replay, inspect, and resolve webhooks together.
-        </p>
-      </div>
-    </div>
+    </CardLayout>
   );
 }
 

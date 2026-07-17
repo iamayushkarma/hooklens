@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { FaCcStripe } from "react-icons/fa";
+import HooklensLogo from "@/assets/icons/logo-icon.png";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -55,11 +57,15 @@ function CollaborationCard() {
           }}
           className="relative p-4 rounded-md space-y-2 bg-bg-card border border-border-default"
         >
-          <div className="flex gap-2 items-center">
-            <div className="size-6 bg-black rounded-full shrink-0" />
-            <div>Messi</div>
+          <div className="flex gap-1 items-center">
+            <div className="size-6 rounded-full shrink-0 flex items-center justify-center">
+              <FaCcStripe className="size-5" />
+            </div>
+            <h4 className="text-text-primary font-medium">Stripe</h4>
           </div>
-          <div>Stripe payment failed.</div>
+          <div className="text-text-secondary text-[14.5px]">
+            Stripe payment failed.
+          </div>
 
           <AnimatePresence>
             {isHovered && (
@@ -104,12 +110,17 @@ function CollaborationCard() {
                       },
                     },
                   }}
-                  className="flex gap-2 items-center pt-1"
+                  className="flex gap-1 items-center pt-1"
                 >
-                  <div className="size-6 bg-black rounded-full shrink-0" />
-                  <div>HookLens AI</div>
+                  <div className="size-6 rounded-full shrink-0 flex items-center justify-center">
+                    <img src={HooklensLogo} className="size-4" />
+                  </div>
+                  <h2 className="text-text-primary font-medium text-[15.5px]">
+                    HookLens AI
+                  </h2>
                 </motion.div>
                 <motion.div
+                  className="text-text-secondary text-[14.5px]"
                   variants={{
                     hidden: {
                       opacity: 0,
@@ -135,10 +146,10 @@ function CollaborationCard() {
 
       <div className="relative px-3">
         <h3 className="text-text-primary font-semibold">
-          Debug webhooks together
+          Resolve incidents as a team,
         </h3>
         <p className="text-text-secondary">
-          Capture, replay, and debug webhooks together.
+          Replay, inspect, and resolve webhooks together.
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
+import CardLayout from "../CardLayout";
 
 // A single "confident, premium" easing curve and a single spring — reused
 // everywhere so the fill, the line, the gradient, and the card lift all
@@ -91,27 +91,6 @@ const stopBottomVariants: Variants = {
   },
 };
 
-const cardVariants: Variants = {
-  rest: {
-    y: 0,
-    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-    borderColor: "var(--border-default, #e5e7eb)",
-  },
-  hover: {
-    y: -3,
-    boxShadow: "0 16px 32px rgba(0,0,0,0.09)",
-    borderColor: "#93c5fd",
-    transition: SPRING,
-  },
-};
-
-// The chart box itself nudges up in scale when the *card* is hovered — kept
-// subtle (1.05x) so it reads as a lift, not a zoom.
-const chartBoxVariants: Variants = {
-  rest: { scale: 1, transition: SPRING },
-  hover: { scale: 1.05, transition: SPRING },
-};
-
 const numberVariants: Variants = {
   rest: { color: "var(--text-primary, #111827)" },
   hover: {
@@ -164,24 +143,24 @@ function useCountUp(target: number, duration = 550, delay = 80) {
 }
 
 interface FollowerGrowthCardProps {
-  restFollowers?: number;
-  hoverFollowers?: number;
+  restRequests?: number;
+  hoverRequests?: number;
   title?: string;
   description?: string;
 }
 
 function FollowerGrowthCard({
-  restFollowers = 14,
-  hoverFollowers = 156,
-  title = "Powerful analytics to grow faster",
-  description = "See what worked, spot patterns, and shape your next posts.",
+  restRequests = 14,
+  hoverRequests = 156,
 }: FollowerGrowthCardProps) {
   const [isActive, setIsActive] = useState(false);
-  const followers = useCountUp(isActive ? hoverFollowers : restFollowers);
+  const followers = useCountUp(isActive ? hoverRequests : restRequests);
   const state = isActive ? "hover" : "rest";
 
   return (
-    <motion.div
+    <CardLayout
+      heading="Track every request"
+      subHeading="Monitor webhook traffic over time and spot activity as it happens."
       onHoverStart={() => setIsActive(true)}
       onHoverEnd={() => setIsActive(false)}
       onFocus={() => setIsActive(true)}
@@ -189,13 +168,7 @@ function FollowerGrowthCard({
       tabIndex={0}
       initial="rest"
       animate={state}
-      variants={cardVariants}
-      className="w-full max-w-sm rounded-2xl border bg-white p-4 pb-5 outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
     >
-      <div className="flex justify-end">
-        <ArrowUpRight className="size-4 text-text-secondary" />
-      </div>
-
       <div className="relative -mt-2 h-36 overflow-hidden rounded-xl bg-white">
         <div className="relative z-10 p-4">
           <motion.div
@@ -204,7 +177,7 @@ function FollowerGrowthCard({
           >
             +{followers}
           </motion.div>
-          <div className="font-mono text-sm text-text-secondary">Followers</div>
+          <div className="font-mono text-sm text-text-secondary">Requests</div>
         </div>
 
         <svg
@@ -235,10 +208,7 @@ function FollowerGrowthCard({
           />
         </svg>
       </div>
-
-      <h3 className="mt-4 font-semibold text-text-primary">{title}</h3>
-      <p className="mt-1 text-sm text-text-secondary">{description}</p>
-    </motion.div>
+    </CardLayout>
   );
 }
 

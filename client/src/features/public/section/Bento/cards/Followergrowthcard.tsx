@@ -124,7 +124,7 @@ const numberVariants: Variants = {
 function useCountUp(target: number, duration = 550, delay = 80) {
   const [value, setValue] = useState(target);
   const fromRef = useRef(target);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number>(0);
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {

@@ -57,7 +57,7 @@ function CollaborationCard() {
             layout: { type: "spring", stiffness: 260, damping: 30, mass: 0.9 },
             scale: { type: "spring", stiffness: 260, damping: 24 },
           }}
-          className="relative p-4 rounded-md bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300 flex flex-col gap-3"
+          className="relative p-4 rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300 flex flex-col gap-3"
         >
           <div className="flex gap-1 flex-col">
             <div className="flex gap-1 items-center">

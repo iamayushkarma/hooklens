@@ -1,3 +1,5 @@
+import BentoFooter from "./BentoFooter";
+import BentoHeader from "./BentoHeader";
 import AutoGenrateCard from "./cards/AutoGenrateCard";
 import CalendarSchedulingCard from "./cards/Calendarschedulingcard";
 import CollaborationCard from "./cards/CollaborationCard";
@@ -10,16 +12,20 @@ import WriteBetterCard from "./cards/WriteBetterCard";
 
 function BentoSection() {
   return (
-    <section className="w-6xl grid grid-cols-3 gap-2.5 bg-white">
-      <CollaborationCard />
-      <WebhookCaptureCard />
-      <WriteBetterCard />
-      <IntegrationsCard style="col-span-2!" />
-      <AutoGenrateCard />
-      <CalendarSchedulingCard />
-      <PostCard style="col-span-2!" />
-      <PreviewCars style="col-span-2!" />
-      <FollowerGrowthCard />
+    <section>
+      <BentoHeader />
+      <div className="w-6xl grid grid-cols-3 gap-2.5 bg-white">
+        <CollaborationCard />
+        <WebhookCaptureCard />
+        <WriteBetterCard />
+        <IntegrationsCard style="col-span-2!" />
+        <AutoGenrateCard />
+        <CalendarSchedulingCard />
+        <PostCard style="col-span-2!" />
+        <PreviewCars style="col-span-2!" />
+        <FollowerGrowthCard />
+      </div>
+      <BentoFooter />
     </section>
   );
 }

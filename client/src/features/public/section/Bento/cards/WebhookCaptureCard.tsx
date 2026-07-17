@@ -3,6 +3,7 @@ import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Check } from "lucide-react";
 import { FaLinkedinIn, FaCcStripe } from "react-icons/fa";
 import UserImage from "@/features/public/assets/user-image.png";
+import CardLayout from "../CardLayout";
 
 const ThreadsIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -84,11 +85,11 @@ export default function PublishEverywhereCard() {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div
-      className="w-full max-w-sm rounded-2xl bg-neutral-50 px-8 py-4 relative overflow-hidden h-82 border border-border-default cursor-default
-      "
+    <CardLayout
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      heading="Works with every webhook"
+      subHeading="Point any webhook to HookLens and inspect every request in real time."
     >
       <motion.div
         aria-hidden
@@ -178,14 +179,6 @@ export default function PublishEverywhereCard() {
           )}
         </AnimatePresence>
       </div>
-
-      {/* Copy */}
-      <h3 className="mb-1 text-lg font-semibold text-neutral-900">
-        Works with every webhook
-      </h3>
-      <p className="text-sm leading-relaxed text-neutral-500">
-        Point any webhook to HookLens and inspect every request in real time.
-      </p>
-    </div>
+    </CardLayout>
   );
 }

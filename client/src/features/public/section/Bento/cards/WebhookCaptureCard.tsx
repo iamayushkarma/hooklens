@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Check } from "lucide-react";
 import { FaLinkedinIn, FaCcStripe } from "react-icons/fa";
+import UserImage from "@/features/public/assets/user-image.png";
 
 const ThreadsIcon = ({ className = "" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -137,8 +138,8 @@ export default function PublishEverywhereCard() {
             {i === 0 ? (
               // Front card: full "post" preview
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-300 to-rose-400 shrink-0 overflow-hidden flex items-center justify-center text-white text-xs font-semibold">
-                  ●
+                <div className="w-9 h-9 rounded-full  shrink-0 overflow-hidden flex items-center justify-center text-white text-xs font-semibold">
+                  <img src={UserImage} className="size-9" />
                 </div>
                 <div className="flex-1 space-y-2 pt-1">
                   <div className="h-2.5 w-24 rounded-full bg-neutral-200" />
@@ -169,10 +170,10 @@ export default function PublishEverywhereCard() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
               transition={{ duration: 0.2 }}
-              className="flex items-center gap-1.5 text-sm font-medium text-blue-500"
+              className="flex items-center gap-1.5 text-sm font-medium text-accent"
             >
               <Check className="w-4 h-4" strokeWidth={3} />
-              Published on {platforms.length} platforms
+              Compatible with 100+ services
             </motion.div>
           )}
         </AnimatePresence>
@@ -180,11 +181,10 @@ export default function PublishEverywhereCard() {
 
       {/* Copy */}
       <h3 className="mb-1 text-lg font-semibold text-neutral-900">
-        Inspect every webhook instantly
+        Works with every webhook
       </h3>
       <p className="text-sm leading-relaxed text-neutral-500">
-        Capture, inspect, replay, and debug incoming webhooks in real time with
-        a beautiful developer-first dashboard.
+        Point any webhook to HookLens and inspect every request in real time.
       </p>
     </div>
   );

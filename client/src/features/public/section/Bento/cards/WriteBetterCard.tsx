@@ -46,44 +46,41 @@ export default function WriteBetterCard() {
 
     const colors = ["#16a34a", "#22c55e", "#15803d", "#4ade80", "#65d48a"];
 
-    // Full 360° burst with higher velocity so particles travel far
-    // enough to reach every edge of the card, not just the area
-    // around the pill.
-    confettiInstance.current?.({
-      particleCount: 95,
-      spread: 130,
-      startVelocity: 38,
-      gravity: 1.1,
+    const shared = {
+      gravity: 1,
       decay: 0.9,
-      scalar: 0.6,
-      ticks: 160,
+      ticks: 200,
       origin,
       colors,
+    };
+
+    // Central burst — the main "pop"
+    confettiInstance.current?.({
+      ...shared,
+      particleCount: 50,
+      spread: 100,
+      startVelocity: 34,
+      scalar: 0.65,
     });
 
+    // Left fan
     confettiInstance.current?.({
-      particleCount: 60,
+      ...shared,
+      particleCount: 28,
       angle: 200,
-      spread: 140,
-      startVelocity: 60,
-      gravity: 0.9,
-      decay: 0.88,
-      scalar: 0.7,
-      ticks: 220,
-      origin,
-      colors,
+      spread: 90,
+      startVelocity: 30,
+      scalar: 0.6,
     });
+
+    // Right fan
     confettiInstance.current?.({
-      particleCount: 60,
+      ...shared,
+      particleCount: 28,
       angle: 260,
-      spread: 150,
-      startVelocity: 50,
-      gravity: 0.85,
-      decay: 0.88,
-      scalar: 0.7,
-      ticks: 220,
-      origin,
-      colors,
+      spread: 90,
+      startVelocity: 30,
+      scalar: 0.6,
     });
   }, []);
 

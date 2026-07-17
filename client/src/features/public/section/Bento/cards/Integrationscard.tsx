@@ -73,7 +73,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
     >
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 h-44 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[50px]"
+        className="pointer-events-none absolute! left-1/2 top-1/3 h-44 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[50px]"
         style={{
           background:
             "radial-gradient(closest-side, rgba(37,99,235,0.5), rgba(37,99,235,0) 70%)",
@@ -108,7 +108,7 @@ export default function IntegrationsCard({ style }: { style: string }) {
 
       <div
         ref={containerRef}
-        className="relative h-3/4 flex items-center justify-center group-hover:scale-[1.04] transition-all duration-500 ease-in-out"
+        className="relative h-52 flex items-center justify-center group-hover:scale-[1.04] transition-all duration-500 ease-in-out"
       >
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {lines.map((line, i) => {

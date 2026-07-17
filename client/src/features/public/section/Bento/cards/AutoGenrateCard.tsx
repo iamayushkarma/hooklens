@@ -7,7 +7,7 @@ import HookLensLogo from "@/assets/icons/logo-icon.png";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const SUMMARY_TEXT =
-  "Customer upgraded to the Pro plan. Billing updated successfully.";
+  "Customer upgraded to the Pro plan. Billing updated and subscription activated successfully.";
 
 const LETTER_STAGGER = 0.012;
 
@@ -78,10 +78,9 @@ function WebhookPayload() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15, ease: EASE }}
     >
-      <div className="flex items-center gap-1.5 mb-2">
-        <span className="size-1.25 rounded-full bg-text-muted shrink-0" />
-        <span className="text-[11px] tracking-wide text-text-muted uppercase">
-          Webhook received
+      <div className="mb-2 bg-bg-base w-fit flex items-center">
+        <span className="text-[10.5px] text-text-secondary bg-surface-1 px-2 py-0.75 rounded">
+          webhook
         </span>
       </div>
 

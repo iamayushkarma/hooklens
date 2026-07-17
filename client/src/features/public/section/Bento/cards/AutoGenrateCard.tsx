@@ -174,11 +174,15 @@ function AutoGenrateCard() {
         <motion.div
           layout
           initial={false}
-          style={{ transformOrigin: "center" }}
           transition={{
             layout: { type: "spring", stiffness: 260, damping: 30, mass: 0.9 },
           }}
-          className="relative w-70 p-3.5 rounded-md space-y-2.5 bg-bg-card border border-border-default"
+          className="relative w-70 p-3.5 rounded-2xl space-y-2.5 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] transition-shadow duration-300"
+          style={{
+            boxShadow: isHovered
+              ? "0 4px 10px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.09)"
+              : undefined,
+          }}
         >
           <div className="flex gap-2 items-center">
             <div className="size-6 rounded-md shrink-0 bg-bg-sidebar border border-border-default flex items-center justify-center p-1">

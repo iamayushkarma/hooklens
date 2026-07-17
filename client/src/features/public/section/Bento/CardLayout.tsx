@@ -53,10 +53,11 @@ function CardLayout({
       animate={animate}
       tabIndex={tabIndex}
       variants={variants}
-      className={`${className} relative h-82 group bg-[#fafafa] border border-border-default rounded-3xl overflow-hidden  cursor-default p-6`}
+      className={`${className} relative h-82 group bg-[#fafafa] border border-border-default rounded-3xl overflow-hidden cursor-default p-6`}
     >
-      {children}
-      <div className="relative">
+      <div className="relative">{children}</div>
+
+      <div className="absolute bottom-6 left-6 right-6">
         <h3 className="text-text-primary font-semibold">{heading}</h3>
         <p className="text-text-secondary">{subHeading}</p>
       </div>

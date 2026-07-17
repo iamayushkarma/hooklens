@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import CardLayout from "../CardLayout";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -63,10 +64,11 @@ function AutoGenrateCard() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   return (
-    <div
+    <CardLayout
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative h-82 group bg-gray-50 border border-border-default rounded-md overflow-hidden flex items-center justify-center flex-col cursor-default group"
+      heading="Debug webhooks together"
+      subHeading="Capture, replay, and debug webhooks together."
     >
       <motion.div
         aria-hidden
@@ -137,16 +139,7 @@ function AutoGenrateCard() {
           <AnimatedSubtitle active={isHovered} />
         </motion.div>
       </div>
-
-      <div className="relative px-3">
-        <h3 className="text-text-primary font-semibold">
-          Debug webhooks together
-        </h3>
-        <p className="text-text-secondary">
-          Capture, replay, and debug webhooks together.
-        </p>
-      </div>
-    </div>
+    </CardLayout>
   );
 }
 

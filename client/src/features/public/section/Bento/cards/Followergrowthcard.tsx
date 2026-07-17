@@ -169,7 +169,14 @@ function FollowerGrowthCard({
       initial="rest"
       animate={state}
     >
-      <div className="relative -mt-2 h-36 overflow-hidden rounded-xl bg-white">
+      <div
+        className="relative -mt-2 h-36 overflow-hidden rounded-2xl bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] p-5 transition-shadow duration-300"
+        style={{
+          boxShadow: isActive
+            ? "0 4px 10px rgba(0,0,0,0.05), 0 16px 40px rgba(0,0,0,0.09)"
+            : undefined,
+        }}
+      >
         <div className="relative z-10 p-4">
           <motion.div
             variants={numberVariants}
@@ -179,7 +186,6 @@ function FollowerGrowthCard({
           </motion.div>
           <div className="font-mono text-sm text-text-secondary">Requests</div>
         </div>
-
         <svg
           viewBox={`0 0 ${CHART_W} ${CHART_H}`}
           preserveAspectRatio="none"

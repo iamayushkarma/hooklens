@@ -12,9 +12,9 @@ import WriteBetterCard from "./cards/WriteBetterCard";
 
 function BentoSection() {
   return (
-    <section>
+    <section className="w-full">
       <BentoHeader />
-      <div className="w-6xl grid grid-cols-3 gap-2.5 bg-white">
+      <div className="w-6xl grid grid-cols-3 gap-2.5 bg-white mx-auto">
         <CollaborationCard />
         <WebhookCaptureCard />
         <WriteBetterCard />

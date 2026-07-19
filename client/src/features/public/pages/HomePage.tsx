@@ -3,6 +3,7 @@ import BentoSection from "../section/Bento/BentoSection";
 import HeroDashboardImage from "../section/HeroDashboardImage";
 import HeroSection from "../section/HeroSection";
 import WhyIBuiltSection from "../section/Whyibuiltsection";
+import HowItWorksSection from "../section/HowItWorksSection";
 
 function HomePage() {
   return (
@@ -14,6 +15,7 @@ function HomePage() {
       <div className="flex items-center justify-center bg-white">
         <BentoSection />
       </div>
+      <HowItWorksSection />
     </div>
   );
 }

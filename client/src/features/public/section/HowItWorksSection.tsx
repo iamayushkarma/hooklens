@@ -139,8 +139,8 @@ export default function HowItWorks() {
                   className={[
                     "flex h-[72px] w-[72px] items-center justify-center rounded-full border-2 transition-all duration-300",
                     active
-                      ? "scale-[1.08] border-accent bg-accent-subtle"
-                      : "scale-100 border-border-default bg-bg-surface",
+                      ? "scale-[1.08] border-accent bg-accent/10"
+                      : "scale-100 border-border-default bg-bg-sidebar",
                   ].join(" ")}
                 >
                   <Icon
@@ -170,7 +170,7 @@ export default function HowItWorks() {
             <p className="m-0 text-[13px] uppercase tracking-wide text-text-secondary">
               Your endpoint
             </p>
-            <div className="flex items-center gap-3 rounded-xl border border-border-default bg-bg-surface px-6 py-4">
+            <div className="flex items-center gap-3 rounded-xl border border-border-default bg-bg-sidebar px-6 py-4">
               <Globe size={20} className="text-accent" aria-hidden="true" />
               <span className="font-mono text-[17px] text-text-primary">
                 api.hooklens.app/h/abc123xyz
@@ -197,7 +197,7 @@ export default function HowItWorks() {
                 from Stripe
               </span>
             </div>
-            <div className="rounded-[10px] border border-border-default bg-bg-surface p-4 font-mono text-[13px] leading-[1.7] text-text-secondary">
+            <div className="rounded-[10px] border border-border-default bg-bg-sidebar p-4 font-mono text-[13px] leading-[1.7] text-text-secondary">
               <div>content-type: application/json</div>
               <div>x-stripe-signature: t=1737...</div>
               <div className="mt-2.5 text-text-primary">{"{"}</div>
@@ -220,7 +220,7 @@ export default function HowItWorks() {
               </span>
             </div>
 
-            <div className="flex items-center gap-3 rounded-[10px] border border-accent bg-bg-surface px-4 py-3">
+            <div className="flex items-center gap-3 rounded-[10px] border border-accent bg-bg-sidebar px-4 py-3">
               <span className="rounded-md bg-success-bg px-2 py-0.5 font-mono text-[11px] font-medium text-success">
                 POST
               </span>
@@ -230,8 +230,8 @@ export default function HowItWorks() {
               <span className="ml-auto text-xs text-text-muted">just now</span>
             </div>
 
-            <div className="flex items-center gap-3 rounded-[10px] border border-border-default bg-bg-surface px-4 py-3 opacity-70">
-              <span className="rounded-md bg-accent-subtle px-2 py-0.5 font-mono text-[11px] font-medium text-accent">
+            <div className="flex items-center gap-3 rounded-[10px] border border-border-default bg-bg-sidebar px-4 py-3 opacity-70">
+              <span className="rounded-md bg-accent/10 px-2 py-0.5 font-mono text-[11px] font-medium text-accent">
                 GET
               </span>
               <span className="font-mono text-[13px] text-text-primary">
@@ -240,7 +240,7 @@ export default function HowItWorks() {
               <span className="ml-auto text-xs text-text-muted">4m ago</span>
             </div>
 
-            <div className="flex items-center gap-3 rounded-[10px] border border-border-default bg-bg-surface px-4 py-3 opacity-45">
+            <div className="flex items-center gap-3 rounded-[10px] border border-border-default bg-bg-sidebar px-4 py-3 opacity-45">
               <span className="rounded-md bg-success-bg px-2 py-0.5 font-mono text-[11px] font-medium text-success">
                 POST
               </span>
@@ -255,20 +255,20 @@ export default function HowItWorks() {
         {step === 3 && (
           <div className="flex min-h-[280px] flex-col justify-center gap-4">
             <div className="flex gap-4">
-              <div className="flex-1 rounded-[10px] border border-border-default bg-bg-surface p-3.5">
+              <div className="flex-1 rounded-[10px] border border-border-default bg-bg-sidebar p-3.5">
                 <p className="m-0 mb-2 text-xs text-text-muted">Replayed to</p>
                 <p className="m-0 font-mono text-[13px] text-text-primary">
                   localhost:3000/webhook
                 </p>
               </div>
-              <div className="flex-1 rounded-[10px] border border-border-default bg-bg-surface p-3.5">
+              <div className="flex-1 rounded-[10px] border border-border-default bg-bg-sidebar p-3.5">
                 <p className="m-0 mb-2 text-xs text-text-muted">Response</p>
                 <p className="m-0 font-mono text-[13px] text-success">
                   200 OK · 84ms
                 </p>
               </div>
             </div>
-            <div className="flex gap-3 rounded-[10px] bg-accent-subtle p-4">
+            <div className="flex gap-3 rounded-[10px] bg-accent/10 p-4">
               <Sparkles
                 size={18}
                 className="mt-0.5 shrink-0 text-accent"

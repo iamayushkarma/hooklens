@@ -1,6 +1,14 @@
-import { Zap, Radio, Globe, Sparkles } from "lucide-react";
+import {
+  Zap,
+  Radio,
+  Globe,
+  Sparkles,
+  Repeat,
+  Users,
+  ShieldCheck,
+} from "lucide-react";
 
-const CARD_HEIGHT = 260; // consistent estimate used for line math below
+const CARD_HEIGHT = 260;
 
 const items = [
   {
@@ -43,67 +51,101 @@ const items = [
     rotate: 3,
     style: { top: 300, left: 500, width: 420 },
   },
+  {
+    id: "replay",
+    icon: Repeat,
+    title: "Replays to anywhere",
+    body: "Re-send any captured request to a new target and see status, headers, and latency side by side — no curl script needed.",
+    blob: "from-[#34D399] to-[#059669]",
+    tint: "bg-[#ECFDF5]",
+    rotate: 2,
+    style: { top: 650, left: 290, width: 420 },
+  },
+  {
+    id: "team",
+    icon: Users,
+    title: "Built for teams",
+    body: "Share a workspace with Owner, Admin, Member, and Viewer roles — everyone watches the same live requests together.",
+    blob: "from-[#5B67E8] to-[#2633CB]",
+    tint: "bg-[#ECEEFF]",
+    rotate: -3,
+    style: { top: 950, left: 60, width: 420 },
+  },
+  {
+    id: "cleanup",
+    icon: ShieldCheck,
+    title: "Cleans up after itself",
+    body: "Requests auto-expire after 7 days and every endpoint is rate-limited and hardened — nothing lingers, nothing leaks.",
+    blob: "from-[#9CA3AF] to-[#6B7280]",
+    tint: "bg-[#F4F4F5]",
+    rotate: 3,
+    style: { top: 950, left: 500, width: 420 },
+  },
 ];
 
+// Each connection is either:
+// - "h": right-mid of `from` card -> left-mid of `to` card (side-by-side cards)
+// - "v": bottom-mid of `from` card -> top-mid of `to` card (cards stacked vertically)
 // Endpoints are derived from each card's real top/left/width (+ CARD_HEIGHT),
 // so every line's start/end point sits exactly on a card edge — not eyeballed.
+const connections: { from: number; to: number; type: "h" | "v" }[] = [
+  { from: 0, to: 1, type: "h" }, // instant -> capture
+  { from: 0, to: 2, type: "v" }, // instant -> live
+  { from: 1, to: 3, type: "v" }, // capture -> explain
+  { from: 2, to: 4, type: "v" }, // live -> replay (converge)
+  { from: 3, to: 4, type: "v" }, // explain -> replay (converge)
+  { from: 4, to: 5, type: "v" }, // replay -> team (diverge)
+  { from: 4, to: 6, type: "v" }, // replay -> cleanup (diverge)
+];
+
+function getEdgePoints(
+  from: (typeof items)[number],
+  to: (typeof items)[number],
+  type: "h" | "v",
+) {
+  if (type === "h") {
+    return {
+      start: {
+        x: from.style.left + from.style.width,
+        y: from.style.top + CARD_HEIGHT / 2,
+      },
+      end: { x: to.style.left, y: to.style.top + CARD_HEIGHT / 2 },
+    };
+  }
+  return {
+    start: {
+      x: from.style.left + from.style.width / 2,
+      y: from.style.top + CARD_HEIGHT,
+    },
+    end: { x: to.style.left + to.style.width / 2, y: to.style.top },
+  };
+}
+
+const curve = (a: { x: number; y: number }, b: { x: number; y: number }) =>
+  `M ${a.x} ${a.y} C ${a.x + (b.x - a.x) * 0.4} ${a.y + (b.y - a.y) * 0.2}, ${
+    a.x + (b.x - a.x) * 0.6
+  } ${a.y + (b.y - a.y) * 0.8}, ${b.x} ${b.y}`;
+
 function ConnectorLines() {
-  const card1 = items[0].style;
-  const card2 = items[1].style;
-  const card3 = items[2].style;
-  const card4 = items[3].style;
-
-  // card1 right-mid -> card2 left-mid
-  const p1Start = {
-    x: card1.left + card1.width,
-    y: card1.top + CARD_HEIGHT / 2,
-  };
-  const p1End = { x: card2.left, y: card2.top + CARD_HEIGHT / 2 };
-
-  // card1 bottom-mid -> card3 top-mid
-  const p2Start = {
-    x: card1.left + card1.width / 2,
-    y: card1.top + CARD_HEIGHT,
-  };
-  const p2End = { x: card3.left + card3.width / 2, y: card3.top };
-
-  // card2 bottom-mid -> card4 top-mid
-  const p3Start = {
-    x: card2.left + card2.width / 2,
-    y: card2.top + CARD_HEIGHT,
-  };
-  const p3End = { x: card4.left + card4.width / 2, y: card4.top };
-
-  const curve = (a: { x: number; y: number }, b: { x: number; y: number }) =>
-    `M ${a.x} ${a.y} C ${a.x + (b.x - a.x) * 0.4} ${a.y + (b.y - a.y) * 0.2}, ${
-      a.x + (b.x - a.x) * 0.6
-    } ${a.y + (b.y - a.y) * 0.8}, ${b.x} ${b.y}`;
-
   return (
     <svg
       className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
-      viewBox="0 0 1000 640"
+      viewBox="0 0 1000 1250"
       fill="none"
       preserveAspectRatio="none"
     >
-      <path
-        d={curve(p1Start, p1End)}
-        stroke="#D9D5CC"
-        strokeWidth="1.5"
-        strokeDasharray="4 6"
-      />
-      <path
-        d={curve(p2Start, p2End)}
-        stroke="#D9D5CC"
-        strokeWidth="1.5"
-        strokeDasharray="4 6"
-      />
-      <path
-        d={curve(p3Start, p3End)}
-        stroke="#D9D5CC"
-        strokeWidth="1.5"
-        strokeDasharray="4 6"
-      />
+      {connections.map(({ from, to, type }) => {
+        const { start, end } = getEdgePoints(items[from], items[to], type);
+        return (
+          <path
+            key={`${items[from].id}-${items[to].id}`}
+            d={curve(start, end)}
+            stroke="#D9D5CC"
+            strokeWidth="1.5"
+            strokeDasharray="4 6"
+          />
+        );
+      })}
     </svg>
   );
 }
@@ -130,12 +172,12 @@ function BenefitCard({ item }: { item: (typeof items)[number] }) {
         <Icon
           size={22}
           strokeWidth={1.75}
-          className="mb-6 text-text-primary/70"
+          className="mb-6 text-[#141412]/70 dark:text-[#ececec]/70"
         />
-        <h3 className="m-0 mb-2 text-[19px] font-bold text-text-primary">
+        <h3 className="m-0 mb-2 text-[19px] font-bold text-[#141412] dark:text-[#ececec]">
           {item.title}
         </h3>
-        <p className="m-0 text-[13.5px] leading-relaxed text-text-secondary">
+        <p className="m-0 text-[13.5px] leading-relaxed text-[#888780] dark:text-[#404040]">
           {item.body}
         </p>
       </div>
@@ -154,12 +196,12 @@ function BenefitCardStacked({ item }: { item: (typeof items)[number] }) {
         <Icon
           size={20}
           strokeWidth={1.75}
-          className="mb-4 text-text-primary/70"
+          className="mb-4 text-[#141412]/70 dark:text-[#ececec]/70"
         />
-        <h3 className="m-0 mb-2 text-[17px] font-bold text-text-primary">
+        <h3 className="m-0 mb-2 text-[17px] font-bold text-[#141412] dark:text-[#ececec]">
           {item.title}
         </h3>
-        <p className="m-0 text-[13px] leading-relaxed text-text-secondary">
+        <p className="m-0 text-[13px] leading-relaxed text-[#888780] dark:text-[#404040]">
           {item.body}
         </p>
       </div>
@@ -174,10 +216,10 @@ export default function WhyChooseUs() {
       style={{ backgroundColor: "#F7F6F3" }}
     >
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="m-0 mb-3 text-[34px] font-serif font-bold leading-tight text-text-primary md:text-[42px]">
-          Why <span className="italic text-accent">choose</span> Hooklens?
+        <h2 className="m-0 mb-3 text-[34px] font-serif font-bold leading-tight text-[#141412] dark:text-[#ececec] md:text-[42px]">
+          Why <span className="italic text-[#2633CB]">choose</span> Hooklens?
         </h2>
-        <p className="m-0 text-[15px] text-text-secondary">
+        <p className="m-0 text-[15px] text-[#888780] dark:text-[#404040]">
           Here's why developers reach for it when debugging webhooks:
         </p>
       </div>
@@ -187,7 +229,7 @@ export default function WhyChooseUs() {
         style={{
           width: 1000,
           maxWidth: "100%",
-          height: 640,
+          height: 1250,
           backgroundImage:
             "repeating-linear-gradient(to bottom, transparent, transparent 39px, rgba(0,0,0,0.05) 40px)",
         }}

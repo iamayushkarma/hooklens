@@ -1,11 +1,5 @@
 import { useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  MotionValue,
-  useMotionValueEvent,
-} from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import {
   Link2,
   Zap,
@@ -23,34 +17,47 @@ const methodStyles = {
   put: { text: "text-put-text", bg: "bg-put-bg" },
 };
 
-const steps = [
+type Method = keyof typeof methodStyles;
+
+interface Step {
+  method: Method;
+  label: string;
+  icon: typeof Link2;
+  title: string;
+  description: string;
+}
+
+const steps: Step[] = [
   {
     method: "get",
     label: "GET",
     icon: Link2,
-    title: "Get an endpoint",
-    description: "A unique URL generated instantly",
+    title: "Spin up an endpoint",
+    description: "A nanoid-generated URL, live the moment it's created",
   },
   {
     method: "post",
     label: "POST",
     icon: Zap,
-    title: "A webhook fires",
-    description: "Stripe, GitHub or any service sends a request",
+    title: "Any request gets captured",
+    description:
+      "Headers, raw body, query params — every method, no auth needed",
   },
   {
     method: "patch",
     label: "LIVE",
     icon: Radio,
-    title: "Watch it live",
-    description: "Dashboard updates over sockets, no refresh",
+    title: "Dashboard updates instantly",
+    description:
+      "Socket.io pushes it straight to your inspect page, zero refresh",
   },
   {
     method: "put",
     label: "REPLAY",
     icon: RefreshCw,
-    title: "Replay and debug",
-    description: "Resend to any target, AI explains the payload",
+    title: "Replay and let AI explain it",
+    description:
+      "Re-send to any target and get a plain-English breakdown from Groq",
   },
 ];
 
@@ -60,7 +67,26 @@ interface StepCardProps {
   progress: MotionValue<number>;
   range: [number, number];
   targetScale: number;
-  onActivate: (i: number) => void;
+}
+function StepNumberBadge({
+  number,
+  bgClass,
+  rotate,
+}: {
+  number: number;
+  bgClass: string;
+  rotate: number;
+}) {
+  return (
+    <div
+      className={`absolute -top-4 -left-4 flex h-14 w-14 items-center justify-center rounded-2xl shadow-md ${bgClass}`}
+      style={{ transform: `rotate(${rotate}deg)` }}
+    >
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[15px] font-bold text-text-primary shadow-sm">
+        {number}
+      </div>
+    </div>
+  );
 }
 
 function StepCard({
@@ -69,29 +95,35 @@ function StepCard({
   progress,
   range,
   targetScale,
-  onActivate,
 }: StepCardProps) {
-  const container = useRef(null);
   const scale = useTransform(progress, range, [1, targetScale]);
+
+  // Alternate tilt direction by index: even cards lean left, odd cards lean right.
+  // Each card starts slightly rotated and settles toward flat as it gets pushed back in the stack.
+  const startRotate = index % 2 === 0 ? -3 : 3;
+  const endRotate = index % 2 === 0 ? -1 : 1;
+  const rotate = useTransform(progress, range, [startRotate, endRotate]);
+
   const Icon = step.icon;
   const colors = methodStyles[step.method];
-
-  useMotionValueEvent(progress, "change", (v) => {
-    if (v >= range[0] && v < range[0] + 0.25) onActivate(index);
-  });
+  const badgeRotate = index % 2 === 0 ? -6 : 6;
 
   return (
-    <div
-      ref={container}
-      className="h-screen flex items-center justify-center sticky top-0"
-    >
+    <div className="h-screen flex items-center justify-center sticky top-0">
       <motion.div
         style={{
           scale,
+          rotate,
           top: `calc(-5vh + ${index * 25}px)`,
         }}
         className="relative -top-[10%] w-full max-w-2xl origin-top rounded-2xl border border-border-default bg-bg-card p-7 shadow-lg"
       >
+        <StepNumberBadge
+          number={index + 1}
+          bgClass={colors.bg}
+          rotate={badgeRotate}
+        />
+
         <div className="mb-6 flex items-center gap-3.5">
           <div
             className={[
@@ -136,7 +168,7 @@ function StepCard({
             </div>
             <div className="flex items-center gap-2 text-[13px] text-text-secondary">
               <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-get-text" />
-              Waiting for requests
+              Public route · no auth · waiting for requests
             </div>
           </div>
         )}
@@ -165,6 +197,9 @@ function StepCard({
               <div className="pl-4 text-text-primary">"currency": "usd"</div>
               <div className="text-text-primary">{"}"}</div>
             </div>
+            <p className="m-0 text-xs text-text-muted">
+              Stored with headers, IP, and content type — TTL-expires in 7 days
+            </p>
           </div>
         )}
 
@@ -203,6 +238,10 @@ function StepCard({
               </span>
               <span className="ml-auto text-xs text-text-muted">11m ago</span>
             </div>
+            <p className="m-0 text-xs text-text-muted">
+              Pushed via a <code>request:new</code> event to the endpoint's
+              Socket.io room
+            </p>
           </div>
         )}
 
@@ -234,6 +273,10 @@ function StepCard({
                 paid.
               </p>
             </div>
+            <p className="m-0 text-xs text-text-muted">
+              Explained by Llama 3.3 70B via Groq — under 300 tokens, no raw
+              JSON to parse
+            </p>
           </div>
         )}
       </motion.div>
@@ -277,7 +320,6 @@ export default function HowItWorks() {
                 progress={scrollYProgress}
                 range={[i * 0.25, 1]}
                 targetScale={targetScale}
-                onActivate={() => {}}
               />
             );
           })}

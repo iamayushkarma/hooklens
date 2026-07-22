@@ -4,6 +4,7 @@ import HeroDashboardImage from "../section/HeroDashboardImage";
 import HeroSection from "../section/HeroSection";
 import WhyIBuiltSection from "../section/Whyibuiltsection";
 import HowItWorksSection from "../section/HowItWorksSection";
+import WhyChooseUs from "../section/WhyChooseUs";
 
 function HomePage() {
   return (
@@ -16,6 +17,7 @@ function HomePage() {
         <BentoSection />
       </div>
       <HowItWorksSection />
+      <WhyChooseUs />
     </div>
   );
 }

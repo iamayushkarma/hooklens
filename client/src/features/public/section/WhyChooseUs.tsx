@@ -13,6 +13,7 @@ import purplePin from "@/features/public/assets/purplePin.png";
 import pinkPin from "@/features/public/assets/pinkPin.png";
 import bluePin from "@/features/public/assets/bluePin.png";
 import greenPin from "@/features/public/assets/greenPin.png";
+import indigoPin from "@/features/public/assets/indigoPin.png";
 
 const CARD_HEIGHT = 260;
 
@@ -151,7 +152,7 @@ const items = [
     body: "...",
     blob: "from-owner-text to-owner-text/70",
     tint: "bg-owner-bg",
-    // pin: indigoPin,
+    pin: indigoPin,
     rotate: -3,
     style: { top: 950, left: 60, width: 420 },
   },

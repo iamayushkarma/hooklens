@@ -12,6 +12,7 @@ import yellowPin from "@/features/public/assets/yellowPin.png";
 import purplePin from "@/features/public/assets/purplePin.png";
 import pinkPin from "@/features/public/assets/pinkPin.png";
 import bluePin from "@/features/public/assets/bluePin.png";
+import greenPin from "@/features/public/assets/greenPin.png";
 
 const CARD_HEIGHT = 260;
 
@@ -139,7 +140,7 @@ const items = [
     body: "...",
     blob: "from-patch-text to-patch-text/70",
     tint: "bg-patch-bg",
-    // pin: greenPin,
+    pin: greenPin,
     rotate: 2,
     style: { top: 650, left: 290, width: 420 },
   },

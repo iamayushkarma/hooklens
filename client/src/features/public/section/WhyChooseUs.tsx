@@ -14,6 +14,7 @@ import pinkPin from "@/features/public/assets/pinkPin.png";
 import bluePin from "@/features/public/assets/bluePin.png";
 import greenPin from "@/features/public/assets/greenPin.png";
 import indigoPin from "@/features/public/assets/indigoPin.png";
+import grayPin from "@/features/public/assets/grayPin.png";
 
 const CARD_HEIGHT = 260;
 
@@ -163,7 +164,7 @@ const items = [
     body: "...",
     blob: "from-viewer-text to-viewer-text/70",
     tint: "bg-viewer-bg",
-    // pin: grayPin,
+    pin: grayPin,
     rotate: 3,
     style: { top: 950, left: 500, width: 420 },
   },

@@ -10,6 +10,8 @@ import {
 
 import yellowPin from "@/features/public/assets/yellowPin.png";
 import purplePin from "@/features/public/assets/purplePin.png";
+import pinkPin from "@/features/public/assets/pinkPin.png";
+import bluePin from "@/features/public/assets/bluePin.png";
 
 const CARD_HEIGHT = 260;
 
@@ -115,7 +117,7 @@ const items = [
     body: "...",
     blob: "from-delete-text to-delete-text/70",
     tint: "bg-[#FDF0F6]",
-    // pin: pinkPin,
+    pin: pinkPin,
     rotate: -2,
     style: { top: 350, left: 60, width: 420 },
   },
@@ -126,7 +128,7 @@ const items = [
     body: "...",
     blob: "from-get-text to-get-text/70",
     tint: "bg-get-bg",
-    // pin: bluePin,
+    pin: bluePin,
     rotate: 3,
     style: { top: 300, left: 500, width: 420 },
   },

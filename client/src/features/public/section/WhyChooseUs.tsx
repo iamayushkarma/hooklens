@@ -18,85 +18,12 @@ import grayPin from "@/features/public/assets/grayPin.png";
 
 const CARD_HEIGHT = 260;
 
-// const items = [
-//   {
-//     id: "instant",
-//     icon: Zap,
-//     title: "Instant setup",
-//     body: "Get a live, unique URL the moment you create it — no signup friction, no config files to write first.",
-//     blob: "from-put-text to-put-text/70",
-//     tint: "bg-[#FEF9E7]",
-//     rotate: -3,
-//     style: { top: 0, left: 20, width: 420 },
-//   },
-//   {
-//     id: "capture",
-//     icon: Sparkles,
-//     title: "Captures everything",
-//     body: "Headers, raw body, query params, method — every request is stored exactly as it arrived, no auth required.",
-//     blob: "from-post-text to-post-text/70",
-//     tint: "bg-[#F3F0FF]",
-//     rotate: 2,
-//     style: { top: 30, left: 540, width: 420 },
-//   },
-//   {
-//     id: "live",
-//     icon: Radio,
-//     title: "Updates in real time",
-//     body: "New requests push straight to your dashboard over a socket connection — no refresh, no polling, no delay.",
-//     blob: "from-delete-text to-delete-text/70",
-//     tint: "bg-[#FDF0F6]",
-//     rotate: -2,
-//     style: { top: 350, left: 60, width: 420 },
-//   },
-//   {
-//     id: "explain",
-//     icon: Globe,
-//     title: "Explains itself",
-//     body: "Replay any request and get a plain-English breakdown of what it actually did — no raw JSON to decode by hand.",
-//     blob: "from-get-text to-get-text/70",
-//     tint: "bg-get-bg", // matches theme exactly (#EFF6FF)
-//     rotate: 3,
-//     style: { top: 300, left: 500, width: 420 },
-//   },
-//   {
-//     id: "replay",
-//     icon: Repeat,
-//     title: "Replays to anywhere",
-//     body: "Re-send any captured request to a new target and see status, headers, and latency side by side — no curl script needed.",
-//     blob: "from-patch-text to-patch-text/70",
-//     tint: "bg-patch-bg", // matches theme exactly (#ECFDF5)
-//     rotate: 2,
-//     style: { top: 650, left: 290, width: 420 },
-//   },
-//   {
-//     id: "team",
-//     icon: Users,
-//     title: "Built for teams",
-//     body: "Share a workspace with Owner, Admin, Member, and Viewer roles — everyone watches the same live requests together.",
-//     blob: "from-owner-text to-owner-text/70",
-//     tint: "bg-owner-bg", // matches theme exactly (#ECEEFF)
-//     rotate: -3,
-//     style: { top: 950, left: 60, width: 420 },
-//   },
-//   {
-//     id: "cleanup",
-//     icon: ShieldCheck,
-//     title: "Cleans up after itself",
-//     body: "Requests auto-expire after 7 days and every endpoint is rate-limited and hardened — nothing lingers, nothing leaks.",
-//     blob: "from-viewer-text to-viewer-text/70",
-//     tint: "bg-viewer-bg", // matches theme exactly (#F4F4F5)
-//     rotate: 3,
-//     style: { top: 950, left: 500, width: 420 },
-//   },
-// ];
 const items = [
   {
     id: "instant",
     icon: Zap,
     title: "Instant setup",
-    body: "...",
-    blob: "from-put-text to-put-text/70",
+    body: "Get a live, unique URL the moment you create it — no signup friction, no config files to write first.",
     tint: "bg-[#FEF9E7]",
     pin: yellowPin,
     rotate: -3,
@@ -106,8 +33,7 @@ const items = [
     id: "capture",
     icon: Sparkles,
     title: "Captures everything",
-    body: "...",
-    blob: "from-post-text to-post-text/70",
+    body: "Headers, raw body, query params, method — every request is stored exactly as it arrived, no auth required.",
     tint: "bg-[#F3F0FF]",
     pin: purplePin,
     rotate: 2,
@@ -117,8 +43,7 @@ const items = [
     id: "live",
     icon: Radio,
     title: "Updates in real time",
-    body: "...",
-    blob: "from-delete-text to-delete-text/70",
+    body: "New requests push straight to your dashboard over a socket connection — no refresh, no polling, no delay.",
     tint: "bg-[#FDF0F6]",
     pin: pinkPin,
     rotate: -2,
@@ -128,8 +53,7 @@ const items = [
     id: "explain",
     icon: Globe,
     title: "Explains itself",
-    body: "...",
-    blob: "from-get-text to-get-text/70",
+    body: "Replay any request and get a plain-English breakdown of what it actually did — no raw JSON to decode by hand.",
     tint: "bg-get-bg",
     pin: bluePin,
     rotate: 3,
@@ -139,8 +63,7 @@ const items = [
     id: "replay",
     icon: Repeat,
     title: "Replays to anywhere",
-    body: "...",
-    blob: "from-patch-text to-patch-text/70",
+    body: "Re-send any captured request to a new target and see status, headers, and latency side by side — no curl script needed.",
     tint: "bg-patch-bg",
     pin: greenPin,
     rotate: 2,
@@ -150,8 +73,7 @@ const items = [
     id: "team",
     icon: Users,
     title: "Built for teams",
-    body: "...",
-    blob: "from-owner-text to-owner-text/70",
+    body: "Share a workspace with Owner, Admin, Member, and Viewer roles — everyone watches the same live requests together.",
     tint: "bg-owner-bg",
     pin: indigoPin,
     rotate: -3,
@@ -161,8 +83,7 @@ const items = [
     id: "cleanup",
     icon: ShieldCheck,
     title: "Cleans up after itself",
-    body: "...",
-    blob: "from-viewer-text to-viewer-text/70",
+    body: "Requests auto-expire after 7 days and every endpoint is rate-limited and hardened — nothing lingers, nothing leaks.",
     tint: "bg-viewer-bg",
     pin: grayPin,
     rotate: 3,
@@ -250,13 +171,13 @@ function BenefitCard({ item }: { item: (typeof items)[number] }) {
         transform: `rotate(${item.rotate}deg)`,
       }}
     >
-      <div
-        className={`absolute left-1/2 top-3 z-10 h-14 w-14 -translate-x-1/2 rounded-full bg-gradient-to-br ${item.blob} shadow-[0_6px_16px_-4px_rgba(0,0,0,0.35)]`}
+      <img
+        src={item.pin}
+        alt=""
+        className="absolute left-1/2 top-4 z-10 h-12 w-12 -translate-x-1/2 object-contain drop-shadow-[0_6px_10px_rgba(0,0,0,0.3)]"
       />
       <div className="flex h-full flex-col">
-        <div className="flex h-8 shrink-0 items-center justify-center">
-          <img src={item.pin} alt="" className="h-6 w-6 object-contain" />
-        </div>
+        <div className="h-8 shrink-0" />
         <div
           className={`relative flex-1 rounded-2xl ${item.tint} px-6 pb-6 pt-10`}
         >
@@ -281,13 +202,13 @@ function BenefitCardStacked({ item }: { item: (typeof items)[number] }) {
   const Icon = item.icon;
   return (
     <div className="relative rounded-[22px] bg-bg-card p-3 shadow-md">
-      <div
-        className={`absolute left-1/2 top-3 z-10 h-12 w-12 -translate-x-1/2 rounded-full bg-gradient-to-br ${item.blob}`}
+      <img
+        src={item.pin}
+        alt=""
+        className="absolute left-1/2 top-1 z-10 h-10 w-10 -translate-x-1/2 object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]"
       />
       <div className="flex flex-col">
-        <div className="flex h-6 shrink-0 items-center justify-center">
-          <img src={item.pin} alt="" className="h-5 w-5 object-contain" />
-        </div>
+        <div className="h-6 shrink-0" />
         <div className={`relative rounded-2xl ${item.tint} px-5 pb-6 pt-8`}>
           <Icon
             size={20}

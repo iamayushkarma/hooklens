@@ -42,12 +42,12 @@ const items = [
 function ProblemCard({ item }: { item: (typeof items)[number] }) {
   const Icon = item.icon;
   return (
-    <div className="rounded-xl border border-border-default bg-bg-card p-5 shadow-sm">
-      <Icon size={20} strokeWidth={1.75} className="mb-4 text-text-secondary" />
-      <h3 className="m-0 mb-1.5 text-[15px] font-semibold text-text-primary">
+    <div className="border-r border-b border-border-default p-10 md:p-12 hover:bg-gray-50/80">
+      <Icon size={20} strokeWidth={1.5} className="mb-6 text-text-secondary" />
+      <h3 className="m-0 mb-3 font-mono text-[12px] font-medium uppercase tracking-wider text-text-primary">
         {item.title}
       </h3>
-      <p className="m-0 text-[13px] leading-relaxed text-text-secondary">
+      <p className="m-0 max-w-[26ch] text-[14px] leading-relaxed text-text-secondary">
         {item.body}
       </p>
     </div>
@@ -56,18 +56,18 @@ function ProblemCard({ item }: { item: (typeof items)[number] }) {
 
 export default function ProblemWeSolve() {
   return (
-    <section className="bg-bg-base px-5 py-20 md:py-28">
+    <section className="bg-white px-5 py-20 md:py-28">
       <div className="mx-auto max-w-xl text-center">
         <h2 className="m-0 mb-3 text-[34px] font-bold leading-tight text-text-primary md:text-[42px]">
           Webhooks are a black box until something breaks
         </h2>
         <p className="m-0 text-[15px] text-text-secondary">
-          Stripe, GitHub, Twilio — they all fire events at you blind. Here's
-          what that actually costs.
+          Stripe, GitHub, Twilio they all fire events at you blind. Here's what
+          that actually costs.
         </p>
       </div>
 
-      <div className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+      <div className="mx-auto mt-14 grid max-w-4xl grid-cols-1 border-t border-l border-border-default sm:grid-cols-2 md:grid-cols-3">
         {items.map((item) => (
           <ProblemCard key={item.id} item={item} />
         ))}

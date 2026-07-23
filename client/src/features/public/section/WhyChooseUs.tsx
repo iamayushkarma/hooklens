@@ -209,7 +209,9 @@ function BenefitCardStacked({ item }: { item: (typeof items)[number] }) {
       />
       <div className="flex flex-col">
         <div className="h-6 shrink-0" />
-        <div className={`relative rounded-2xl ${item.tint} px-5 pb-6 pt-8`}>
+        <div
+          className={`relative overflow-hidden rounded-2xl ${item.tint} px-5 pb-6 pt-8`}
+        >
           <Icon
             size={20}
             strokeWidth={1.75}
@@ -218,7 +220,7 @@ function BenefitCardStacked({ item }: { item: (typeof items)[number] }) {
           <h3 className="m-0 mb-2 text-[17px] font-bold text-text-primary">
             {item.title}
           </h3>
-          <p className="m-0 text-[13px] leading-relaxed text-text-secondary">
+          <p className="m-0 line-clamp-3 text-[13px] leading-relaxed text-text-secondary">
             {item.body}
           </p>
         </div>

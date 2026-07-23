@@ -205,7 +205,7 @@ function BenefitCardStacked({ item }: { item: (typeof items)[number] }) {
       <img
         src={item.pin}
         alt=""
-        className="absolute left-1/2 top-1 z-10 h-10 w-10 -translate-x-1/2 object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]"
+        className="absolute left-1/2 top-4 z-10 h-10 w-10 -translate-x-1/2 object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.25)]"
       />
       <div className="flex flex-col">
         <div className="h-6 shrink-0" />

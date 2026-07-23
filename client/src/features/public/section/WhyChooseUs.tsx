@@ -179,7 +179,7 @@ function BenefitCard({ item }: { item: (typeof items)[number] }) {
       <div className="flex h-full flex-col">
         <div className="h-8 shrink-0" />
         <div
-          className={`relative flex-1 rounded-2xl ${item.tint} px-6 pb-6 pt-10`}
+          className={`relative flex-1 overflow-hidden rounded-2xl ${item.tint} px-6 pb-6 pt-10`}
         >
           <Icon
             size={22}
@@ -189,7 +189,7 @@ function BenefitCard({ item }: { item: (typeof items)[number] }) {
           <h3 className="m-0 mb-2 text-[19px] font-bold text-text-primary">
             {item.title}
           </h3>
-          <p className="m-0 text-[13.5px] leading-relaxed text-text-secondary">
+          <p className="m-0 line-clamp-3 text-[13.5px] leading-relaxed text-text-secondary">
             {item.body}
           </p>
         </div>

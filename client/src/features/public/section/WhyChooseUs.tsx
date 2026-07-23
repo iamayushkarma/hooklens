@@ -8,9 +8,10 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const CARD_HEIGHT = 260;
-
 import yellowPin from "@/features/public/assets/yellowPin.png";
+import purplePin from "@/features/public/assets/purplePin.png";
+
+const CARD_HEIGHT = 260;
 
 // const items = [
 //   {
@@ -103,7 +104,7 @@ const items = [
     body: "...",
     blob: "from-post-text to-post-text/70",
     tint: "bg-[#F3F0FF]",
-    // pin: purplePin,
+    pin: purplePin,
     rotate: 2,
     style: { top: 30, left: 540, width: 420 },
   },
@@ -248,8 +249,9 @@ function BenefitCard({ item }: { item: (typeof items)[number] }) {
         className={`absolute left-1/2 top-3 z-10 h-14 w-14 -translate-x-1/2 rounded-full bg-gradient-to-br ${item.blob} shadow-[0_6px_16px_-4px_rgba(0,0,0,0.35)]`}
       />
       <div className="flex h-full flex-col">
-        {/* white "pinboard" margin — pastel block starts below this */}
-        <div className="h-8 shrink-0" />
+        <div className="flex h-8 shrink-0 items-center justify-center">
+          <img src={item.pin} alt="" className="h-6 w-6 object-contain" />
+        </div>
         <div
           className={`relative flex-1 rounded-2xl ${item.tint} px-6 pb-6 pt-10`}
         >
@@ -278,7 +280,9 @@ function BenefitCardStacked({ item }: { item: (typeof items)[number] }) {
         className={`absolute left-1/2 top-3 z-10 h-12 w-12 -translate-x-1/2 rounded-full bg-gradient-to-br ${item.blob}`}
       />
       <div className="flex flex-col">
-        <div className="h-6 shrink-0" />
+        <div className="flex h-6 shrink-0 items-center justify-center">
+          <img src={item.pin} alt="" className="h-5 w-5 object-contain" />
+        </div>
         <div className={`relative rounded-2xl ${item.tint} px-5 pb-6 pt-8`}>
           <Icon
             size={20}

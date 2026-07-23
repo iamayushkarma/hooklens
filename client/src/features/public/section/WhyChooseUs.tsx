@@ -233,8 +233,8 @@ export default function WhyChooseUs() {
   return (
     <section className="bg-bg-base px-5 py-20 md:py-28">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="m-0 mb-3 text-[34px] font-serif font-bold leading-tight text-text-primary md:text-[42px]">
-          Why <span className="italic text-accent">choose</span> Hooklens?
+        <h2 className="m-0 mb-3 text-[34px] font-bold leading-tight text-text-primary md:text-[42px]">
+          Why <span className="text-accent">choose</span> Hooklens?
         </h2>
         <p className="m-0 text-[15px] text-text-secondary">
           Here's why developers reach for it when debugging webhooks:

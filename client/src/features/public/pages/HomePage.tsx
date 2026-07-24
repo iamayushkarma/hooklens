@@ -1,19 +1,19 @@
 import ThemeSwitcher from "@/shared/components/ui/ThemeToggler";
-import BentoSection from "../section/Bento/BentoSection";
-import HeroDashboardImage from "../section/HeroDashboardImage";
 import HeroSection from "../section/HeroSection";
+import Problemwesolve from "../section/Problemwesolve";
+import HeroDashboardImage from "../section/HeroDashboardImage";
 import WhyIBuiltSection from "../section/Whyibuiltsection";
+import BentoSection from "../section/Bento/BentoSection";
 import HowItWorksSection from "../section/HowItWorksSection";
 import WhyChooseUs from "../section/WhyChooseUs";
-import Problemwesolve from "../section/Problemwesolve";
 
 function HomePage() {
   return (
     <div className="top-16">
       <ThemeSwitcher />
       <HeroSection />
-      <Problemwesolve />
       <HeroDashboardImage />
+      <Problemwesolve />
       <WhyIBuiltSection />
       <div className="flex items-center justify-center bg-white">
         <BentoSection />

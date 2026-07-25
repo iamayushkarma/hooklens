@@ -12,29 +12,50 @@ const faqs: FAQ[] = [
   {
     id: "volume",
     question: "Do you offer volume discounts?",
-    answer: "Yes. Discounts apply automatically across all your titles.",
+    answer:
+      "Yes. Discounts apply automatically across all your titles you don't need to ask for them or negotiate per game. As your combined DAU crosses each tier, your rate drops on the next invoice, and every title you run counts toward the total.",
   },
   {
     id: "multiple",
     question: "What if I have multiple games?",
     answer:
-      "Every game you add pools into the same volume discount — no separate contracts.",
+      "Every game you add pools into the same volume discount no separate contracts, no separate dashboards. Add a new title from your account in a couple of clicks and it starts contributing to your tier immediately.",
   },
   {
     id: "fees",
     question: "Are there hidden fees?",
-    answer: "No. What's on your invoice is what you pay, every month.",
+    answer:
+      "No. What's on your invoice is what you pay, every month. No setup fees, no per-seat charges, no surprise line items for support or integrations. If a price ever changes, we tell you at least 30 days before it takes effect.",
   },
   {
     id: "setup",
     question: "How long does setup take?",
-    answer: "Most teams are integrated and live within a day.",
+    answer:
+      "Most teams are integrated and live within a day. Drop in the SDK, verify events are flowing in the dashboard, and you're done there's no approval queue or onboarding call required to get started.",
   },
   {
     id: "dau",
     question: "Can I start below 10k DAU?",
     answer:
-      "Yes. There's no minimum to get started — pricing scales as you grow.",
+      "Yes. There's no minimum to get started pricing scales as you grow, so you're never paying for headroom you don't need yet. Plenty of teams start on their very first build and scale up from there.",
+  },
+  {
+    id: "cancel",
+    question: "Can I cancel anytime?",
+    answer:
+      "Yes, there's no lock-in. Cancel from your account settings whenever you like and you'll keep access through the end of your current billing period no cancellation fee, no exit call required.",
+  },
+  {
+    id: "support",
+    question: "What kind of support do I get?",
+    answer:
+      "Every plan includes email support with same-day responses on business days. Larger teams also get a shared Slack channel with our engineers, so integration questions get answered in minutes instead of ticket queues.",
+  },
+  {
+    id: "data",
+    question: "Who owns the data?",
+    answer:
+      "You do, fully. We never sell or share your data with third parties, and you can export everything raw events, aggregates, and reports at any time from the dashboard or the API.",
   },
 ];
 
@@ -48,7 +69,7 @@ export default function FAQSection() {
   return (
     <section className="bg-[#F7F6F1] font-sans antialiased">
       <div className="max-w-6xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-[1fr_560px] gap-x-16 gap-y-10 items-start">
-        <h2 className="text-[2.75rem] leading-none font-bold tracking-tight text-[#3A0D06] pt-1">
+        <h2 className="text-[4rem] leading-none font-extrabold tracking-tight text-text-primary pt-1">
           FAQ<span className="italic font-serif font-normal">s</span>
         </h2>
 
@@ -64,7 +85,7 @@ export default function FAQSection() {
                   type="button"
                   onClick={() => toggle(faq.id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-start justify-between gap-6 px-7 py-5 text-left"
+                  className="w-full flex items-start justify-between gap-6 px-7 py-5 text-left cursor-pointer hover:bg-[#FAF9F5] transition-colors"
                 >
                   <span className="text-[17px] font-semibold text-[#1A1A1A]">
                     {faq.question}
@@ -87,7 +108,7 @@ export default function FAQSection() {
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <p className="px-7 pb-5 text-[15px] leading-relaxed text-[#8B8B85] max-w-md">
+                      <p className="px-7 pb-5 text-[15px] leading-relaxed text-[#8B8B85]">
                         {faq.answer}
                       </p>
                     </motion.div>

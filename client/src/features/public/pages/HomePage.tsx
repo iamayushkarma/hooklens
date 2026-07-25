@@ -7,6 +7,7 @@ import BentoSection from "../section/Bento/BentoSection";
 import HowItWorksSection from "../section/HowItWorksSection";
 import WhyChooseUs from "../section/WhyChooseUs";
 import IntegrationSnippetsSection from "../section/Integrationsnippetssection";
+import FAQSection from "../section/Faqsection";
 
 function HomePage() {
   return (
@@ -22,6 +23,7 @@ function HomePage() {
       <HowItWorksSection />
       <WhyChooseUs />
       <IntegrationSnippetsSection />
+      <FAQSection />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import HowItWorksSection from "../section/HowItWorksSection";
 import WhyChooseUs from "../section/WhyChooseUs";
 import IntegrationSnippetsSection from "../section/Integrationsnippetssection";
 import FAQSection from "../section/Faqsection";
+import CTASection from "../section/CTASection";
 
 function HomePage() {
   return (
@@ -24,6 +25,7 @@ function HomePage() {
       <WhyChooseUs />
       <IntegrationSnippetsSection />
       <FAQSection />
+      <CTASection />
     </div>
   );
 }

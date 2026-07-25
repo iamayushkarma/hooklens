@@ -17,9 +17,9 @@ function HomePage() {
       <HeroDashboardImage />
       <Problemwesolve />
       <WhyIBuiltSection />
-      <div className="flex items-center justify-center bg-white">
+      <section className="flex items-center justify-center bg-white">
         <BentoSection />
-      </div>
+      </section>
       <HowItWorksSection />
       <WhyChooseUs />
       <IntegrationSnippetsSection />

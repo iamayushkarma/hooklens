@@ -123,7 +123,7 @@ export default function IntegrationSnippetsSection() {
                       key={s.id}
                       type="button"
                       onClick={() => select(s.id)}
-                      className="relative"
+                      className="relative cursor-pointer"
                     >
                       <div className="relative px-2.5 py-1.5 text-sm">
                         {isActive && (

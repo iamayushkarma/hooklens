@@ -1,22 +1,10 @@
-"use client";
-
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { Copy, Check } from "lucide-react";
-import {
-  SiStripe,
-  SiGithub,
-  SiTwilio,
-  SiSlack,
-  SiSendgrid,
-  SiRazorpay,
-} from "react-icons/si";
-import type { IconType } from "react-icons";
 
 interface Service {
   id: string;
   name: string;
-  icon: IconType;
   filename: string;
   endpoint: string;
   headers: string[];
@@ -27,7 +15,6 @@ const services: Service[] = [
   {
     id: "stripe",
     name: "Stripe",
-    icon: SiStripe,
     filename: "stripe-webhook.sh",
     endpoint: "https://hooklens.dev/h/abc123xyz",
     headers: ['"Content-Type: application/json"'],
@@ -36,7 +23,6 @@ const services: Service[] = [
   {
     id: "github",
     name: "GitHub",
-    icon: SiGithub,
     filename: "github-webhook.sh",
     endpoint: "https://hooklens.dev/h/abc123xyz",
     headers: ['"X-GitHub-Event: push"', '"Content-Type: application/json"'],
@@ -45,7 +31,6 @@ const services: Service[] = [
   {
     id: "twilio",
     name: "Twilio",
-    icon: SiTwilio,
     filename: "twilio-webhook.sh",
     endpoint: "https://hooklens.dev/h/abc123xyz",
     headers: ['"Content-Type: application/x-www-form-urlencoded"'],
@@ -54,7 +39,6 @@ const services: Service[] = [
   {
     id: "slack",
     name: "Slack",
-    icon: SiSlack,
     filename: "slack-webhook.sh",
     endpoint: "https://hooklens.dev/h/abc123xyz",
     headers: ['"Content-Type: application/json"'],
@@ -63,7 +47,6 @@ const services: Service[] = [
   {
     id: "sendgrid",
     name: "SendGrid",
-    icon: SiSendgrid,
     filename: "sendgrid-webhook.sh",
     endpoint: "https://hooklens.dev/h/abc123xyz",
     headers: ['"Content-Type: application/json"'],
@@ -72,7 +55,6 @@ const services: Service[] = [
   {
     id: "razorpay",
     name: "Razorpay",
-    icon: SiRazorpay,
     filename: "razorpay-webhook.sh",
     endpoint: "https://hooklens.dev/h/abc123xyz",
     headers: [
@@ -83,110 +65,132 @@ const services: Service[] = [
   },
 ];
 
-function buildSnippet(service: Service) {
-  const headerLines = service.headers.map((h) => `  -H ${h} \\`).join("\n");
-  return `curl -X POST \\\n  ${service.endpoint} \\\n${headerLines}\n  -d ${service.body}`;
+function plainSnippet(s: Service): string {
+  const h = s.headers.map((x: string) => `  -H ${x} \\`).join("\n");
+  return `curl -X POST \\\n  ${s.endpoint} \\\n${h}\n  -d ${s.body}`;
 }
 
 export default function IntegrationSnippetsSection() {
-  const [activeId, setActiveId] = useState(services[0].id);
+  const [activeId, setActiveId] = useState<string>(services[0].id);
   const [copied, setCopied] = useState(false);
-  const active = services.find((s) => s.id === activeId)!;
+  const [latency, setLatency] = useState(43);
+
+  // services is a fixed, non-empty local array and activeId only ever
+  // comes from it, so this find can never actually miss.
+  const active = services.find((s) => s.id === activeId) as Service;
+
+  const select = (id: string) => {
+    if (id === activeId) return;
+    setActiveId(id);
+    setLatency(18 + Math.floor(Math.random() * 55));
+  };
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(buildSnippet(active));
+    await navigator.clipboard.writeText(plainSnippet(active));
     setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setTimeout(() => setCopied(false), 1300);
   };
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-16">
-      <div className="mb-10 text-center">
-        <span className="inline-block rounded-full bg-accent-subtle px-3 py-1 text-xs font-medium text-accent">
-          integrations
+    <section className="bg-bg-base font-sans antialiased transition-colors duration-300">
+      <div className="max-w-3xl mx-auto px-6 pt-24 pb-24">
+        <span className="block font-mono text-xs font-medium tracking-widest text-accent uppercase mb-5">
+          Webhook capture
         </span>
-        <h2 className="mt-3 text-2xl font-medium text-text-primary sm:text-3xl">
-          Point any service at HookLens
-        </h2>
-        <p className="mx-auto mt-2 max-w-md text-sm text-text-secondary sm:text-base">
-          Stripe, GitHub, Twilio, Slack, SendGrid, Razorpay. Swap the tab, copy
-          the url, paste it in — your dashboard is already listening.
+
+        <h1 className="font-sans font-bold text-4xl sm:text-5xl leading-tight tracking-tight text-text-primary mb-4">
+          Send it anywhere.
+          <br />
+          Watch it land.
+        </h1>
+
+        <p className="text-base leading-relaxed text-text-secondary max-w-md mb-12">
+          Point any service at{" "}
+          <code className="font-mono text-sm bg-bg-surface border border-border-default rounded px-1.5 py-0.5 text-text-primary">
+            hooklens.dev/h/abc123xyz
+          </code>{" "}
+          and every request shows up in your dashboard the moment it arrives.
         </p>
-      </div>
 
-      <div className="flex flex-col overflow-hidden rounded-xl border border-border-default bg-bg-card shadow-sm md:flex-row">
-        {/* Service tabs */}
-        <div className="flex overflow-x-auto border-b border-border-subtle md:w-40 md:flex-col md:overflow-visible md:border-b-0 md:border-r">
-          {services.map((service) => {
-            const Icon = service.icon;
-            const isActive = service.id === activeId;
-            return (
-              <button
-                key={service.id}
-                onClick={() => setActiveId(service.id)}
-                className="relative flex shrink-0 items-center gap-2 px-4 py-3 text-sm transition-colors md:w-full"
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="active-tab"
-                    className="absolute inset-0 bg-bg-surface md:border-l-2 md:border-l-accent"
-                    transition={{ type: "spring", stiffness: 400, damping: 35 }}
-                  />
-                )}
-                <Icon
-                  className={`relative z-10 h-4 w-4 shrink-0 ${
-                    isActive ? "text-accent" : "text-text-secondary"
-                  }`}
-                />
-                <span
-                  className={`relative z-10 whitespace-nowrap ${
-                    isActive
-                      ? "font-medium text-text-primary"
-                      : "text-text-secondary"
-                  }`}
-                >
-                  {service.name}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <div className="bg-bg-card border border-border-default rounded-xl overflow-hidden shadow-md">
+          <div className="p-4 border-b border-border-subtle">
+            <LayoutGroup id="integration-tabs">
+              <div className="flex gap-2 bg-bg-sidebar border border-border-default w-fit rounded-md p-0.75">
+                {services.map((s) => {
+                  const isActive = s.id === activeId;
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => select(s.id)}
+                      className="relative"
+                    >
+                      <div className="relative px-2.5 py-1.5 text-sm">
+                        {isActive && (
+                          <motion.div
+                            layoutId="integration-tab-pill"
+                            className="absolute inset-0 rounded-[5px] pointer-events-none bg-bg-card shadow-md border border-border-default"
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                        <span
+                          className={`relative z-10 transition-colors ${
+                            isActive
+                              ? "font-medium text-text-primary"
+                              : "text-text-secondary"
+                          }`}
+                        >
+                          {s.name}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </LayoutGroup>
+          </div>
 
-        {/* Code panel */}
-        <div className="flex-1">
-          <div className="flex items-center gap-1.5 border-b border-border-subtle px-4 py-2.5">
-            <span className="h-2 w-2 rounded-full bg-border-strong" />
-            <span className="h-2 w-2 rounded-full bg-border-strong" />
-            <span className="h-2 w-2 rounded-full bg-border-strong" />
-            <span className="ml-2 font-mono text-xs text-text-muted">
+          <div className="flex items-center gap-2.5 px-5 py-3 border-b border-border-subtle">
+            <span className="font-mono text-xs font-semibold tracking-wide text-post-text bg-post-bg rounded px-1.5 py-0.5">
+              POST
+            </span>
+            <span className="font-mono text-xs text-text-muted">
               {active.filename}
             </span>
             <button
               onClick={handleCopy}
-              className="ml-auto flex items-center gap-1 text-xs text-text-muted transition-colors hover:text-text-primary"
+              className={`ml-auto flex items-center gap-1.5 bg-bg-surface border border-border-default font-sans text-xs font-medium px-2.5 py-1.5 rounded-md transition-colors ${
+                copied
+                  ? "text-success border-success-border"
+                  : "text-text-secondary hover:text-text-primary"
+              }`}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {copied ? (
                   <motion.span
                     key="check"
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, scale: 0.7 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center gap-1 text-success"
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.12 }}
+                    className="flex items-center gap-1.5"
                   >
-                    <Check className="h-3.5 w-3.5" />
-                    copied
+                    <Check size={13} /> Copied
                   </motion.span>
                 ) : (
                   <motion.span
                     key="copy"
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, scale: 0.7 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center gap-1"
+                    exit={{ opacity: 0, scale: 0.7 }}
+                    transition={{ duration: 0.12 }}
+                    className="flex items-center gap-1.5"
                   >
-                    <Copy className="h-3.5 w-3.5" />
-                    copy
+                    <Copy size={13} /> Copy
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -196,40 +200,62 @@ export default function IntegrationSnippetsSection() {
           <AnimatePresence mode="wait">
             <motion.pre
               key={active.id}
-              initial={{ opacity: 0, y: 4 }}
+              initial={{ opacity: 0, y: 3 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.15 }}
-              className="overflow-x-auto whitespace-pre-wrap px-4 py-4 font-mono text-[13px] leading-7 text-text-primary"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.14, ease: "easeOut" }}
+              className="m-0 px-5 py-6 font-mono text-sm leading-loose overflow-x-auto text-text-secondary"
             >
               <code>
-                curl -X POST \{"\n"}
-                {"  "}
-                <span className="text-text-accent">{active.endpoint}</span> \
+                <span className="text-accent font-medium">curl -X POST</span>{" "}
+                {"\\"}
+                {"\n  "}
+                <span className="text-text-primary">
+                  {active.endpoint}
+                </span>{" "}
+                {"\\"}
                 {"\n"}
-                {active.headers.map((header, i) => (
+                {active.headers.map((h: string, i: number) => (
                   <span key={i}>
-                    {"  "}-H{" "}
-                    <span className="text-text-secondary">{header}</span> \
+                    {"  "}
+                    <span className="text-accent font-medium">-H</span> {h}{" "}
+                    {"\\"}
                     {"\n"}
                   </span>
                 ))}
-                {"  "}-d{" "}
+                {"  "}
+                <span className="text-accent font-medium">-d</span>{" "}
                 <span className="text-text-secondary">{active.body}</span>
               </code>
             </motion.pre>
           </AnimatePresence>
 
-          <div className="flex items-center justify-between border-t border-success-border bg-success-bg px-4 py-2.5">
-            <span className="font-mono text-xs text-success">200 OK</span>
-            <span className="text-xs text-success">captured in 43ms</span>
+          <div className="flex items-center justify-between px-5 py-3 border-t border-border-subtle">
+            <span className="flex items-center gap-2 font-mono text-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-success" />
+              <span className="text-text-primary font-semibold">200</span>
+              <span className="text-text-muted">OK</span>
+            </span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={latency}
+                initial={{ opacity: 0, y: -2 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 2 }}
+                transition={{ duration: 0.15 }}
+                className="font-mono text-xs text-text-muted"
+              >
+                captured in {latency}ms
+              </motion.span>
+            </AnimatePresence>
           </div>
         </div>
-      </div>
 
-      <p className="mt-6 text-center text-xs text-text-muted">
-        Works with any service that sends a webhook — not just the six above.
-      </p>
+        <p className="mt-5 text-sm text-text-secondary">
+          Works with anything that sends a webhook — these six are just the
+          familiar ones.
+        </p>
+      </div>
     </section>
   );
 }

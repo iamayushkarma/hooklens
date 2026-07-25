@@ -292,7 +292,7 @@ export default function HowItWorks() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-16 md:py-24" ref={container}>
+    <section className="mx-auto max-w-6xl px-5 py-16 md:py-24" ref={container}>
       <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:gap-16">
         {/* Left: sticky heading */}
         <div className="md:sticky md:top-0 md:h-screen md:flex md:flex-col md:justify-center">
@@ -325,6 +325,6 @@ export default function HowItWorks() {
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

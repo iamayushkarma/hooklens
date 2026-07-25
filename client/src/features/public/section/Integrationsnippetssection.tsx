@@ -252,7 +252,7 @@ export default function IntegrationSnippetsSection() {
         </div>
 
         <p className="mt-5 text-sm text-text-secondary">
-          Works with anything that sends a webhook — these six are just the
+          Works with anything that sends a webhook these six are just the
           familiar ones.
         </p>
       </div>

@@ -66,7 +66,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="bg-bg-card font-sans antialiased">
+    <section id="faq" className="bg-bg-card font-sans antialiased">
       <div className="max-w-6xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-[1fr_560px] gap-x-16 gap-y-10 items-start">
         <h2 className="text-[4rem] leading-none font-extrabold tracking-tight text-text-primary pt-1">
           FAQ<span className="italic font-serif font-normal">s</span>

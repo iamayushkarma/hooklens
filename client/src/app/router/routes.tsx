@@ -90,6 +90,7 @@ import EndpointSettings from "@/features/endpoint/pages/EndpointSettings";
 import RequestDetail from "@/features/request/pages/RequestDetail";
 import Account from "@/features/settings/pages/Account";
 import AppSettings from "@/features/settings/pages/AppSettings";
+import NotFound from "@/features/public/pages/NotFound";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -140,5 +141,6 @@ export const appRoutes = (
     <Route path="/" element={<MainLayout />}>
       <Route index element={<HomePage />} />
     </Route>
+    <Route path="*" element={<NotFound />} />
   </Routes>
 );

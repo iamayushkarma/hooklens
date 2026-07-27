@@ -10,55 +10,54 @@ interface FAQ {
 
 const faqs: FAQ[] = [
   {
-    id: "volume",
-    question: "Do you offer volume discounts?",
+    id: "how-it-works",
+    question: "How does HookLens actually work?",
     answer:
-      "Yes. Discounts apply automatically across all your titles — you don't need to ask for them or negotiate per game. As your combined DAU crosses each tier, your rate drops on the next invoice, and every title you run counts toward the total.",
+      "You create an endpoint and get a unique URL. Point any webhook Stripe, GitHub, your own backend, anything at that URL, and every request that hits it is captured, sanitized, and logged instantly. You can inspect headers, body, and query params in real time from your dashboard.",
   },
   {
-    id: "multiple",
-    question: "What if I have multiple games?",
+    id: "replay",
+    question: "Can I replay a captured request?",
     answer:
-      "Every game you add pools into the same volume discount — no separate contracts, no separate dashboards. Add a new title from your account in a couple of clicks and it starts contributing to your tier immediately.",
+      "Yes. Any request you've captured can be replayed against a different target URL with one click same method, headers, and body. This is useful for testing how your local server or a staging environment handles a real payload without waiting for the original event to fire again.",
   },
   {
-    id: "fees",
-    question: "Are there hidden fees?",
+    id: "disabled-endpoint",
+    question: "What happens if I disable an endpoint?",
     answer:
-      "No. What's on your invoice is what you pay, every month. No setup fees, no per-seat charges, no surprise line items for support or integrations. If a price ever changes, we tell you at least 30 days before it takes effect.",
+      "Incoming requests to a disabled endpoint are silently dropped the sender still gets a 200 OK, so you won't trigger retries or failure alerts on their end, but nothing gets stored or shown in your dashboard until you reactivate it.",
   },
   {
-    id: "setup",
-    question: "How long does setup take?",
+    id: "ai-explain",
+    question: "What does the AI payload explanation do?",
     answer:
-      "Most teams are integrated and live within a day. Drop in the SDK, verify events are flowing in the dashboard, and you're done — there's no approval queue or onboarding call required to get started.",
+      "For any captured request, you can ask HookLens to explain the payload in plain English what event it represents, what fields matter, and anything unusual about the structure. Handy when you're debugging a webhook from a provider you're not familiar with.",
   },
   {
-    id: "dau",
-    question: "Can I start below 10k DAU?",
+    id: "projects-workspaces",
+    question: "How are projects and workspaces organized?",
     answer:
-      "Yes. There's no minimum to get started — pricing scales as you grow, so you're never paying for headroom you don't need yet. Plenty of teams start on their very first build and scale up from there.",
+      "A workspace is your team's home base invite members, manage roles, and see everything happening across your webhooks. Inside a workspace, you create projects to group related endpoints, so a checkout flow's webhooks stay separate from your CI notifications.",
   },
   {
-    id: "cancel",
-    question: "Can I cancel anytime?",
+    id: "team-roles",
+    question: "Can I invite teammates and control their access?",
     answer:
-      "Yes, there's no lock-in. Cancel from your account settings whenever you like and you'll keep access through the end of your current billing period — no cancellation fee, no exit call required.",
+      "Yes. Workspace owners and admins can invite members by email, assign roles, and remove access at any time. Only the owner can delete a workspace, and ownership must be transferred before an owner can delete their account.",
   },
   {
-    id: "support",
-    question: "What kind of support do I get?",
+    id: "realtime",
+    question: "Do I see requests live, or do I need to refresh?",
     answer:
-      "Every plan includes email support with same-day responses on business days. Larger teams also get a shared Slack channel with our engineers, so integration questions get answered in minutes instead of ticket queues.",
+      "Requests stream into your dashboard in real time over a socket connection the moment they're captured no polling or manual refresh needed. You'll see new requests, replays, and endpoint status changes as they happen.",
   },
   {
-    id: "data",
-    question: "Who owns the data?",
+    id: "data-safety",
+    question: "Is sensitive data in my webhooks safe?",
     answer:
-      "You do, fully. We never sell or share your data with third parties, and you can export everything — raw events, aggregates, and reports — at any time from the dashboard or the API.",
+      "Incoming headers, bodies, and query params are sanitized before they're ever stored, stripping common sensitive fields. You can delete any individual request permanently, and deleting an endpoint removes all of its logged requests along with it.",
   },
 ];
-
 export default function FAQSection() {
   const [openId, setOpenId] = useState<string>("");
 

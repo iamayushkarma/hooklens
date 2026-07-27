@@ -66,7 +66,7 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="bg-bg-base font-sans antialiased">
+    <section className="bg-bg-card font-sans antialiased">
       <div className="max-w-6xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-[1fr_560px] gap-x-16 gap-y-10 items-start">
         <h2 className="text-[4rem] leading-none font-extrabold tracking-tight text-text-primary pt-1">
           FAQ<span className="italic font-serif font-normal">s</span>
@@ -84,7 +84,7 @@ export default function FAQSection() {
                   type="button"
                   onClick={() => toggle(faq.id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-start justify-between gap-6 px-7 py-5 text-left cursor-pointer hover:bg-base-hover transition-colors"
+                  className="w-full flex items-start justify-between gap-6 px-7 py-5 text-left cursor-pointer hover:bg-bg-sidebar/70 transition-colors"
                 >
                   <span className="text-[17px] font-semibold text-text-primary">
                     {faq.question}
@@ -107,7 +107,7 @@ export default function FAQSection() {
                       transition={{ duration: 0.25, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <p className="px-7 pb-5 text-[15px] leading-relaxed text-text-secondary">
+                      <p className="px-7 pb-5 mt-2 text-[15px] leading-relaxed text-text-secondary">
                         {faq.answer}
                       </p>
                     </motion.div>

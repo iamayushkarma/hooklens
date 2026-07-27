@@ -7,7 +7,7 @@ import BentoSection from "../section/Bento/BentoSection";
 import HowItWorksSection from "../section/HowItWorksSection";
 import WhyChooseUs from "../section/WhyChooseUs";
 import IntegrationSnippetsSection from "../section/Integrationsnippetssection";
-import FAQSection from "../section/Faqsection";
+import FAQSection from "../section/FAQSection";
 import CTASection from "../section/CTASection";
 
 function HomePage() {

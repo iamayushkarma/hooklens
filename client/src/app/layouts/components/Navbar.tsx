@@ -5,12 +5,11 @@ import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { Button } from "@/shared/components/ui/Button";
 
 const navLinks = [
-  { label: "Features", href: "#" },
-  { label: "How it Works", href: "#" },
-  { label: "Use Cases", href: "#" },
-  { label: "FAQ", href: "#" },
+  { label: "Features", href: "#features" },
+  { label: "How it Works", href: "#how-it-works" },
+  { label: "Use Cases", href: "#use-cases" },
+  { label: "FAQ", href: "#faq" },
 ];
-
 function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
   const { goToHome, goToRegister } = useAppNavigation();

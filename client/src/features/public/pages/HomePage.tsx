@@ -18,7 +18,10 @@ function HomePage() {
       <HeroDashboardImage />
       <Problemwesolve />
       <WhyIBuiltSection />
-      <section className="flex items-center justify-center bg-white">
+      <section
+        id="features"
+        className="flex items-center justify-center bg-white"
+      >
         <BentoSection />
       </section>
       <HowItWorksSection />

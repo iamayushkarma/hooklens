@@ -60,7 +60,7 @@ const faqs: FAQ[] = [
 ];
 
 export default function FAQSection() {
-  const [openId, setOpenId] = useState<string>(faqs[0].id);
+  const [openId, setOpenId] = useState<string>("");
 
   const toggle = (id: string) => {
     setOpenId((current) => (current === id ? "" : id));

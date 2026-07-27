@@ -92,7 +92,10 @@ export default function IntegrationSnippetsSection() {
   };
 
   return (
-    <section className="bg-bg-base font-sans antialiased transition-colors duration-300">
+    <section
+      id="use-cases"
+      className="bg-bg-base font-sans antialiased transition-colors duration-300"
+    >
       <div className="max-w-3xl mx-auto px-6 pt-24 pb-24">
         <span className="block font-mono text-xs font-medium tracking-widest text-accent uppercase mb-5">
           Webhook capture

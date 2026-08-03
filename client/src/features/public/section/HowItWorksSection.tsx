@@ -137,17 +137,16 @@ export default function HowItWorks() {
       </div>
 
       <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {/* connecting thread — desktop only */}
         <div className="pointer-events-none absolute left-[6%] right-[6%] top-[38px] hidden h-px bg-border-default lg:block" />
         <motion.div
-          className="pointer-events-none absolute top-[35px] hidden h-1.5 w-1.5 rounded-full bg-accent lg:block"
-          style={{ left: "6%" }}
-          animate={{ left: ["6%", "94%"], opacity: [0, 1, 1, 0] }}
+          className="pointer-events-none absolute top-[37px] hidden h-[2px] origin-left rounded-full bg-accent lg:block"
+          style={{ left: "6%", width: "88%" }}
+          animate={{ scaleX: [0, 1, 1], opacity: [1, 1, 0] }}
           transition={{
             duration: 4,
             repeat: Infinity,
-            ease: "linear",
-            times: [0, 0.08, 0.92, 1],
+            ease: "easeInOut",
+            times: [0, 0.85, 1],
           }}
         />
 
@@ -159,7 +158,6 @@ export default function HowItWorks() {
               key={step.title}
               className="relative overflow-hidden rounded-2xl border border-border-default bg-bg-card px-8 py-6 transition-transform duration-150 hover:-translate-y-0.5"
             >
-              {/* big faint number, top-right, like the reference */}
               <span className="pointer-events-none absolute top-6 right-4 select-none font-mono text-[42px] font-bold leading-none text-text-primary/[0.06]">
                 {step.number}
               </span>

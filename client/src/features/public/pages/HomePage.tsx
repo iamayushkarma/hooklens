@@ -4,7 +4,7 @@ import Problemwesolve from "../section/Problemwesolve";
 import HeroDashboardImage from "../section/HeroDashboardImage";
 import WhyIBuiltSection from "../section/Whyibuiltsection";
 import BentoSection from "../section/Bento/BentoSection";
-import HowItWorksSection from "../section/HowItWorksSection";
+import { HowItWorksSection } from "../section/HowItWorksSection";
 import WhyChooseUs from "../section/WhyChooseUs";
 import IntegrationSnippetsSection from "../section/Integrationsnippetssection";
 import FAQSection from "../section/FAQSection";

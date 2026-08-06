@@ -3,6 +3,7 @@ import { LayoutGroup, motion } from "motion/react";
 import logo from "@/assets/icons/logo-icon.png";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { Button } from "@/shared/components/ui/Button";
+import ThemeSwitcher from "@/shared/components/ui/ThemeToggler";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -66,9 +67,10 @@ function Navbar() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
+          <ThemeSwitcher variant="simple" />
           <a
             href="/login"
-            className="text-sm text-text-secondary hover:text-text-primary transition-colors hidden sm:block cursor-pointer"
+            className="text-sm ml-2 text-text-secondary hover:text-text-primary transition-colors hidden sm:block cursor-pointer"
           >
             Login
           </a>

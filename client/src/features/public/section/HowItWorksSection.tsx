@@ -278,11 +278,6 @@ export function HowItWorksSection() {
       id="how-it-works"
       className="relative w-full overflow-hidden bg-bg-base py-24"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 left-1/2 h-72 w-[900px] -translate-x-1/2 rounded-full bg-gradient-to-r from-post-bg via-get-bg to-patch-bg opacity-60 blur-3xl"
-      />
-
       <div className="relative mx-auto max-w-6xl px-5">
         <div className="mb-12 max-w-2xl">
           <span className="relative inline-flex items-center">

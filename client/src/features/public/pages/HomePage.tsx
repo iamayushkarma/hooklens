@@ -1,4 +1,3 @@
-import ThemeSwitcher from "@/shared/components/ui/ThemeToggler";
 import HeroSection from "../section/HeroSection";
 import Problemwesolve from "../section/Problemwesolve";
 import HeroDashboardImage from "../section/HeroDashboardImage";
@@ -13,7 +12,6 @@ import CTASection from "../section/CTASection";
 function HomePage() {
   return (
     <div className="top-16">
-      <ThemeSwitcher />
       <HeroSection />
       <HeroDashboardImage />
       <Problemwesolve />

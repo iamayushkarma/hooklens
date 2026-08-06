@@ -168,7 +168,7 @@ function RegisterPage() {
                       console.error(error);
                     }
                   }}
-                  className="bg-white flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
+                  className="bg-white w-full flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
                 >
                   <FcGoogle className="size-5" />
                   {/* Mobile */}

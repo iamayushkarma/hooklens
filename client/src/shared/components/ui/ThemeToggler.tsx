@@ -85,7 +85,7 @@ function ThemeSwitcher({ variant = "tabs" }: ThemeSwitcherProps) {
       <button
         onClick={() => setTheme(isDark ? "light" : "dark")}
         aria-label="Toggle theme"
-        className="relative flex size-9 cursor-pointer items-center justify-center rounded-lg border border-border-default bg-bg-card text-text-secondary transition-colors hover:text-text-primary"
+        className="relative flex size-9 cursor-pointer items-center justify-center rounded-lg text-text-secondary hover:text-text-primary"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
@@ -96,7 +96,7 @@ function ThemeSwitcher({ variant = "tabs" }: ThemeSwitcherProps) {
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="flex items-center justify-center"
           >
-            {isDark ? <Moon className="size-4" /> : <Sun className="size-4" />}
+            {isDark ? <Moon className="size-5" /> : <Sun className="size-5" />}
           </motion.span>
         </AnimatePresence>
       </button>

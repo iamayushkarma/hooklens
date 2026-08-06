@@ -51,7 +51,7 @@ function LoginPage() {
     <section className="w-full">
       <div className="w-full flex max-sm:flex-col min-h-screen relative">
         {/* Right section */}
-        <div className="w-full max-sm:h-40 md:w-[48.5%] flex items-center overflow-hidden bg-accent relative">
+        <div className="w-full max-sm:h-40 md:w-1/2 flex items-center overflow-hidden bg-accent relative">
           <div className="md:w-3/4 p-8 md:p-20 flex flex-col gap-3">
             <h2 className="text-white text-2xl md:text-5xl font-bold">
               Good to See You Again

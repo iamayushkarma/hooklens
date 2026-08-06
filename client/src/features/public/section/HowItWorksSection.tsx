@@ -182,7 +182,7 @@ function VisualExplain({ active }: { active: boolean }) {
           <span className="rounded bg-post-bg px-1 font-mono font-semibold text-post-text">
             payment_intent.succeeded
           </span>{" "}
-          for <span className="font-semibold text-member-text">$49.00</span> —
+          for <span className="font-semibold text-member-text">₹1999.00</span> -
           the charge cleared.
         </p>
       </div>

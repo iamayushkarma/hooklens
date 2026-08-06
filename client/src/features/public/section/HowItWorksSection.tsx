@@ -9,6 +9,7 @@ import {
   ArrowRight,
   Zap,
 } from "lucide-react";
+import { Button } from "@/shared/components/ui/Button";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -284,9 +285,12 @@ export function HowItWorksSection() {
 
       <div className="relative mx-auto max-w-6xl px-5">
         <div className="mb-12 max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-owner-border bg-owner-bg px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-accent">
-            <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
-            Four steps, sixty seconds
+          <span className="relative inline-flex items-center [transform:rotate(-1deg)]">
+            <span className="absolute left-1.5 top-1.5 rounded-full border-2 border-dashed border-border-strong px-[18px] py-2 text-transparent" />
+            <span className="relative inline-flex items-center gap-1.5 rounded-full border-2 border-text-primary bg-accent px-[18px] py-2 text-[12px] font-extrabold uppercase tracking-wide text-white">
+              <Zap className="h-3.5 w-3.5" strokeWidth={3} />
+              Four steps, sixty seconds
+            </span>
           </span>
           <h2 className="mt-5 text-4xl font-semibold leading-[1.1] tracking-tight text-text-primary sm:text-5xl">
             How HookLens{" "}
@@ -306,21 +310,28 @@ export function HowItWorksSection() {
           ))}
         </div>
 
-        <div className="relative mt-12 flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-xl bg-gradient-to-r from-accent via-accent to-post-text px-6 py-6 shadow-lg">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-white/10 blur-2xl"
-          />
-          <p className="relative text-[17px] font-semibold text-white">
-            Ship webhooks without the guesswork.
-          </p>
-          <a
-            href="#get-started"
-            className="relative inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-accent shadow-md transition-transform hover:-translate-y-0.5"
-          >
-            Get a URL
-            <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-          </a>
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-6 rounded-lg border border-border-strong bg-card px-6 py-5">
+          <div className="flex flex-col gap-2">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+              Webhooks
+            </span>
+            <p className="text-base font-semibold text-text-primary">
+              Ship webhooks without the guesswork.
+            </p>
+            <div className="inline-flex w-fit items-center gap-2 rounded-md bg-tooltip-bg px-3 py-1.5 font-mono text-[13px] text-tooltip-text">
+              <span className="rounded bg-white/10 px-1.5 py-0.5 text-[11px] font-semibold text-success">
+                POST
+              </span>
+              <span>
+                https://hooklens.com/h/
+                <span className="text-get-text">a1f9c2</span>
+              </span>
+            </div>
+          </div>
+
+          <Button>
+            Get a URL <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+          </Button>
         </div>
       </div>
     </section>

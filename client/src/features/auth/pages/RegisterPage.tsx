@@ -53,7 +53,7 @@ function RegisterPage() {
     <section className="w-full">
       <div className="w-full flex max-sm:flex-col min-h-screen relative">
         {/* Right section */}
-        <div className="w-full max-sm:h-40 md:w-1/2 flex items-center overflow-hidden bg-accent relative">
+        <div className="w-full max-sm:h-40 md:w-1/2 flex items-center overflow-hidden bg-accent sticky top-0 h-screen ">
           <div className="md:w-3/4 p-8 md:p-20 flex flex-col gap-3">
             <h2 className="text-white text-2xl md:text-5xl font-bold">
               Start Building Today
@@ -77,7 +77,7 @@ function RegisterPage() {
         </div>
 
         {/* Left section */}
-        <div className="w-[90%] mx-auto md:w-1/2 bg-bg-base relative">
+        <div className="w-[90%] overflow-y-auto mx-auto md:w-1/2 bg-bg-base relative">
           <div className="flex items-center rounded-lg w-full md:h-full justify-center max-sm:bg-[#1c1c1a] py-10 max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
             <div className="w-114 bg-white p-8 rounded-xl shadow-sm">
               {/* Heading section */}

@@ -27,9 +27,9 @@ function VisualUrl({ active }: { active: boolean }) {
           <span className="h-2 w-2 rounded-full bg-patch-text" />
         </div>
         <p className="break-all font-mono text-[11px] leading-relaxed text-text-secondary">
-          hooklens.dev/
+          hooklens.com/
           <span className="rounded bg-post-bg px-1 font-semibold text-post-text">
-            e/9f2ac1
+            h/9f2ac1
           </span>
         </p>
       </motion.div>

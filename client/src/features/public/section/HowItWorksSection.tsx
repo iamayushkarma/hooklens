@@ -326,7 +326,7 @@ export function HowItWorksSection() {
             </div>
           </div>
 
-          <Button shimmer>
+          <Button className="w-30">
             Get a URL <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </Button>
         </div>

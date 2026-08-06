@@ -148,7 +148,7 @@ function LoginPage() {
                       console.error(error);
                     }
                   }}
-                  className="bg-white flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
+                  className="bg-white w-full flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
                 >
                   <FcGoogle className="size-5" />
                   {/* Mobile */}
@@ -159,7 +159,7 @@ function LoginPage() {
                     Sign in with Google
                   </span>
                 </Button>
-                <Button className="bg-gray-950 flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
+                <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
                   <FaGithub className="size-5" />
                   {/* Mobile */}
                   <span className="sm:hidden">Github</span>

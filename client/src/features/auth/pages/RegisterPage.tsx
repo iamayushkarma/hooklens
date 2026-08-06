@@ -178,7 +178,7 @@ function RegisterPage() {
                     Sign up with Google
                   </span>
                 </Button>
-                <Button className="bg-gray-950 flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
+                <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
                   <FaGithub className="size-5" />
                   {/* Mobile */}
                   <span className="sm:hidden">Github</span>

@@ -49,9 +49,9 @@ function LoginPage() {
   };
   return (
     <section className="w-full">
-      <div className="w-full flex max-sm:flex-col md:p-6 min-h-screen relative">
+      <div className="w-full flex max-sm:flex-col min-h-screen relative">
         {/* Right section */}
-        <div className="w-full max-sm:h-40 md:w-1/2 flex items-center overflow-hidden bg-accent md:rounded-xl relative">
+        <div className="w-full max-sm:h-40 md:w-[48.5%] flex items-center overflow-hidden bg-accent relative">
           <div className="md:w-3/4 p-8 md:p-20 flex flex-col gap-3">
             <h2 className="text-white text-2xl md:text-5xl font-bold">
               Good to See You Again
@@ -74,9 +74,9 @@ function LoginPage() {
           />
         </div>
         {/* left section */}
-        <div className="w-[90%] mx-auto md:w-1/2 bg-bg-base relative">
-          <div className="flex items-center rounded-lg w-full h-145 md:h-full justify-center  max-sm:bg-bg-base max-sm:shadow-lg max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
-            <div className="w-96 h-112">
+        <div className="w-[90%] mx-auto md:w-1/2 relative">
+          <div className="flex items-center rounded-lg w-full h-145 md:h-full justify-center max-sm:shadow-lg max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
+            <div className="w-108 h-135 bg-white p-8 rounded-xl shadow-sm">
               {/* Heading section */}
               <div className="text-center mx-auto">
                 <h2 className="text-2xl font-medium md:font-semibold">

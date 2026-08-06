@@ -285,25 +285,22 @@ export function HowItWorksSection() {
 
       <div className="relative mx-auto max-w-6xl px-5">
         <div className="mb-12 max-w-2xl">
-          <span className="relative inline-flex items-center [transform:rotate(-1deg)]">
+          <span className="relative inline-flex items-center">
             <span className="absolute left-1.5 top-1.5 rounded-full border-2 border-dashed border-border-strong px-[18px] py-2 text-transparent" />
-            <span className="relative inline-flex items-center gap-1.5 rounded-full border-2 border-text-primary bg-accent px-[18px] py-2 text-[12px] font-extrabold uppercase tracking-wide text-white">
-              <Zap className="h-3.5 w-3.5" strokeWidth={3} />
+            <span className="relative inline-flex items-center gap-1.5 rounded-full border-2 border-text-primary bg-accent px-[18px] py-2 text-[11px] font-extrabold uppercase tracking-wide text-white">
+              <Zap className="h-3 w-3" strokeWidth={3} />
               Four steps, sixty seconds
             </span>
           </span>
-          <h2 className="mt-5 text-4xl font-semibold leading-[1.1] tracking-tight text-text-primary sm:text-5xl">
-            How HookLens{" "}
-            <span className="bg-gradient-to-r from-accent via-post-text to-get-text bg-clip-text text-transparent">
-              works
-            </span>
+
+          <h2 className="mt-5 text-4xl font-semibold leading-[1.15] tracking-tight text-text-primary sm:text-5xl">
+            How HookLens works
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-text-secondary">
-            From a blank tab to a decoded webhook — no tunnels, no CLI, no yak
-            shaving.
+
+          <p className="mt-3 max-w-lg text-base leading-relaxed text-text-secondary">
+            From a blank tab to a decoded webhook no tunnels, no CLI, no drama.
           </p>
         </div>
-
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s) => (
             <StepCard key={s.n} step={s} />

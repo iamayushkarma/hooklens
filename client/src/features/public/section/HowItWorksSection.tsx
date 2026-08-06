@@ -307,7 +307,7 @@ export function HowItWorksSection() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-6 rounded-lg border border-border-strong bg-card px-6 py-5">
+        <div className="mt-12 bg-white flex flex-wrap items-center justify-between gap-6 rounded-lg border border-border-strong bg-card px-6 py-5">
           <div className="flex flex-col gap-2">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
               Webhooks

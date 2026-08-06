@@ -115,7 +115,7 @@ function LoginPage() {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="select-none"
+                    className="select-none w-full"
                   >
                     {loading ? "Signing in..." : "Sign in"}
                   </Button>

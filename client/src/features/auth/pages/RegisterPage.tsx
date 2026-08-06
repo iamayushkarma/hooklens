@@ -134,7 +134,7 @@ function RegisterPage() {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="select-none"
+                    className="select-none w-full"
                   >
                     {loading ? "Creating account..." : "Create account"}
                   </Button>

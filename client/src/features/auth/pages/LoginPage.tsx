@@ -12,6 +12,7 @@ import {
   loginSchema,
   type LoginFormData,
 } from "@/shared/validators/auth.validators";
+import BackButton from "@/shared/components/ui/BackButton";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -76,6 +77,10 @@ function LoginPage() {
         {/* left section */}
         <div className="w-[90%] mx-auto md:w-1/2 relative">
           <div className="flex items-center rounded-lg w-full h-145 md:h-full justify-center max-sm:shadow-lg max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
+            <BackButton
+              fallbackHref="/dashboard"
+              className="absolute top-4 left-4"
+            />
             <div className="w-108 h-135 bg-white p-8 rounded-xl shadow-sm">
               {/* Heading section */}
               <div className="text-center mx-auto">

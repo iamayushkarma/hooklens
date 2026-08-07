@@ -1,5 +1,3 @@
-import React from "react";
-
 function BentoHeader() {
   return (
     <div className="relative bg-white">

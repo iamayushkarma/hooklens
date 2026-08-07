@@ -69,11 +69,11 @@ function RegisterPage() {
           </div>
           <img
             src={authPatternOne}
-            className="hidden md:block size-50 absolute top-[-50px]"
+            className="hidden md:block size-50 absolute -top-12.5"
           />
           <img
             src={authPatterTwo}
-            className="hidden md:block size-50 absolute right-0 bottom-[-10px]"
+            className="hidden md:block size-50 absolute right-0 -bottom-2.5"
           />
         </div>
 

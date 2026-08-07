@@ -97,7 +97,7 @@
 }
 
 /* Dark Mode Overrides */
-.dark {
+[data-theme="dark"] {
   --color-bg-base: #0e0e0e;
   --color-bg-surface: #080808;
   --color-bg-sidebar: #0a0a0a;

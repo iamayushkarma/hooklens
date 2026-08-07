@@ -4,8 +4,19 @@ import Sidebar from "@/app/layouts/components/Sidebar";
 import { Outlet } from "react-router-dom";
 import { useSocketConnection } from "@/socket/useSocketConnection";
 import { useNotificationSocket } from "@/features/notification/hooks/useNotificationSocket";
+import { useThemeStore } from "@/store/ui.store";
 
 function DashboardLayout() {
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+
+    return () => {
+      document.documentElement.removeAttribute("data-theme");
+    };
+  }, [theme]);
+
   useSocketConnection();
   useNotificationSocket();
   const [mobileOpen, setMobileOpen] = useState(false);

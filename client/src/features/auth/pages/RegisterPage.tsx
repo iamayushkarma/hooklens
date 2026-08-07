@@ -12,6 +12,7 @@ import {
   registerSchema,
   type RegisterFormData,
 } from "@/shared/validators/auth.validators";
+import BackButton from "@/shared/components/ui/BackButton";
 
 function RegisterPage() {
   const loading = useAuthStore((state) => state.loading);
@@ -79,6 +80,10 @@ function RegisterPage() {
         {/* Left section */}
         <div className="w-[90%] overflow-y-auto mx-auto md:w-1/2 bg-bg-base relative">
           <div className="flex items-center rounded-lg w-full md:h-full justify-center max-sm:bg-[#1c1c1a] py-10 max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
+            <BackButton
+              fallbackHref="/dashboard"
+              className="absolute top-4 left-4"
+            />
             <div className="w-114 bg-white p-8 rounded-xl shadow-sm">
               {/* Heading section */}
               <div className="text-center mx-auto">

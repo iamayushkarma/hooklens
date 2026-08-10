@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface BackButtonProps {
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler;
   fallbackHref?: string;
   showLabel?: boolean;
   label?: string;
@@ -16,20 +16,15 @@ export default function BackButton({
   label = "Back",
   className = "",
 }: BackButtonProps) {
-  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+  function handleClick(e: React.MouseEvent) {
     if (onClick) {
       onClick(e);
       return;
     }
-    const cameFromSomewhere =
-      window.history.length > 1 && document.referrer !== "";
 
-    if (cameFromSomewhere) {
-      window.history.back();
-    } else {
-      window.location.href = fallbackHref;
-    }
+    window.location.href = fallbackHref;
   }
+
   return (
     <motion.button
       type="button"
@@ -66,9 +61,13 @@ export default function BackButton({
           rest: { x: 0 },
           hover: { x: -3 },
         }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 20,
+        }}
       >
-        <ArrowLeft size={16} strokeWidth={2} />
+        <ArrowLeft className="size-4" />
       </motion.span>
 
       {showLabel && <span>{label}</span>}

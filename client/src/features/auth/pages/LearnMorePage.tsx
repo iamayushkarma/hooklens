@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/Button";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LayoutGroup, motion, AnimatePresence } from "motion/react";
 
 function Section({
@@ -215,6 +215,13 @@ function LearnMorePage() {
   const registerRef = (id: string, el: HTMLElement | null) => {
     sectionRefs.current[id] = el;
   };
+  useLayoutEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
 
   useEffect(() => {
     const ACTIVATION_LINE = 140;

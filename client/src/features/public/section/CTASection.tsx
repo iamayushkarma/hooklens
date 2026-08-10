@@ -2,9 +2,13 @@ import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/Button";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
+import { useNavigate } from "react-router-dom";
 
 export default function CTASection() {
   const { goToLogin } = useAppNavigation();
+  const navigate = useNavigate();
+
+  const goToLernMorePage = () => navigate("/lern-more");
   return (
     <section className="relative overflow-hidden bg-white font-sans antialiased">
       <div
@@ -60,7 +64,10 @@ export default function CTASection() {
             />
           </Button>
 
-          <Button className="bg-white text-text-primary hover:bg-base-hover border border-border-default">
+          <Button
+            onClick={goToLernMorePage}
+            className="bg-white text-text-primary hover:bg-base-hover border border-border-default"
+          >
             Learn more
           </Button>
         </motion.div>

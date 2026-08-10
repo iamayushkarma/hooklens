@@ -5,6 +5,13 @@ import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 function HeroSection() {
   const { goToLogin } = useAppNavigation();
+
+  const goToHowItWorks = () => {
+    document.getElementById("how-it-works")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
   return (
     <section className="relative overflow-hidden h-dvh">
       <img
@@ -36,7 +43,7 @@ function HeroSection() {
           </Button>
           <Button
             className="px-6! py-5.5! border border-border-default bg-bg-card text-text-primary hover:bg-base-hover transition-colors"
-            onClick={goToLogin}
+            onClick={goToHowItWorks}
           >
             See how it works
           </Button>

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/Button";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
+import { useNavigate } from "react-router-dom";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -274,7 +275,8 @@ function StepCard({ step }: { step: (typeof steps)[number] }) {
 }
 
 export function HowItWorksSection() {
-  const { goToLogin } = useAppNavigation();
+  const navigate = useNavigate();
+  const goToLernMorePage = () => navigate("/lern-more");
   return (
     <section
       id="how-it-works"
@@ -323,8 +325,11 @@ export function HowItWorksSection() {
             </div>
           </div>
 
-          <Button onClick={goToLogin} className="w-30">
-            Get a URL <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+          <Button
+            onClick={goToLernMorePage}
+            className="bg-bg-base text-text-primary hover:bg-base-hover border border-border-default"
+          >
+            Learn more
           </Button>
         </div>
       </div>

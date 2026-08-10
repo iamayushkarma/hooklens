@@ -75,11 +75,11 @@ const NAV = [
 const OVERVIEW_CARDS = [
   {
     title: "Full request anatomy",
-    body: "Headers, raw body, parsed JSON, query params, IP, user agent, and byte size — nothing summarized away.",
+    body: "Headers, raw body, parsed JSON, query params, IP, user agent, and byte size. Nothing gets summarized away.",
   },
   {
     title: "Live, no refresh",
-    body: "Requests reach your dashboard over a socket the instant they're captured — you never poll for them.",
+    body: "Requests reach your dashboard over a socket the instant they're captured, so you never have to poll for them.",
   },
   {
     title: "Replay with a diff",
@@ -119,7 +119,7 @@ const API_ROUTES: [string, string, string][] = [
   [
     "POST",
     "/h/:slug",
-    "Public capture route — no auth, always returns 200 immediately.",
+    "Public capture route, no auth, always returns 200 immediately.",
   ],
   [
     "GET",
@@ -136,11 +136,11 @@ const API_ROUTES: [string, string, string][] = [
 const FAQS = [
   {
     q: "How long is request data stored?",
-    a: "7 days by default, enforced by a MongoDB TTL index on each request's timestamp — not a cron job, so nothing lingers if a cleanup task fails. You can set a different retention window per endpoint.",
+    a: "7 days by default, enforced by a MongoDB TTL index on each request's timestamp rather than a cron job, so nothing lingers if a cleanup task fails. You can set a different retention window per endpoint.",
   },
   {
     q: "Is the capture endpoint authenticated?",
-    a: "No — /h/:slug is intentionally public, the same way real webhook receivers work. It also always responds 200 immediately, so it never leaks timing information. Every other route requires a valid token.",
+    a: "No, /h/:slug is intentionally public, the same way real webhook receivers work. It also always responds 200 immediately, so it never leaks timing information. Every other route requires a valid token.",
   },
   {
     q: "Can I verify a webhook really came from Stripe or GitHub?",
@@ -148,7 +148,7 @@ const FAQS = [
   },
   {
     q: "Can I replay a request more than once?",
-    a: "Yes — every replay is logged separately with its own status, body, and latency, so you can compare several attempts against the same original request.",
+    a: "Yes, every replay is logged separately with its own status, body, and latency, so you can compare several attempts against the same original request.",
   },
 ];
 
@@ -310,7 +310,7 @@ function LearnMorePage() {
           </h1>
           <p className="text-text-secondary font-normal mt-4 text-base leading-relaxed">
             A unique URL, a live dashboard, and a replay button for every
-            request that ever hits it — this page covers the capture pipeline,
+            request that ever hits it. This page covers the capture pipeline,
             the replay engine, and everything in between.
           </p>
         </motion.div>
@@ -335,10 +335,10 @@ function LearnMorePage() {
                     key={item.id}
                     onClick={() => jumpTo(item.id)}
                     onMouseEnter={() => setHoveredId(item.id)}
-                    className="relative text-left rounded-md"
+                    className="relative text-left rounded-md cursor-pointer"
                   >
                     {isActive && (
-                      <div className="absolute inset-0 rounded-md bg-white border border-border-subtle shadow-sm z-10" />
+                      <div className="absolute inset-0 rounded-md bg-white border border-border-subtle z-10" />
                     )}
                     {!isActive && isHovered && (
                       <motion.div
@@ -401,14 +401,14 @@ function LearnMorePage() {
                 User → Workspace → Project → Endpoint → Request Log → Replay Job
               </Code>
               . A workspace is created automatically on sign-up, and projects
-              group related endpoints — e.g. "Stripe Integration" or "GitHub
-              Automation."
+              group related endpoints, for example "Stripe Integration" or
+              "GitHub Automation."
             </p>
             <p>
               <Code>/h/:slug</Code> is the only route in the app that skips
-              authentication, on purpose — it mirrors how real webhook senders
-              behave. Everything past that, from viewing a request to changing a
-              role, requires a signed-in session.
+              authentication on purpose, since it mirrors how real webhook
+              senders behave. Everything past that, from viewing a request to
+              changing a role, requires a signed-in session.
             </p>
           </Section>
 
@@ -422,7 +422,7 @@ function LearnMorePage() {
               Every endpoint gets a unique URL the moment it's created, e.g.{" "}
               <Code>hooklens.app/h/abc123xyz</Code>. As soon as a request hits
               it, it's written to the log and pushed over a socket scoped to
-              that endpoint — your dashboard updates with no polling and no
+              that endpoint, and your dashboard updates with no polling and no
               refresh.
             </p>
           </Section>
@@ -466,10 +466,11 @@ function LearnMorePage() {
             registerRef={registerRef}
           >
             <p>
-              Pick a captured request and send it again — to localhost, staging,
-              wherever. HookLens re-issues the same method, headers, and body,
-              then records the response status, headers, body, and latency as
-              its own entry, separate from the original request.
+              Pick a captured request and send it again, whether that's
+              localhost, staging, or wherever you need it. HookLens re-issues
+              the same method, headers, and body, then records the response
+              status, headers, body, and latency as its own entry, separate from
+              the original request.
             </p>
             <p>
               Because every replay is logged individually, you can fire the same
@@ -487,8 +488,8 @@ function LearnMorePage() {
             <p>
               The "Explain" button sends a request's method, headers, and body
               to an LLM and gets back a short read on which service likely sent
-              it, what event it represents, and what the key fields mean —
-              useful when you're staring at an unfamiliar payload at 2am. It
+              it, what event it represents, and what the key fields mean. It's
+              useful when you're staring at an unfamiliar payload at 2am, and it
               only runs when you ask for it, never automatically.
             </p>
           </Section>
@@ -529,10 +530,10 @@ function LearnMorePage() {
             registerRef={registerRef}
           >
             <p>
-              Requests expire automatically on a TTL index — <Code>7 days</Code>{" "}
-              by default — rather than a scheduled job, so cleanup can't
-              silently fail. You can set a longer or shorter window per endpoint
-              if you need requests to stick around, or disappear sooner.
+              Requests expire automatically on a TTL index, <Code>7 days</Code>{" "}
+              by default, rather than a scheduled job, so cleanup can't silently
+              fail. You can set a longer or shorter window per endpoint if you
+              need requests to stick around, or disappear sooner.
             </p>
           </Section>
 
@@ -606,7 +607,7 @@ function LearnMorePage() {
               </Button>
               <Button
                 onClick={() => navigate("/")}
-                className="bg-white border border-border-subtle text-text-primary hover:bg-bg-base w-full md:w-fit flex items-center justify-center select-none"
+                className="bg-bg-base border border-border-subtle text-text-primary hover:bg-bg-sidebar w-full md:w-fit flex items-center justify-center select-none"
               >
                 Back to site
               </Button>

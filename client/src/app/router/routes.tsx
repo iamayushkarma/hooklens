@@ -91,7 +91,7 @@ import RequestDetail from "@/features/request/pages/RequestDetail";
 import Account from "@/features/settings/pages/Account";
 import AppSettings from "@/features/settings/pages/AppSettings";
 import NotFound from "@/features/public/pages/NotFound";
-import LearnMorePage from "@/features/auth/pages/LearnMorePage";
+import LearnMorePage from "@/features/public/pages/LearnMorePage";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>

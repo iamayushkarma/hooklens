@@ -27,13 +27,13 @@ function Section({
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
-      <span className="text-xs tracking-[0.15em] font-medium text-accent uppercase">
+      <span className="text-xs tracking-[0.15em] font-semibold text-accent uppercase">
         {eyebrow}
       </span>
-      <h2 className="text-2xl md:text-[1.75rem] font-semibold mt-2 tracking-tight">
+      <h2 className="text-2xl md:text-[1.75rem] font-semibold mt-2 tracking-tight text-text-primary">
         {title}
       </h2>
-      <div className="mt-4 text-text-secondary leading-relaxed [&>p+p]:mt-3">
+      <div className="mt-4 text-text-secondary font-normal leading-relaxed [&>p+p]:mt-3">
         {children}
       </div>
     </motion.section>
@@ -43,8 +43,8 @@ function Section({
 function InfoCard({ title, body }: { title: string; body: string }) {
   return (
     <div className="border border-border-subtle rounded-xl p-5 bg-white transition-colors hover:border-accent/40">
-      <h3 className="font-semibold text-[.95rem]">{title}</h3>
-      <p className="text-sm text-text-secondary mt-1.5 leading-relaxed">
+      <h3 className="font-semibold text-[.95rem] text-text-primary">{title}</h3>
+      <p className="text-sm text-text-secondary font-normal mt-1.5 leading-relaxed">
         {body}
       </p>
     </div>
@@ -53,7 +53,7 @@ function InfoCard({ title, body }: { title: string; body: string }) {
 
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <code className="px-1.5 py-0.5 rounded bg-bg-base text-[.85em] font-mono">
+    <code className="px-1.5 py-0.5 rounded bg-bg-base text-[.85em] font-mono font-medium text-text-primary">
       {children}
     </code>
   );
@@ -106,6 +106,14 @@ const ROLES: [string, string][] = [
   ["Member", "Create endpoints, inspect and replay requests."],
   ["Viewer", "Read-only access to the live feed and detail view."],
 ];
+
+const METHOD_STYLES: Record<string, string> = {
+  GET: "bg-blue-50 text-blue-600",
+  POST: "bg-emerald-50 text-emerald-600",
+  PUT: "bg-amber-50 text-amber-600",
+  PATCH: "bg-violet-50 text-violet-600",
+  DELETE: "bg-red-50 text-red-600",
+};
 
 const API_ROUTES: [string, string, string][] = [
   [
@@ -164,7 +172,9 @@ function FaqItem({
         onClick={onToggle}
         className="w-full flex items-center justify-between py-4 text-left group"
       >
-        <span className="font-medium text-[.95rem] text-text-primary">{q}</span>
+        <span className="font-semibold text-[.95rem] text-text-primary">
+          {q}
+        </span>
         <motion.span
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
@@ -285,13 +295,13 @@ function LearnMorePage() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-2xl"
         >
-          <span className="text-xs tracking-[0.15em] font-medium text-text-secondary uppercase">
+          <span className="text-xs tracking-[0.15em] font-semibold text-text-secondary uppercase">
             Documentation
           </span>
-          <h1 className="text-4xl md:text-[2.75rem] font-semibold tracking-tight mt-3 leading-[1.1]">
+          <h1 className="text-4xl md:text-[2.75rem] font-bold tracking-tight mt-3 leading-[1.1] text-text-primary">
             How HookLens works
           </h1>
-          <p className="text-text-secondary mt-4 text-base leading-relaxed">
+          <p className="text-text-secondary font-normal mt-4 text-base leading-relaxed">
             A unique URL, a live dashboard, and a replay button for every
             request that ever hits it — this page covers the capture pipeline,
             the replay engine, and everything in between.
@@ -318,7 +328,7 @@ function LearnMorePage() {
                     key={item.id}
                     onClick={() => jumpTo(item.id)}
                     onMouseEnter={() => setHoveredId(item.id)}
-                    className="relative text-left rounded-md cursor-pointer"
+                    className="relative text-left rounded-md"
                   >
                     {isActive && (
                       <div className="absolute inset-0 rounded-md bg-white border border-border-subtle shadow-sm z-10" />
@@ -337,8 +347,8 @@ function LearnMorePage() {
                     <span
                       className={`relative z-20 block text-sm py-1.5 px-3 rounded-md transition-colors duration-150 ${
                         isActive
-                          ? "text-text-primary font-medium"
-                          : "text-text-secondary hover:text-text-primary"
+                          ? "text-text-primary font-semibold"
+                          : "text-text-secondary font-normal hover:text-text-primary"
                       }`}
                     >
                       {item.label}
@@ -429,7 +439,9 @@ function LearnMorePage() {
                   }`}
                 >
                   <Code>{field}</Code>
-                  <span className="text-text-secondary text-right">{note}</span>
+                  <span className="text-text-secondary font-normal text-right">
+                    {note}
+                  </span>
                 </div>
               ))}
             </div>
@@ -492,8 +504,12 @@ function LearnMorePage() {
                     i > 0 ? "border-t border-border-subtle" : ""
                   }`}
                 >
-                  <span className="font-medium w-16 shrink-0">{role}</span>
-                  <span className="text-text-secondary">{desc}</span>
+                  <span className="font-semibold text-text-primary w-16 shrink-0">
+                    {role}
+                  </span>
+                  <span className="text-text-secondary font-normal">
+                    {desc}
+                  </span>
                 </div>
               ))}
             </div>
@@ -526,7 +542,11 @@ function LearnMorePage() {
                   className={`py-3 ${i > 0 ? "border-t border-border-subtle" : ""}`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-accent-subtle text-accent">
+                    <span
+                      className={`text-xs font-semibold font-mono px-1.5 py-0.5 rounded ${
+                        METHOD_STYLES[method] ?? "bg-accent-subtle text-accent"
+                      }`}
+                    >
                       {method}
                     </span>
                     <Code>{path}</Code>

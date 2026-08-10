@@ -66,7 +66,7 @@ export default function CTASection() {
 
           <Button
             onClick={goToLernMorePage}
-            className="bg-white text-text-primary hover:bg-base-hover border border-border-default"
+            className="bg-bg-card text-text-primary hover:bg-base-hover border border-border-default"
           >
             Learn more
           </Button>

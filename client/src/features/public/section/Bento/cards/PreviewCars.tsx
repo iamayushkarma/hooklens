@@ -163,12 +163,12 @@ function PreviewCars({ style }: { style: string }) {
 
               {/* Event badge + structured detail, replacing the dense run-on sentence */}
               <div className="space-y-1.5">
-                <span className="inline-block text-[10.5px] text-text-secondary bg-surface-1 py-0.75 rounded">
+                <span className="inline-block text-[10.5px] text-success bg-surface-1 py-0.75 rounded">
                   pull_request.opened
                 </span>
                 <p className="text-text-primary leading-relaxed">
                   Review requested for{" "}
-                  <span className="inline-flex items-center gap-1 align-middle font-mono text-[12.5px] font-medium bg-surface-1 text-text-primary px-1.5 py-px rounded border border-border-default">
+                  <span className="inline-flex items-center gap-1 align-middle font-mono text-[12.5px] bg-bg-base font-medium bg-surface-1 text-text-primary px-1.5 py-px rounded border border-border-default">
                     <GitBranch className="size-3 text-text-muted" />
                     feature/auth
                   </span>{" "}

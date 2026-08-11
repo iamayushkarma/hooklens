@@ -92,6 +92,7 @@ import Account from "@/features/settings/pages/Account";
 import AppSettings from "@/features/settings/pages/AppSettings";
 import NotFound from "@/features/public/pages/NotFound";
 import LearnMorePage from "@/features/public/pages/LearnMorePage";
+import PrivacyPolicyPage from "@/features/public/pages/PrivacyPolicyPage";
 export const appRoutes = (
   <Routes>
     <Route element={<AuthLayout />}>
@@ -142,6 +143,7 @@ export const appRoutes = (
     <Route path="/" element={<MainLayout />}>
       <Route index element={<HomePage />} />
       <Route path="/lern-more" element={<LearnMorePage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

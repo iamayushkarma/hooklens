@@ -142,7 +142,7 @@ export const appRoutes = (
     </Route>
     <Route path="/" element={<MainLayout />}>
       <Route index element={<HomePage />} />
-      <Route path="/lern-more" element={<LearnMorePage />} />
+      <Route path="/learn-more" element={<LearnMorePage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
     </Route>
     <Route path="*" element={<NotFound />} />

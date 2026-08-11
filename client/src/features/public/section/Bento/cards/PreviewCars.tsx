@@ -123,7 +123,7 @@ function PreviewCars({ style }: { style: string }) {
               transition={SPRING}
               className="flex-1 min-w-0 space-y-2"
             >
-              <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center justify-between pt-1.5">
                 <div className="leading-tight">
                   <AnimatePresence initial={false}>
                     {isHovered && (

@@ -3,6 +3,8 @@ import { Button } from "@/shared/components/ui/Button";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LayoutGroup, motion, AnimatePresence } from "motion/react";
+import { RoleBadge } from "@/shared/components/ui/role-badge";
+import type { Role } from "@/shared/lib/role-colors";
 
 function Section({
   id,
@@ -100,11 +102,11 @@ const REQUEST_FIELDS: [string, string][] = [
   ["ip / userAgent", "Sender IP and user agent"],
 ];
 
-const ROLES: [string, string][] = [
-  ["Owner", "Full control, including deleting the workspace."],
-  ["Admin", "Manage projects, endpoints, and members."],
-  ["Member", "Create endpoints, inspect and replay requests."],
-  ["Viewer", "Read-only access to the live feed and detail view."],
+const ROLES: [Role, string][] = [
+  ["owner", "Full control, including deleting the workspace."],
+  ["admin", "Manage projects, endpoints, and members."],
+  ["member", "Create endpoints, inspect and replay requests."],
+  ["viewer", "Read-only access to the live feed and detail view."],
 ];
 
 const METHOD_STYLES: Record<string, string> = {
@@ -513,7 +515,7 @@ function LearnMorePage() {
                   }`}
                 >
                   <span className="font-semibold text-text-primary w-16 shrink-0">
-                    {role}
+                    <RoleBadge role={role} />
                   </span>
                   <span className="text-text-secondary font-normal">
                     {desc}

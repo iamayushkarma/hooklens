@@ -1,13 +1,39 @@
+import { Link } from "react-router-dom";
 import logo from "@/assets/icons/logo-icon.png";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 
 const columns = [
   {
     title: "Product",
-    links: ["How It Works", "Live Capture", "Replay Engine", "Features"],
+    links: [
+      { label: "How It Works", href: "/#how-it-works" },
+      { label: "Live Capture", href: "/#live-capture" },
+      { label: "Replay Engine", href: "/#replay" },
+      { label: "Features", href: "/#features" },
+    ],
   },
-  { title: "Resources", links: ["Code Examples", "FAQ", "Guides", "Support"] },
-  { title: "Company", links: ["About", "Contact", "GitHub", "Privacy Policy"] },
+  {
+    title: "Resources",
+    links: [
+      { label: "Code Examples", href: "/learn-more#api" },
+      { label: "FAQ", href: "/learn-more#faq" },
+      { label: "Guides", href: "/learn-more" },
+      { label: "Support", href: "mailto:support@hooklens.app", external: true },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "mailto:hello@hooklens.app", external: true },
+      {
+        label: "GitHub",
+        href: "https://github.com/your-org/hooklens",
+        external: true,
+      },
+      { label: "Privacy Policy", href: "/privacy-policy" },
+    ],
+  },
 ];
 
 function Footer() {
@@ -75,16 +101,35 @@ function Footer() {
               <div key={col.title}>
                 <p className="font-semibold text-[#ececec] mb-4">{col.title}</p>
                 <ul className="space-y-3">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <a
-                        href="#"
-                        className="text-sm text-[#a1a1aa] hover:text-[#ececec] transition-colors"
-                      >
-                        {link}
-                      </a>
-                    </li>
-                  ))}
+                  {col.links.map((link) =>
+                    link.external ? (
+                      <li key={link.label}>
+                        <a
+                          href={link.href}
+                          target={
+                            link.href.startsWith("http") ? "_blank" : undefined
+                          }
+                          rel={
+                            link.href.startsWith("http")
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                          className="text-sm text-[#a1a1aa] hover:text-[#ececec] transition-colors"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ) : (
+                      <li key={link.label}>
+                        <Link
+                          to={link.href}
+                          className="text-sm text-[#a1a1aa] hover:text-[#ececec] transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
             ))}

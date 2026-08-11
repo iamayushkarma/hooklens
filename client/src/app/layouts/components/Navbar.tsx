@@ -3,13 +3,13 @@ import { LayoutGroup, motion } from "motion/react";
 import logo from "@/assets/icons/logo-icon.png";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { Button } from "@/shared/components/ui/Button";
-import ThemeSwitcher from "@/shared/components/ui/ThemeToggler";
+import { Link } from "react-router-dom";
 
 const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "How it Works", href: "#how-it-works" },
-  { label: "Use Cases", href: "#use-cases" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Features", href: "/#features" },
+  { label: "How it Works", href: "/#how-it-works" },
+  { label: "Use Cases", href: "/#use-cases" },
+  { label: "FAQ", href: "/#faq" },
 ];
 function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -34,9 +34,9 @@ function Navbar() {
               onMouseLeave={() => setHovered(null)}
             >
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   onMouseEnter={() => setHovered(link.label)}
                   className="relative px-3 py-1.5 text-sm"
                 >
@@ -60,7 +60,7 @@ function Navbar() {
                   >
                     {link.label}
                   </span>
-                </a>
+                </Link>
               ))}
             </div>
           </LayoutGroup>

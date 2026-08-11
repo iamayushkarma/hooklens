@@ -18,17 +18,25 @@ const columns = [
       { label: "Code Examples", href: "/learn-more#api" },
       { label: "FAQ", href: "/learn-more#faq" },
       { label: "Guides", href: "/learn-more" },
-      { label: "Support", href: "mailto:support@hooklens.app", external: true },
+      {
+        label: "Support",
+        href: "mailto:ayushkarma.dev@gmail.com",
+        external: true,
+      },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Contact", href: "mailto:hello@hooklens.app", external: true },
+      {
+        label: "Contact",
+        href: "mailto:ayushkarma.dev@gmail.com",
+        external: true,
+      },
       {
         label: "GitHub",
-        href: "https://github.com/your-org/hooklens",
+        href: "https://github.com/iamayushkarma/hooklens",
         external: true,
       },
       { label: "Privacy Policy", href: "/privacy-policy" },

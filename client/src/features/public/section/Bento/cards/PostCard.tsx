@@ -174,9 +174,7 @@ function PostCard({ style }: { style: string }) {
                 </h4>
                 <p className="text-text-secondary text-sm">2:13</p>
               </div>
-              <p className="text-sm truncate">
-                payment_intent.succeeded received from Stripe.
-              </p>
+              <p className="text-sm truncate">received from Stripe.</p>
             </div>
           </div>
           <div className="pl-12 flex gap-2 mt-3">

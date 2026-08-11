@@ -46,10 +46,34 @@ function CountUp({
 }
 
 const reactions = [
-  { icon: Eye, count: 42 },
-  { icon: RotateCcw, count: 18 },
-  { icon: BadgeCheck, count: 12 },
-  { icon: MessageSquare, count: 5 },
+  {
+    icon: Eye,
+    count: 42,
+    bg: "bg-[#EAF3FF]",
+    border: "border-[#D3E6FE]",
+    text: "text-[#3B6FB0]",
+  }, // soft sky blue — views
+  {
+    icon: RotateCcw,
+    count: 18,
+    bg: "bg-[#EAF8F0]",
+    border: "border-[#CFEEDC]",
+    text: "text-[#3E9A6C]",
+  }, // soft mint — replays
+  {
+    icon: BadgeCheck,
+    count: 12,
+    bg: "bg-[#F3F0FF]",
+    border: "border-[#E1DBFE]",
+    text: "text-[#7159C1]",
+  }, // soft lavender — verified
+  {
+    icon: MessageSquare,
+    count: 5,
+    bg: "bg-[#FDF0F6]",
+    border: "border-[#FADCE9]",
+    text: "text-[#C1548C]",
+  }, // soft pink — comments
 ];
 function ReactionPills({
   show,
@@ -87,7 +111,7 @@ function ReactionPills({
                     delay: i * 0.25,
                     ease: "easeOut",
                   }}
-                  className="flex items-center gap-1 rounded-full border border-border-default bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
+                  className={`flex items-center gap-1 rounded-xl border ${r.bg} ${r.border} ${r.text} px-2.5 py-1 text-xs font-medium`}
                 >
                   <Icon className="size-3.5" />
                   <span

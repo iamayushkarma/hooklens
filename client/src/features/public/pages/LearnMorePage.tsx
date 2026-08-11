@@ -217,13 +217,32 @@ function LearnMorePage() {
   const registerRef = (id: string, el: HTMLElement | null) => {
     sectionRefs.current[id] = el;
   };
+
+  // Only force scroll-to-top when there's no hash
   useLayoutEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "instant",
-    });
+    if (!location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
   }, []);
+
+  // Scroll to the hashed section once it's mounted
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      suppressScrollSpy.current = true;
+      const timeout = setTimeout(() => {
+        sectionRefs.current[id]?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        setActiveId(id);
+        suppressTimeout.current = setTimeout(() => {
+          suppressScrollSpy.current = false;
+        }, 700);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [location.hash]);
 
   useEffect(() => {
     const ACTIVATION_LINE = 140;

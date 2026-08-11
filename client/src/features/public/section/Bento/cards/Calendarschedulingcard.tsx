@@ -56,8 +56,6 @@ const violetVariants = makeRevealVariants(8);
 const blueVariants = makeRevealVariants(10);
 const amberVariants = makeRevealVariants(6);
 
-// Gradient + border tokens shared by every pill so the palette stays
-// consistent between the "always on" pills and the revealed ones.
 const pillStyles = {
   blue: "border-blue-200 bg-gradient-to-br from-sky-50 to-blue-100",
   violet: "border-violet-200 bg-gradient-to-br from-violet-50 to-purple-100",
@@ -109,21 +107,21 @@ export default function CalendarSchedulingCard() {
             layout
             transition={shiftSpring}
             style={{ gridColumn: 1, gridRow: 1 }}
-            className={`h-5 rounded-md border ${pillStyles.blue}`}
+            className={`h-5 rounded-[.375em] border ${pillStyles.blue}`}
           />
 
           <motion.div
             layout
             transition={shiftSpring}
             style={{ gridColumn: 2, gridRow: greenBelow ? 2 : 1 }}
-            className={`h-5 rounded-md border ${pillStyles.emerald}`}
+            className={`h-5 rounded-[.375em] border ${pillStyles.emerald}`}
           />
 
           <motion.div
             layout
             transition={shiftSpring}
             style={{ gridColumn: 1, gridRow: 2 }}
-            className={`h-5 rounded-md border ${pillStyles.amber}`}
+            className={`h-5 rounded-[.375em] border ${pillStyles.amber}`}
           />
 
           <AnimatePresence onExitComplete={() => setGreenBelow(false)}>
@@ -139,17 +137,17 @@ export default function CalendarSchedulingCard() {
                 <motion.div
                   variants={violetVariants}
                   style={{ gridColumn: 2, gridRow: 1 }}
-                  className={`h-5 rounded-md border ${pillStyles.violet}`}
+                  className={`h-5 rounded-[.375em] border ${pillStyles.violet}`}
                 />
                 <motion.div
                   variants={blueVariants}
                   style={{ gridColumn: 3, gridRow: 1 }}
-                  className={`h-5 rounded-md border ${pillStyles.blue}`}
+                  className={`h-5 rounded-[.375em] border ${pillStyles.blue}`}
                 />
                 <motion.div
                   variants={amberVariants}
                   style={{ gridColumn: 3, gridRow: 2 }}
-                  className={`h-5 rounded-md border ${pillStyles.amber}`}
+                  className={`h-5 rounded-[.375em] border ${pillStyles.amber}`}
                 />
               </motion.div>
             )}

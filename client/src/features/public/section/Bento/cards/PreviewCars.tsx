@@ -172,7 +172,9 @@ function PreviewCars({ style }: { style: string }) {
                     <GitBranch className="size-3 text-text-muted" />
                     feature/auth
                   </span>{" "}
-                  <span className="text-text-secondary">in</span>{" "}
+                  <span className="text-text-secondary text-[13px]">
+                    in
+                  </span>{" "}
                   <span className="text-text-secondary font-mono text-[12.5px]">
                     hooklens-app
                   </span>
@@ -189,14 +191,14 @@ function PreviewCars({ style }: { style: string }) {
                     animate="animate"
                     exit="exit"
                     transition={SPRING}
-                    className="flex items-center gap-4 text-sm text-text-secondary"
+                    className="flex items-center gap-4 text-sm"
                   >
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[#3B6FB0]">
                       <Clock3 className="size-4" />
                       148 ms
                     </span>
 
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5 text-[#B0813B]">
                       <Database className="size-4" />
                       3.2 KB
                     </span>

@@ -9,7 +9,7 @@ const App = () => {
     initialize();
   }, []);
 
-  if (!initialized) return "loading...";
+  if (!initialized) return;
   return <AppRouter />;
 };
 

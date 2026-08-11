@@ -72,6 +72,9 @@ function ReactionPills({
           <div className="flex flex-wrap gap-1.5 pt-3">
             {reactions.map((r, i) => {
               const Icon = r.icon;
+              const maxDigits = Math.max(
+                ...reactions.map((r) => String(r.count).length),
+              );
 
               return (
                 <motion.span
@@ -84,10 +87,15 @@ function ReactionPills({
                     delay: i * 0.25,
                     ease: "easeOut",
                   }}
-                  className="flex items-center gap-1.5 rounded-full border border-border-default bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
+                  className="flex items-center gap-1 rounded-full border border-border-default bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700"
                 >
                   <Icon className="size-3.5" />
-                  <CountUp target={r.count} start={show} delay={i * 0.25} />
+                  <span
+                    className="inline-block text-center tabular-nums"
+                    style={{ minWidth: `${maxDigits}ch` }}
+                  >
+                    <CountUp target={r.count} start={show} delay={i * 0.25} />
+                  </span>
                 </motion.span>
               );
             })}

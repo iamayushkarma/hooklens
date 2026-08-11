@@ -167,11 +167,16 @@ function PostCard({ style }: { style: string }) {
             <div className="bg-bg-base size-10 rounded-md shrink-0 flex items-center justify-center">
               <FaStripeS className="size-5" />
             </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 text-sm">
-                <h4 className="text-text-primary font-semibold text-sm">
-                  Stripe
-                </h4>
+            <div className="w-full">
+              <div className="flex items-center justify-between gap-2 text-sm">
+                <div className="flex gap-2 items-center">
+                  <h4 className="text-text-primary font-semibold text-sm">
+                    Stripe
+                  </h4>
+                  <span className="px-3 text-[0.65rem] font-medium rounded-full py-0.5 bg-[#EAF8F0] border border-[#CFEEDC] text-[#3E9A6C]">
+                    Success
+                  </span>
+                </div>
                 <p className="text-text-secondary text-sm">2:13</p>
               </div>
               <p className="text-sm truncate">received from Stripe.</p>

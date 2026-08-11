@@ -7,8 +7,8 @@ const columns = [
     title: "Product",
     links: [
       { label: "How It Works", href: "/#how-it-works" },
-      { label: "Live Capture", href: "/#live-capture" },
-      { label: "Replay Engine", href: "/#replay" },
+      { label: "Live Capture", href: "/learn-more#live-capture" },
+      { label: "Replay Engine", href: "/learn-more#replay" },
       { label: "Features", href: "/#features" },
     ],
   },
@@ -16,7 +16,7 @@ const columns = [
     title: "Resources",
     links: [
       { label: "Code Examples", href: "/learn-more#api" },
-      { label: "FAQ", href: "/learn-more#faq" },
+      { label: "FAQ", href: "/#faq" },
       { label: "Guides", href: "/learn-more" },
       {
         label: "Support",

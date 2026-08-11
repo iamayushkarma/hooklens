@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { Clock3, Database, GitBranch } from "lucide-react";
+import { Check, CheckCheck, Clock3, Database, GitBranch } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import CardLayout from "../CardLayout";
 
@@ -145,7 +145,7 @@ function PreviewCars({ style }: { style: string }) {
 
                 <AnimatePresence initial={false}>
                   {isHovered && (
-                    <motion.span
+                    <motion.div
                       key="verified"
                       layout
                       variants={fadeIn}
@@ -153,10 +153,13 @@ function PreviewCars({ style }: { style: string }) {
                       animate="animate"
                       exit="exit"
                       transition={SPRING}
-                      className="shrink-0 rounded-full bg-surface-1 border border-border-default px-2.5 py-0.5 text-xs text-success"
+                      className="shrink-0 flex items-center justify-center gap-1 rounded-full bg-surface-1 border border-border-default px-2.5 py-0.5 text-xs text-success"
                     >
+                      <span>
+                        <CheckCheck className="size-3.5 " />
+                      </span>
                       Verified
-                    </motion.span>
+                    </motion.div>
                   )}
                 </AnimatePresence>
               </div>

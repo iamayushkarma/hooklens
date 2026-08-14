@@ -96,29 +96,33 @@ export default function IntegrationSnippetsSection() {
       id="use-cases"
       className="bg-white font-sans antialiased transition-colors duration-300"
     >
-      <div className="max-w-3xl mx-auto px-6 pt-24 pb-24">
-        <span className="block font-mono text-xs font-medium tracking-widest text-accent uppercase mb-5">
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-14 sm:pt-24 pb-14 sm:pb-24">
+        <span className="block font-mono text-xs font-medium tracking-widest text-accent uppercase mb-4 sm:mb-5">
           Webhook capture
         </span>
 
-        <h1 className="font-sans font-bold text-4xl sm:text-5xl leading-tight tracking-tight text-text-primary mb-4">
+        <h1 className="font-sans font-bold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight text-text-primary mb-4">
           Send it anywhere.
           <br />
           Watch it land.
         </h1>
 
-        <p className="text-base leading-relaxed text-text-secondary max-w-md mb-12">
+        <p className="text-sm sm:text-base leading-relaxed text-text-secondary max-w-md mb-8 sm:mb-12">
           Point any service at{" "}
-          <code className="font-mono text-sm bg-bg-surface border border-border-default rounded px-1.5 py-0.5 text-text-primary">
+          <code className="font-mono text-xs sm:text-sm bg-bg-surface border border-border-default rounded px-1.5 py-0.5 text-text-primary break-all">
             hooklens.dev/h/abc123xyz
           </code>{" "}
           and every request shows up in your dashboard the moment it arrives.
         </p>
 
         <div className="bg-bg-card border border-border-default rounded-xl overflow-hidden shadow-md">
-          <div className="p-4 border-b border-border-subtle">
+          <div className="p-3 sm:p-4 border-b border-border-subtle">
             <LayoutGroup id="integration-tabs">
-              <div className="flex gap-2 bg-bg-sidebar border border-border-default w-fit rounded-md p-0.75">
+              <div className="flex gap-2 bg-bg-sidebar border border-border-default w-full sm:w-fit rounded-md p-0.75 overflow-x-auto no-scrollbar">
                 {services.map((s) => {
                   const isActive = s.id === activeId;
                   return (
@@ -126,9 +130,9 @@ export default function IntegrationSnippetsSection() {
                       key={s.id}
                       type="button"
                       onClick={() => select(s.id)}
-                      className="relative cursor-pointer"
+                      className="relative cursor-pointer shrink-0"
                     >
-                      <div className="relative px-2.5 py-1.5 text-sm">
+                      <div className="relative px-2.5 py-1.5 text-xs sm:text-sm whitespace-nowrap">
                         {isActive && (
                           <motion.div
                             layoutId="integration-tab-pill"
@@ -157,16 +161,16 @@ export default function IntegrationSnippetsSection() {
             </LayoutGroup>
           </div>
 
-          <div className="flex items-center gap-2.5 px-5 py-3 border-b border-border-subtle">
-            <span className="font-mono text-xs font-semibold tracking-wide text-post-text bg-post-bg rounded px-1.5 py-0.5">
+          <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-3 border-b border-border-subtle">
+            <span className="shrink-0 font-mono text-xs font-semibold tracking-wide text-post-text bg-post-bg rounded px-1.5 py-0.5">
               POST
             </span>
-            <span className="font-mono text-xs text-text-muted">
+            <span className="font-mono text-xs text-text-muted truncate">
               {active.filename}
             </span>
             <button
               onClick={handleCopy}
-              className={`ml-auto flex items-center gap-1.5 bg-bg-surface border border-border-default font-sans text-xs font-medium px-2.5 py-1.5 rounded-md transition-colors ${
+              className={`ml-auto shrink-0 flex items-center gap-1.5 bg-bg-surface border border-border-default font-sans text-xs font-medium px-2 sm:px-2.5 py-1.5 rounded-md transition-colors ${
                 copied
                   ? "text-success border-success-border"
                   : "text-text-secondary hover:text-text-primary"
@@ -207,7 +211,7 @@ export default function IntegrationSnippetsSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.14, ease: "easeOut" }}
-              className="m-0 px-5 py-6 font-mono text-sm leading-loose overflow-x-auto text-text-secondary"
+              className="m-0 px-3 sm:px-5 py-4 sm:py-6 font-mono text-xs sm:text-sm leading-relaxed sm:leading-loose overflow-x-auto text-text-secondary"
             >
               <code>
                 <span className="text-accent font-medium">curl -X POST</span>{" "}
@@ -233,7 +237,7 @@ export default function IntegrationSnippetsSection() {
             </motion.pre>
           </AnimatePresence>
 
-          <div className="flex items-center justify-between px-5 py-3 border-t border-border-subtle">
+          <div className="flex items-center justify-between px-3 sm:px-5 py-3 border-t border-border-subtle">
             <span className="flex items-center gap-2 font-mono text-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-success" />
               <span className="text-text-primary font-semibold">200</span>

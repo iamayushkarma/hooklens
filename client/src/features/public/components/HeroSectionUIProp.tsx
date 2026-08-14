@@ -4,7 +4,7 @@ import HeroUiPropThree from "@/features/public/assets/hero-ui-prop-three.png";
 
 function HeroSectionUIProp() {
   return (
-    <div className="relative">
+    <div className="relative hidden md:block">
       <img
         src={HeroUiPropOne}
         alt=""

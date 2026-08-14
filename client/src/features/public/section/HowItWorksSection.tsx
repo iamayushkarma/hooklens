@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Link2,
@@ -10,26 +9,26 @@ import {
   Zap,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/Button";
-import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { useNavigate } from "react-router-dom";
+import { useCardInteraction } from "@/shared/hooks/useCardInteraction";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /* ---------- Step 1 — instant URL ---------- */
 function VisualUrl({ active }: { active: boolean }) {
   return (
-    <div className="flex h-full flex-col justify-center gap-3">
+    <div className="flex h-full flex-col justify-center gap-2 sm:gap-3">
       <motion.div
         animate={{ y: active ? -2 : 0 }}
         transition={{ duration: 0.3, ease: EASE }}
-        className="rounded-lg border border-border-default bg-bg-card p-3 shadow-md"
+        className="rounded-lg border border-border-default bg-bg-card p-2.5 sm:p-3 shadow-md"
       >
         <div className="mb-2 flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-delete-text" />
           <span className="h-2 w-2 rounded-full bg-put-text" />
           <span className="h-2 w-2 rounded-full bg-patch-text" />
         </div>
-        <p className="break-all font-mono text-[11px] leading-relaxed text-text-secondary">
+        <p className="break-all font-mono text-[10px] sm:text-[11px] leading-relaxed text-text-secondary">
           hooklens.com/
           <span className="rounded bg-post-bg px-1 font-semibold text-post-text">
             h/9f2ac1
@@ -48,7 +47,7 @@ function VisualUrl({ active }: { active: boolean }) {
               className="inline-flex items-center gap-1.5 rounded-full bg-member-text px-2.5 py-1 shadow-sm"
             >
               <Check className="h-3 w-3 text-white" strokeWidth={3} />
-              <span className="text-[11px] font-semibold text-white">
+              <span className="text-[10px] sm:text-[11px] font-semibold text-white">
                 Copied
               </span>
             </motion.div>
@@ -98,17 +97,19 @@ function VisualStream({ active }: { active: boolean }) {
             ease: EASE,
             delay: active ? i * 0.06 : 0,
           }}
-          className="flex items-center gap-2 rounded-md border border-border-subtle bg-bg-card px-2 py-1.5 shadow-sm"
+          className="flex items-center gap-1.5 sm:gap-2 rounded-md border border-border-subtle bg-bg-card px-1.5 sm:px-2 py-1.5 shadow-sm"
         >
           <span
-            className={`rounded px-1.5 py-0.5 font-mono text-[9px] font-bold tracking-wide text-white ${r.cls}`}
+            className={`rounded px-1.5 py-0.5 font-mono text-[8px] sm:text-[9px] font-bold tracking-wide text-white ${r.cls}`}
           >
             {r.m}
           </span>
-          <span className="flex-1 truncate font-mono text-[11px] text-text-primary">
+          <span className="flex-1 truncate font-mono text-[10px] sm:text-[11px] text-text-primary">
             {r.p}
           </span>
-          <span className={`font-mono text-[10px] font-bold ${r.sc}`}>
+          <span
+            className={`font-mono text-[9px] sm:text-[10px] font-bold ${r.sc}`}
+          >
             {r.s}
           </span>
         </motion.div>
@@ -118,7 +119,7 @@ function VisualStream({ active }: { active: boolean }) {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-delete-text opacity-70" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-delete-text" />
         </span>
-        <span className="text-[10px] font-bold uppercase tracking-widest text-text-secondary">
+        <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-text-secondary">
           live
         </span>
       </div>
@@ -129,12 +130,12 @@ function VisualStream({ active }: { active: boolean }) {
 /* ---------- Step 3 — replay ---------- */
 function VisualReplay({ active }: { active: boolean }) {
   return (
-    <div className="flex h-full items-center justify-center gap-2">
-      <div className="min-w-0 flex-1 rounded-lg border border-border-default bg-bg-card p-2.5 shadow-sm">
-        <p className="text-[9px] font-bold uppercase tracking-wider text-text-muted">
+    <div className="flex h-full items-center justify-center gap-1.5 sm:gap-2">
+      <div className="min-w-0 flex-1 rounded-lg border border-border-default bg-bg-card p-2 sm:p-2.5 shadow-sm">
+        <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-text-muted">
           captured
         </p>
-        <p className="mt-1 truncate font-mono text-[11px] text-text-primary">
+        <p className="mt-1 truncate font-mono text-[10px] sm:text-[11px] text-text-primary">
           payload.json
         </p>
       </div>
@@ -146,16 +147,19 @@ function VisualReplay({ active }: { active: boolean }) {
           ease: EASE,
           repeat: active ? Infinity : 0,
         }}
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent shadow-md"
+        className="grid h-6 w-6 sm:h-7 sm:w-7 shrink-0 place-items-center rounded-full bg-accent shadow-md"
       >
-        <ArrowRight className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />
+        <ArrowRight
+          className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white"
+          strokeWidth={2.5}
+        />
       </motion.div>
 
-      <div className="min-w-0 flex-1 rounded-lg border border-member-border bg-gradient-to-br from-member-bg to-bg-card p-2.5 shadow-sm">
-        <p className="text-[9px] font-bold uppercase tracking-wider text-member-text/70">
+      <div className="min-w-0 flex-1 rounded-lg border border-member-border bg-gradient-to-br from-member-bg to-bg-card p-2 sm:p-2.5 shadow-sm">
+        <p className="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-member-text/70">
           localhost
         </p>
-        <p className="mt-1 font-mono text-[11px] font-bold text-member-text">
+        <p className="mt-1 font-mono text-[10px] sm:text-[11px] font-bold text-member-text">
           200 · 84ms
         </p>
       </div>
@@ -167,7 +171,7 @@ function VisualReplay({ active }: { active: boolean }) {
 function VisualExplain({ active }: { active: boolean }) {
   return (
     <div className="flex h-full flex-col justify-center">
-      <div className="rounded-lg border border-owner-border bg-bg-card p-3 shadow-md">
+      <div className="rounded-lg border border-owner-border bg-bg-card p-2.5 sm:p-3 shadow-md">
         <div className="mb-2 flex items-center gap-1.5">
           <motion.span
             animate={{ rotate: active ? [0, 12, -8, 0] : 0 }}
@@ -176,11 +180,11 @@ function VisualExplain({ active }: { active: boolean }) {
           >
             <Sparkles className="h-3 w-3 text-white" strokeWidth={2.5} />
           </motion.span>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-text-secondary">
             HookLens AI
           </span>
         </div>
-        <p className="text-[11px] leading-relaxed text-text-primary">
+        <p className="text-[10px] sm:text-[11px] leading-relaxed text-text-primary">
           Stripe sent a{" "}
           <span className="rounded bg-post-bg px-1 font-mono font-semibold text-post-text">
             payment_intent.succeeded
@@ -237,36 +241,38 @@ const steps = [
 ];
 
 function StepCard({ step }: { step: (typeof steps)[number] }) {
-  const [hovered, setHovered] = useState(false);
+  const { active: hovered, handlers } = useCardInteraction();
   const Icon = step.icon;
 
   return (
     <motion.article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      {...handlers}
       animate={{ y: hovered ? -4 : 0 }}
       transition={{ duration: 0.25, ease: EASE }}
-      className={`group relative overflow-hidden rounded-xl border border-border-default bg-bg-card p-3 shadow-sm transition-[box-shadow,border-color] duration-300 hover:shadow-lg ${step.ring}`}
+      className={`group relative overflow-hidden rounded-xl border border-border-default bg-bg-card p-3 shadow-sm transition-[box-shadow,border-color] duration-300 hover:shadow-lg select-none touch-manipulation ${step.ring}`}
     >
       <div
-        className={`relative h-[180px] overflow-hidden rounded-lg border border-border-subtle bg-gradient-to-br ${step.tint} via-bg-card to-bg-card p-4`}
+        className={`relative h-[150px] sm:h-[165px] md:h-[180px] overflow-hidden rounded-lg border border-border-subtle bg-gradient-to-br ${step.tint} via-bg-card to-bg-card p-3 sm:p-4`}
       >
         <step.Visual active={hovered} />
       </div>
 
-      <div className="px-1 pb-1 pt-4">
+      <div className="px-1 pb-1 pt-3 sm:pt-4">
         <div className="flex items-center gap-2">
           <span
-            className={`grid h-5 w-5 place-items-center rounded-md font-mono text-[10px] font-bold text-white ${step.badge}`}
+            className={`grid h-5 w-5 place-items-center rounded-md font-mono text-[10px] font-bold text-white shrink-0 ${step.badge}`}
           >
             {step.n}
           </span>
-          <Icon className="h-4 w-4 text-text-secondary" strokeWidth={2} />
-          <h3 className="text-[15px] font-semibold tracking-tight text-text-primary">
+          <Icon
+            className="h-4 w-4 text-text-secondary shrink-0"
+            strokeWidth={2}
+          />
+          <h3 className="text-[14px] sm:text-[15px] font-semibold tracking-tight text-text-primary">
             {step.title}
           </h3>
         </div>
-        <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
+        <p className="mt-2 text-[12.5px] sm:text-[13px] leading-relaxed text-text-secondary">
           {step.body}
         </p>
       </div>
@@ -280,45 +286,45 @@ export function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
-      className="relative w-full overflow-hidden bg-bg-base py-24"
+      className="relative w-full overflow-hidden bg-bg-base py-16 sm:py-20 md:py-24"
     >
-      <div className="relative mx-auto max-w-6xl px-5">
-        <div className="mb-12 max-w-2xl">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-5">
+        <div className="mb-10 sm:mb-12 max-w-2xl">
           <span className="relative inline-flex items-center">
-            <span className="absolute left-1.5 top-1.5 rounded-full border-2 border-dashed border-border-strong px-[18px] py-2 text-transparent" />
-            <span className="relative inline-flex items-center gap-1.5 rounded-full border-2 border-text-primary bg-accent px-[18px] py-2 text-[11px] font-extrabold uppercase tracking-wide text-white">
+            <span className="absolute left-1.5 top-1.5 rounded-full border-2 border-dashed border-border-strong px-[14px] sm:px-[18px] py-1.5 sm:py-2 text-transparent" />
+            <span className="relative inline-flex items-center gap-1.5 rounded-full border-2 border-text-primary bg-accent px-[14px] sm:px-[18px] py-1.5 sm:py-2 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wide text-white">
               <Zap className="h-3 w-3" strokeWidth={3} />
               Four steps, sixty seconds
             </span>
           </span>
 
-          <h2 className="mt-5 text-4xl font-semibold leading-[1.15] tracking-tight text-text-primary sm:text-5xl">
+          <h2 className="mt-4 sm:mt-5 text-3xl sm:text-4xl font-semibold leading-[1.15] tracking-tight text-text-primary md:text-5xl">
             How HookLens works
           </h2>
 
-          <p className="mt-3 max-w-lg text-base leading-relaxed text-text-secondary">
+          <p className="mt-3 max-w-lg text-sm sm:text-base leading-relaxed text-text-secondary">
             From a blank tab to a decoded webhook no tunnels, no CLI, no drama.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s) => (
             <StepCard key={s.n} step={s} />
           ))}
         </div>
 
-        <div className="mt-12 bg-white flex flex-wrap items-center justify-between gap-6 rounded-lg border border-border-strong bg-card px-6 py-5">
-          <div className="flex flex-col gap-2">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+        <div className="mt-10 sm:mt-12 bg-white flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-5 sm:gap-6 rounded-lg border border-border-strong bg-card px-5 sm:px-6 py-5">
+          <div className="flex flex-col gap-2 w-full sm:w-auto">
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
               Webhooks
             </span>
-            <p className="text-base font-semibold text-text-primary">
+            <p className="text-sm sm:text-base font-semibold text-text-primary">
               Ship webhooks without the guesswork.
             </p>
-            <div className="inline-flex w-fit items-center gap-2 rounded-md bg-tooltip-bg px-3 py-1.5 font-mono text-[13px] text-tooltip-text">
-              <span className="rounded bg-white/10 px-1.5 py-0.5 text-[11px] font-semibold text-success">
+            <div className="inline-flex w-fit max-w-full items-center gap-2 rounded-md bg-tooltip-bg px-3 py-1.5 font-mono text-[11px] sm:text-[13px] text-tooltip-text overflow-x-auto">
+              <span className="shrink-0 rounded bg-white/10 px-1.5 py-0.5 text-[10px] sm:text-[11px] font-semibold text-success">
                 POST
               </span>
-              <span>
+              <span className="whitespace-nowrap">
                 https://hooklens.com/h/
                 <span className="text-get-text">a1f9c2</span>
               </span>
@@ -327,7 +333,7 @@ export function HowItWorksSection() {
 
           <Button
             onClick={goToLernMorePage}
-            className="bg-bg-base text-text-primary hover:bg-base-hover border border-border-default"
+            className="w-full sm:w-auto bg-bg-base text-text-primary hover:bg-base-hover border border-border-default"
           >
             Learn more
           </Button>

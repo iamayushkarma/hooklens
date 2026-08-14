@@ -14,15 +14,15 @@ function BentoSection() {
   return (
     <section className="w-full">
       <BentoHeader />
-      <div className="w-6xl grid grid-cols-3 gap-2.5 bg-white mx-auto">
+      <div className="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 bg-white mx-auto px-4 sm:px-6 lg:px-0">
         <CollaborationCard />
         <WebhookCaptureCard />
         <WriteBetterCard />
-        <IntegrationsCard style="col-span-2!" />
+        <IntegrationsCard style="sm:col-span-2! lg:col-span-2!" />
         <AutoGenrateCard />
         <CalendarSchedulingCard />
-        <PostCard style="col-span-2!" />
-        <PreviewCars style="col-span-2!" />
+        <PostCard style="sm:col-span-2! lg:col-span-2!" />
+        <PreviewCars style="sm:col-span-2! lg:col-span-2!" />
         <FollowerGrowthCard />
       </div>
       <BentoFooter />

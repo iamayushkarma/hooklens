@@ -8,7 +8,7 @@ export default function CTASection() {
   const { goToLogin } = useAppNavigation();
   const navigate = useNavigate();
 
-  const goToLernMorePage = () => navigate("/lern-more");
+  const goToLernMorePage = () => navigate("/learn-more");
   return (
     <section className="relative overflow-hidden bg-white font-sans antialiased">
       <div

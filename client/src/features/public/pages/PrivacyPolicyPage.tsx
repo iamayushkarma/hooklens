@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/Button";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { LayoutGroup, motion } from "motion/react";
+import { LayoutGroup, motion, AnimatePresence } from "motion/react";
 
 function Section({
   id,
@@ -21,7 +21,7 @@ function Section({
     <motion.section
       id={id}
       ref={(el: HTMLElement | null) => registerRef(id, el)}
-      className="scroll-mt-28 pt-16 first:pt-0"
+      className="scroll-mt-24 md:scroll-mt-28 pt-12 md:pt-16 first:pt-0"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -30,7 +30,7 @@ function Section({
       <span className="text-xs tracking-[0.15em] font-semibold text-accent uppercase">
         {eyebrow}
       </span>
-      <h2 className="text-2xl md:text-[1.75rem] font-semibold mt-2 tracking-tight text-text-primary">
+      <h2 className="text-xl sm:text-2xl md:text-[1.75rem] font-semibold mt-2 tracking-tight text-text-primary">
         {title}
       </h2>
       <div className="mt-4 text-text-secondary font-normal leading-relaxed [&>p+p]:mt-3">
@@ -42,7 +42,7 @@ function Section({
 
 function Code({ children }: { children: React.ReactNode }) {
   return (
-    <code className="px-1.5 py-0.5 rounded bg-bg-base text-[.85em] font-mono font-medium text-text-primary">
+    <code className="px-1.5 py-0.5 rounded bg-bg-base text-[.85em] font-mono font-medium text-text-primary break-words">
       {children}
     </code>
   );
@@ -89,11 +89,21 @@ const PAYLOAD_FIELDS: [string, string][] = [
   ],
 ];
 
+const THIRD_PARTIES: [string, string][] = [
+  ["MongoDB Atlas", "Stores account, workspace, and request-log data."],
+  ["Render / Vercel", "Hosts the backend API and frontend application."],
+  [
+    "Groq",
+    "Only when you click \"Explain with AI\" on a specific request — that request's method, headers, and body are sent to Groq's API to generate a plain-English summary. This never runs automatically.",
+  ],
+];
+
 function PrivacyPolicyPage() {
   const navigate = useNavigate();
   const [activeId, setActiveId] = useState("overview");
   const [scrolled, setScrolled] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const suppressScrollSpy = useRef(false);
   const suppressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -128,6 +138,7 @@ function PrivacyPolicyPage() {
 
   const jumpTo = (id: string) => {
     setActiveId(id);
+    setMobileNavOpen(false);
     suppressScrollSpy.current = true;
     if (suppressTimeout.current) clearTimeout(suppressTimeout.current);
     sectionRefs.current[id]?.scrollIntoView({
@@ -139,8 +150,10 @@ function PrivacyPolicyPage() {
     }, 700);
   };
 
+  const activeLabel = NAV.find((n) => n.id === activeId)?.label ?? NAV[0].label;
+
   return (
-    <div className="w-full bg-bg-base min-h-screen">
+    <div className="w-full bg-bg-base min-h-screen overflow-x-hidden">
       <header
         className={`sticky top-0 z-30 bg-bg-base/80 backdrop-blur-md transition-shadow duration-300 ${
           scrolled
@@ -155,7 +168,7 @@ function PrivacyPolicyPage() {
               Legal
             </span>
           </Link>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3 sm:gap-5">
             <Link
               to="/"
               className="hidden sm:block text-sm text-text-secondary hover:text-text-primary transition-colors"
@@ -172,7 +185,7 @@ function PrivacyPolicyPage() {
         </div>
       </header>
 
-      <div className="w-[92%] max-w-5xl mx-auto pt-16 pb-10">
+      <div className="w-[92%] max-w-5xl mx-auto pt-10 sm:pt-16 pb-8 sm:pb-10">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -182,7 +195,7 @@ function PrivacyPolicyPage() {
           <span className="text-xs tracking-[0.15em] font-semibold text-text-secondary uppercase">
             Legal
           </span>
-          <h1 className="text-4xl md:text-[2.75rem] font-bold tracking-tight mt-3 leading-[1.1] text-text-primary">
+          <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight mt-3 leading-[1.15] sm:leading-[1.1] text-text-primary">
             Privacy policy
           </h1>
           <p className="text-text-secondary font-normal mt-4 text-base leading-relaxed">
@@ -197,8 +210,59 @@ function PrivacyPolicyPage() {
       </div>
       <div className="w-[92%] max-w-5xl mx-auto border-t border-border-subtle" />
 
-      <div className="w-[92%] max-w-5xl mx-auto py-12 flex gap-16 items-start">
-        <aside className="hidden md:block w-48 shrink-0 sticky top-24 self-start">
+      {/* Mobile / tablet on-page nav — replaces the hidden sidebar below md */}
+      <div className="md:hidden sticky top-14 z-20 bg-bg-base/95 backdrop-blur-md border-b border-border-subtle">
+        <div className="w-[92%] max-w-5xl mx-auto relative">
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen((v) => !v)}
+            className="w-full flex items-center justify-between py-3 text-sm"
+          >
+            <span className="text-text-secondary">
+              On this page:{" "}
+              <span className="text-text-primary font-semibold">
+                {activeLabel}
+              </span>
+            </span>
+            <motion.span
+              animate={{ rotate: mobileNavOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ChevronDown className="size-4 text-text-secondary" />
+            </motion.span>
+          </button>
+          <AnimatePresence>
+            {mobileNavOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden border-t border-border-subtle"
+              >
+                <div className="py-2 flex flex-col max-h-[60vh] overflow-y-auto">
+                  {NAV.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => jumpTo(item.id)}
+                      className={`text-left text-sm py-2 px-1 rounded-md ${
+                        activeId === item.id
+                          ? "text-text-primary font-semibold"
+                          : "text-text-secondary font-normal"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      <div className="w-[92%] max-w-5xl mx-auto py-10 md:py-12 flex gap-10 lg:gap-16 items-start">
+        <aside className="hidden md:block w-44 lg:w-48 shrink-0 sticky top-24 self-start">
           <span className="text-xs tracking-[0.15em] font-medium text-text-secondary uppercase">
             On this page
           </span>
@@ -247,7 +311,7 @@ function PrivacyPolicyPage() {
           </LayoutGroup>
         </aside>
 
-        <div className="flex-1 min-w-0 max-w-2xl">
+        <div className="flex-1 min-w-0 w-full max-w-2xl">
           <Section
             id="overview"
             eyebrow="Overview"
@@ -278,10 +342,10 @@ function PrivacyPolicyPage() {
               {DATA_FIELDS.map(([field, note], i) => (
                 <div
                   key={field}
-                  className={`flex justify-between gap-4 py-2.5 text-sm ${i > 0 ? "border-t border-border-subtle" : ""}`}
+                  className={`flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4 py-2.5 text-sm ${i > 0 ? "border-t border-border-subtle" : ""}`}
                 >
                   <Code>{field}</Code>
-                  <span className="text-text-secondary font-normal text-right">
+                  <span className="text-text-secondary font-normal sm:text-right">
                     {note}
                   </span>
                 </div>
@@ -304,10 +368,10 @@ function PrivacyPolicyPage() {
               {PAYLOAD_FIELDS.map(([field, note], i) => (
                 <div
                   key={field}
-                  className={`flex justify-between gap-4 py-2.5 text-sm ${i > 0 ? "border-t border-border-subtle" : ""}`}
+                  className={`flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4 py-2.5 text-sm ${i > 0 ? "border-t border-border-subtle" : ""}`}
                 >
                   <Code>{field}</Code>
-                  <span className="text-text-secondary font-normal text-right">
+                  <span className="text-text-secondary font-normal sm:text-right">
                     {note}
                   </span>
                 </div>
@@ -365,28 +429,15 @@ function PrivacyPolicyPage() {
               and none of them use your data for their own purposes:
             </p>
             <div className="mt-4 flex flex-col">
-              {[
-                [
-                  "MongoDB Atlas",
-                  "Stores account, workspace, and request-log data.",
-                ],
-                [
-                  "Render / Vercel",
-                  "Hosts the backend API and frontend application.",
-                ],
-                [
-                  "Groq",
-                  "Only when you click \"Explain with AI\" on a specific request — that request's method, headers, and body are sent to Groq's API to generate a plain-English summary. This never runs automatically.",
-                ],
-              ].map(([name, note], i) => (
+              {THIRD_PARTIES.map(([name, note], i) => (
                 <div
                   key={name}
-                  className={`flex justify-between gap-4 py-2.5 text-sm ${i > 0 ? "border-t border-border-subtle" : ""}`}
+                  className={`flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4 py-2.5 text-sm ${i > 0 ? "border-t border-border-subtle" : ""}`}
                 >
                   <span className="font-semibold text-text-primary shrink-0">
                     {name}
                   </span>
-                  <span className="text-text-secondary font-normal text-right">
+                  <span className="text-text-secondary font-normal sm:text-right">
                     {note}
                   </span>
                 </div>

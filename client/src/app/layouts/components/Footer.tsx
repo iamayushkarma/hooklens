@@ -15,22 +15,10 @@ const columns = [
   {
     title: "Resources",
     links: [
-      { label: "Code Examples", href: "/learn-more#api" },
-      { label: "FAQ", href: "/#faq" },
       { label: "Guides", href: "/learn-more" },
+      { label: "FAQ", href: "/#faq" },
       {
         label: "Support",
-        href: "mailto:ayushkarma.dev@gmail.com",
-        external: true,
-      },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      {
-        label: "Contact",
         href: "mailto:ayushkarma.dev@gmail.com",
         external: true,
       },

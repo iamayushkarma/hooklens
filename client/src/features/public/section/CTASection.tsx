@@ -25,13 +25,13 @@ export default function CTASection() {
         }}
       />
 
-      <div className="relative max-w-3xl mx-auto px-6 py-28 flex flex-col items-center text-center">
+      <div className="relative max-w-3xl mx-auto px-6 sm:px-8 py-16 sm:py-20 md:py-28 flex flex-col items-center text-center">
         <motion.h2
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45 }}
-          className="text-4xl sm:text-5xl leading-[1.15] font-bold tracking-tight text-text-primary mb-5"
+          className="text-3xl sm:text-4xl md:text-5xl leading-[1.15] font-bold tracking-tight text-text-primary mb-4 sm:mb-5"
         >
           Experience a faster way
           <br />
@@ -43,7 +43,7 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.05 }}
-          className="text-base leading-relaxed text-text-secondary max-w-lg mb-10"
+          className="text-sm sm:text-base leading-relaxed text-text-secondary max-w-lg mb-8 sm:mb-10"
         >
           Join the developers who trust HookLens to catch, inspect, and replay
           every request the moment it arrives.
@@ -54,9 +54,9 @@ export default function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.1 }}
-          className="flex items-center gap-3"
+          className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
         >
-          <Button onClick={goToLogin}>
+          <Button onClick={goToLogin} className="w-full sm:w-auto">
             Sign up
             <ArrowRight
               size={15}
@@ -66,7 +66,7 @@ export default function CTASection() {
 
           <Button
             onClick={goToLernMorePage}
-            className="bg-bg-base text-text-primary hover:bg-base-hover border border-border-default"
+            className="w-full sm:w-auto bg-bg-base text-text-primary hover:bg-base-hover border border-border-default"
           >
             Learn more
           </Button>

@@ -2,9 +2,8 @@ import Tabs from "@/shared/components/ui/Tabs";
 import { useCurrentProject } from "../hooks/useCurrentProject";
 import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
 import { ArrowLeft } from "lucide-react";
-import { motion } from "motion/react";
 
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 function ProjectLayout() {
   const { currentProject } = useCurrentProject();
   const { goToWorkspace } = useAppNavigation();

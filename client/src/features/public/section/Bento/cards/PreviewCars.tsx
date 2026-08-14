@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { Check, CheckCheck, Clock3, Database, GitBranch } from "lucide-react";
+import { CheckCheck, Clock3, Database, GitBranch } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import CardLayout from "../CardLayout";
 

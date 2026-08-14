@@ -1,4 +1,4 @@
-import { Copy, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 import { Button } from "@/shared/components/ui/Button";
 import CodeExamples from "./CodeExamples";

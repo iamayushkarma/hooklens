@@ -1,5 +1,3 @@
-import { Copy } from "lucide-react";
-import { Button } from "@/shared/components/ui/Button";
 import type { Endpoint } from "../types/endpoint.types";
 import CopyButton from "@/shared/components/ui/CopyButton";
 

@@ -58,7 +58,7 @@ const faqs: FAQ[] = [
       "Incoming headers, bodies, and query params are sanitized before they're ever stored, stripping common sensitive fields. You can delete any individual request permanently, and deleting an endpoint removes all of its logged requests along with it.",
   },
 ];
-export default function FAQSection() {
+function FAQSection() {
   const [openId, setOpenId] = useState<string>("");
 
   const toggle = (id: string) => {
@@ -121,3 +121,5 @@ export default function FAQSection() {
     </section>
   );
 }
+
+export { FAQSection };

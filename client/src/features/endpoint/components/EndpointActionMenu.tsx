@@ -29,8 +29,7 @@ function EndpointActionMenu({ endpoint, onSuccess }: EndpointActionMenuProps) {
     try {
       setLoading(true);
 
-      await updateEndpoint({
-        endpointId: endpoint._id,
+      await updateEndpoint(endpoint._id, {
         isActive: !endpoint.isActive,
       });
 

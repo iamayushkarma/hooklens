@@ -6,7 +6,7 @@ import BentoSection from "../section/Bento/BentoSection";
 import { HowItWorksSection } from "../section/HowItWorksSection";
 import WhyChooseUs from "../section/WhyChooseUs";
 import IntegrationSnippetsSection from "../section/Integrationsnippetssection";
-import FAQSection from "../section/FAQSection";
+import { FAQSection } from "../section/FAQSection";
 import CTASection from "../section/CTASection";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";

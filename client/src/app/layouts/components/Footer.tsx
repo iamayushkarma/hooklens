@@ -36,8 +36,8 @@ function Footer() {
   const { goToHome } = useAppNavigation();
   return (
     <footer className="w-full bg-[#0a0a0a] border-t border-[#262626]">
-      <div className="max-w-7xl mx-auto px-6 py-14">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-12">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 py-10 sm:py-14">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 sm:gap-12">
           {/* Left: logo, tagline, icons */}
           <div className="max-w-xs">
             <div
@@ -91,8 +91,8 @@ function Footer() {
             </div>
           </div>
 
-          {/* Right: 3 link columns */}
-          <div className="flex flex-wrap gap-x-20 gap-y-10">
+          {/* Right: link columns */}
+          <div className="flex flex-wrap gap-x-12 sm:gap-x-16 lg:gap-x-20 gap-y-8 sm:gap-y-10">
             {columns.map((col) => (
               <div key={col.title}>
                 <p className="font-semibold text-[#ececec] mb-4">{col.title}</p>
@@ -133,7 +133,7 @@ function Footer() {
         </div>
 
         {/* Giant wordmark */}
-        <div className="mt-10 select-none pointer-events-none overflow-hidden">
+        <div className="mt-8 sm:mt-10 select-none pointer-events-none overflow-hidden">
           <p className="font-semibold leading-none tracking-tight text-white/5 text-[22vw] sm:text-[16vw] whitespace-nowrap">
             HookLens
           </p>

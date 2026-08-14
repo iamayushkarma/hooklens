@@ -48,150 +48,139 @@ function LoginPage() {
       });
     }
   };
+
   return (
     <section className="w-full">
-      <div className="w-full flex max-sm:flex-col min-h-screen relative">
-        {/* Right section */}
-        <div className="w-full max-sm:h-40 md:w-1/2 flex items-center overflow-hidden bg-accent relative">
-          <div className="md:w-3/4 p-8 md:p-20 flex flex-col gap-3">
-            <h2 className="text-white text-2xl md:text-5xl font-bold">
+      <div className="w-full flex flex-col md:flex-row min-h-screen relative">
+        {/* Right section - hidden entirely below md, no blue sliver on mobile */}
+        <div className="hidden md:flex md:w-1/2 items-center overflow-hidden bg-accent relative">
+          <div className="w-3/4 p-8 lg:p-20 flex flex-col gap-3">
+            <h2 className="text-white text-3xl lg:text-5xl font-bold">
               Good to See You Again
             </h2>
-            <p className="md:hidden text-gray-100">
-              Everything is set up and ready to go.
-            </p>
-            <p className="hidden md:block text-gray-100">
+            <p className="text-gray-100">
               Everything is set up and ready to go. Access your account,
               continue your projects, and keep building without interruption.
             </p>
           </div>
           <img
             src={authPatternOne}
-            className="hidden md:block size-50 absolute top-[-50px]"
+            className="size-32 lg:size-50 absolute top-[-50px]"
           />
           <img
             src={authPatterTwo}
-            className="hidden md:block size-50 absolute right-0 bottom-[-10px]"
+            className="size-32 lg:size-50 absolute right-0 bottom-[-10px]"
           />
         </div>
-        {/* left section */}
-        <div className="w-[90%] mx-auto md:w-1/2 relative">
-          <div className="flex items-center rounded-lg w-full h-145 md:h-full justify-center max-sm:shadow-lg max-sm:p-3 max-sm:absolute max-sm:top-2 max-sm:-mt-10 relative z-20">
-            <BackButton
-              fallbackHref="/"
-              className="absolute top-4 left-4"
-            />
-            <div className="w-108 h-135 bg-white p-8 rounded-xl shadow-sm">
-              {/* Heading section */}
-              <div className="text-center mx-auto">
-                <h2 className="text-2xl font-medium md:font-semibold">
-                  Welcome back
-                </h2>
-                <p>Enter your credentials to access your dashboard.</p>
-              </div>
-              {/* Login form */}
-              <div className="mx-auto mt-10">
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="flex gap-4 flex-col"
-                  action=""
-                >
-                  <Input
-                    label="E-mail"
-                    id="email"
-                    placeholder="Enter your Email"
-                    error={errors.email?.message}
-                    {...register("email")}
-                  />
-                  <Input
-                    label="Password"
-                    placeholder="••••••••"
-                    id="password"
-                    isPassword={true}
-                    error={errors.password?.message}
-                    {...register("password")}
-                  />
 
-                  {errors.root && (
-                    <p className="text-sm text-danger -mt-2">
-                      {errors.root.message}
-                    </p>
-                  )}
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="select-none w-full"
-                  >
-                    {loading ? "Signing in..." : "Sign in"}
-                  </Button>
-                </form>
-              </div>
-              {/* Divider */}
-              <div className="flex mx-auto mt-6 items-center gap-4">
-                <div className="h-px flex-1 bg-border-subtle" />
+        {/* Left section - form. min-h-screen ensures the card centers
+            correctly on mobile even though the right panel is hidden */}
+        <div className="w-full md:w-1/2 min-h-screen flex items-center justify-center px-4 py-10 relative">
+          <BackButton fallbackHref="/" className="absolute top-4 left-4" />
 
-                <span className="text-sm text-text-secondary">
-                  Or sign up with
-                </span>
+          <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-xl shadow-sm">
+            {/* Heading section */}
+            <div className="text-center mx-auto">
+              <h2 className="text-xl sm:text-2xl font-medium md:font-semibold">
+                Welcome back
+              </h2>
+              <p className="text-sm sm:text-base text-text-secondary">
+                Enter your credentials to access your dashboard.
+              </p>
+            </div>
 
-                <div className="h-px flex-1 bg-border-subtle" />
-              </div>
-              {/* O-Auth */}
-              <div className="flex md:flex-col gap-3 mt-5">
+            {/* Login form */}
+            <div className="mx-auto mt-8 sm:mt-10">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex gap-4 flex-col"
+              >
+                <Input
+                  label="E-mail"
+                  id="email"
+                  placeholder="Enter your Email"
+                  error={errors.email?.message}
+                  {...register("email")}
+                />
+                <Input
+                  label="Password"
+                  placeholder="••••••••"
+                  id="password"
+                  isPassword={true}
+                  error={errors.password?.message}
+                  {...register("password")}
+                />
+
+                {errors.root && (
+                  <p className="text-sm text-danger -mt-2">
+                    {errors.root.message}
+                  </p>
+                )}
                 <Button
-                  onClick={async () => {
-                    try {
-                      await googleLogin();
-                      if (inviteToken) {
-                        navigate(`/invite/accept/${inviteToken}`, {
-                          replace: true,
-                        });
-                        return;
-                      }
-                      navigate("/dashboard");
-                    } catch (error) {
-                      console.error(error);
-                    }
-                  }}
-                  className="bg-white w-full flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
+                  type="submit"
+                  disabled={loading}
+                  className="select-none w-full"
                 >
-                  <FcGoogle className="size-5" />
-                  {/* Mobile */}
-                  <span className="text-gray-950 sm:hidden">Google</span>
-
-                  {/* Tablet and Desktop */}
-                  <span className="text-gray-950 hidden sm:inline">
-                    Sign in with Google
-                  </span>
+                  {loading ? "Signing in..." : "Sign in"}
                 </Button>
-                <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
-                  <FaGithub className="size-5" />
-                  {/* Mobile */}
-                  <span className="sm:hidden">Github</span>
+              </form>
+            </div>
 
-                  {/* Tablet and Desktop */}
-                  <span className="hidden sm:inline">Sign in with GitHub</span>
-                </Button>
-              </div>
-              {/* Register */}
-              <div className="mt-4 md:mt-6 text-center">
-                <p className="text-sm text-text-secondary">
-                  Don't have an account?{" "}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      navigate(
-                        inviteToken
-                          ? `/register?invite=${inviteToken}`
-                          : "/register",
-                      )
+            {/* Divider */}
+            <div className="flex mx-auto mt-6 items-center gap-4">
+              <div className="h-px flex-1 bg-border-subtle" />
+              <span className="text-sm text-text-secondary whitespace-nowrap">
+                Or sign up with
+              </span>
+              <div className="h-px flex-1 bg-border-subtle" />
+            </div>
+
+            {/* O-Auth */}
+            <div className="flex flex-col sm:flex-row md:flex-col gap-3 mt-5">
+              <Button
+                onClick={async () => {
+                  try {
+                    await googleLogin();
+                    if (inviteToken) {
+                      navigate(`/invite/accept/${inviteToken}`, {
+                        replace: true,
+                      });
+                      return;
                     }
-                    className="font-medium text-accent hover:underline"
-                  >
-                    Register
-                  </button>
-                </p>
-              </div>
+                    navigate("/dashboard");
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
+                className="bg-white w-full flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
+              >
+                <FcGoogle className="size-5 shrink-0" />
+                <span className="text-gray-950">Sign in with Google</span>
+              </Button>
+              <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
+                <FaGithub className="size-5 shrink-0" />
+                <span>Sign in with GitHub</span>
+              </Button>
+            </div>
+
+            {/* Register */}
+            <div className="mt-4 md:mt-6 text-center">
+              <p className="text-sm text-text-secondary">
+                Don't have an account?{" "}
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      inviteToken
+                        ? `/register?invite=${inviteToken}`
+                        : "/register",
+                    )
+                  }
+                  className="font-medium text-accent hover:underline"
+                >
+                  Register
+                </button>
+              </p>
             </div>
           </div>
         </div>

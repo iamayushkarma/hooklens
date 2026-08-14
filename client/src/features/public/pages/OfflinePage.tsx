@@ -3,8 +3,8 @@ import { Button } from "@/shared/components/ui/Button";
 
 function OfflinePage() {
   return (
-    <div className="fixed inset-0 z-[100] bg-bg-base flex flex-col items-center justify-center px-6 text-center">
-      <div className="w-14 h-14 rounded-full bg-bg-surface flex items-center justify-center mb-5">
+    <div className="fixed inset-0 z-[100] bg-bg-base flex flex-col items-center justify-center overflow-y-auto px-6 py-10 text-center">
+      <div className="w-14 h-14 shrink-0 rounded-full bg-bg-surface flex items-center justify-center mb-5">
         <WifiOff className="size-6 text-text-secondary" />
       </div>
       <h1 className="text-xl font-semibold text-text-primary tracking-tight">

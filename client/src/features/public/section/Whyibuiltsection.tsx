@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef, useEffect, useState } from "react";
 import {
   motion,
@@ -73,7 +71,7 @@ function ScrollRevealParagraph({ text }: { text: string }) {
   return (
     <p
       ref={ref}
-      className="text-2xl md:text-3xl lg:text-4xl font-medium leading-snug tracking-tight"
+      className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium leading-snug tracking-tight text-center md:text-left"
     >
       {words.map((word, i) => {
         const start = i / words.length;
@@ -115,10 +113,11 @@ function ProviderBadge({ provider }: { provider: Provider }) {
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="flex flex-col items-center gap-2"
       >
-        <div className="w-14 h-14 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
-          <Icon size={28} color={provider.color} />
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/95 flex items-center justify-center shadow-lg">
+          <Icon size={24} className="sm:hidden" color={provider.color} />
+          <Icon size={28} className="hidden sm:block" color={provider.color} />
         </div>
-        <span className="text-sm font-medium tracking-wide text-white drop-shadow-sm">
+        <span className="text-xs sm:text-sm font-medium tracking-wide text-white drop-shadow-sm">
           {provider.name}
         </span>
       </motion.div>
@@ -130,7 +129,7 @@ function ProviderOrb() {
   const active = useProviderLoop();
 
   return (
-    <div className="relative w-64 h-64 md:w-72 md:h-72 ml-12">
+    <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 mx-auto md:ml-12 md:mr-0">
       <div
         className="absolute inset-0 rounded-full overflow-hidden bg-base"
         style={{ boxShadow: "0 25px 50px -15px rgba(0,0,0,0.4)" }}
@@ -177,8 +176,8 @@ function ProviderOrb() {
 
 export default function WhyIBuiltSection() {
   return (
-    <section className="bg-base py-24 md:py-32">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[65%_35%] gap-12 md:gap-8 items-center">
+    <section className="bg-base px-4 sm:px-6 py-16 sm:py-20 md:py-28 lg:py-32">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[65%_35%] gap-10 sm:gap-12 md:gap-8 items-center">
         <ScrollRevealParagraph text={COPY} />
         <ProviderOrb />
       </div>

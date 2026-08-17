@@ -9,6 +9,7 @@ import CopyButton from "@/shared/components/ui/CopyButton";
 import EndpointSettingsSkeleton from "@/shared/components/skletons/EndpointSettingsSkeleton";
 import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
+import BackButton from "@/shared/components/ui/BackButton";
 
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
@@ -70,6 +71,12 @@ function EndpointSettings() {
 
   return (
     <div className="space-y-6">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
+        label="Back to Endpoint"
+        className="mb-4"
+      />
+
       {/* General Information */}
       <div className="rounded-lg border border-border-default bg-bg-card p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-text-primary">
@@ -185,27 +192,29 @@ function EndpointSettings() {
       </div>
 
       {/* Danger Zone */}
-      <div className="rounded-lg border border-danger-border bg-danger-bg p-6">
-        <h2 className="mb-4 text-lg font-semibold text-danger">Danger Zone</h2>
-
-        <div className="flex items-center justify-between gap-4">
+      <div className="rounded-lg border border-border-default bg-bg-card shadow-sm">
+        <div className="space-y-5 px-6 py-6">
           <div>
-            <p className="text-sm font-medium text-text-primary">
-              Delete this endpoint
-            </p>
+            <h2 className="text-lg font-semibold text-text-primary">
+              Delete Endpoint
+            </h2>
             <p className="mt-1 text-sm text-text-secondary">
-              Once you delete an endpoint, there is no going back. Please be
-              certain. All historical request data will be purged.
+              Once deleted, this endpoint cannot be recovered. All historical
+              request data will be permanently removed.
             </p>
           </div>
+        </div>
 
-          <Button
-            className="bg-danger hover:bg-danger-hover"
-            onClick={handleDelete}
-          >
-            <Trash2 size={16} />
-            Delete Endpoint
-          </Button>
+        <div className="border-t border-border-default bg-bg-base/50 px-6 py-4">
+          <div className="flex justify-end">
+            <Button
+              className="flex items-center gap-2 bg-danger hover:bg-red-700 text-white"
+              onClick={handleDelete}
+            >
+              <Trash2 size={16} />
+              Delete Endpoint
+            </Button>
+          </div>
         </div>
       </div>
     </div>

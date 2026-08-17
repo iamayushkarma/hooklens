@@ -1,12 +1,10 @@
 import Tabs from "@/shared/components/ui/Tabs";
+import BackButton from "@/shared/components/ui/BackButton";
 import { useCurrentProject } from "../hooks/useCurrentProject";
-import { useAppNavigation } from "@/shared/hooks/useAppNavigation";
-import { ArrowLeft } from "lucide-react";
 
 import { Outlet, useParams } from "react-router-dom";
 function ProjectLayout() {
   const { currentProject } = useCurrentProject();
-  const { goToWorkspace } = useAppNavigation();
   const { workspaceId, projectId } = useParams();
   const tabs = [
     {
@@ -20,15 +18,11 @@ function ProjectLayout() {
   ];
   return (
     <>
-      <button
-        className="flex items-center gap-1.5 text-text-secondary hover:text-text-primary text-sm mb-4 cursor-pointer group"
-        onClick={() => goToWorkspace(workspaceId!)}
-      >
-        <span className="group-hover:-translate-x-0.5 duration-150 transition-all">
-          <ArrowLeft className="size-4" />
-        </span>{" "}
-        Back to Workspace
-      </button>
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}`}
+        label="Back to Workspace"
+        className="mb-4"
+      />
       <div className="flex flex-col gap-6">
         <div>
           <h1 className="text-2xl font-semibold">{currentProject?.name}</h1>

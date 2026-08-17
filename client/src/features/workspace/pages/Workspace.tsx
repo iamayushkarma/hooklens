@@ -56,7 +56,7 @@ function Workspace() {
         {/* Serching */}
         <Input
           isSearch={true}
-          className="w-82!"
+          className="w-82! bg-bg-card"
           placeholder="Search for workspace..."
           value={serchWorkspaces}
           onChange={(e) => setSerchWorkspaces(e.target.value)}

@@ -22,7 +22,7 @@ function JsonViewer({ data }: JsonViewerProps) {
   }, [formattedJson]);
 
   return (
-    <pre className="overflow-auto bg-[#1e1e1e] p-4 text-sm rounded-b-lg">
+    <pre className="overflow-auto bg-[#1e1e1e] p-4 text-sm">
       <code ref={codeRef} className="language-json">
         {formattedJson}
       </code>

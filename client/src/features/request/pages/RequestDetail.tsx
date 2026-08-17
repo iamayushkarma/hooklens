@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CopyButton from "@/shared/components/ui/CopyButton";
 import BackButton from "@/shared/components/ui/BackButton";
+import { Button } from "@/shared/components/ui/Button";
 import { generateCurl } from "../utils/generateCurl";
 import { getRequest } from "@/features/request/api/getRequest";
 import type { RequestLog } from "../types/request.types";
@@ -12,6 +13,7 @@ import { deleteRequest } from "../api/deleteRequest";
 import { explainRequest } from "../api/explainRequest";
 import ReplayDialog from "../components/ReplayDialog";
 import ReplayResult from "../components/ReplayResult";
+import { LayoutGroup, motion } from "motion/react";
 
 function RequestDetail() {
   const { requestId, workspaceId, projectId, endpointId } = useParams();
@@ -74,9 +76,16 @@ function RequestDetail() {
     }
   };
 
+  const payloadTabs = [
+    { key: "headers", label: "Headers" },
+    { key: "body", label: "Body" },
+    { key: "raw", label: "Raw Body" },
+    { key: "query", label: "Query Params" },
+  ];
+
   if (!request) {
     return (
-      <div className="rounded-lg border border-border-default p-6">
+      <div className=" border border-border-default p-6">
         Loading request...
       </div>
     );
@@ -104,12 +113,11 @@ function RequestDetail() {
         className="mb-4"
       />
 
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="rounded-xl border border-border-default bg-bg-card p-5 shadow-sm">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex items-center gap-3">
             <span
-              className={`rounded-md px-3 py-1 text-sm font-medium ${
+              className={`inline-flex items-center rounded-md px-3 py-1.5 text-sm font-semibold ${
                 request.method === "GET"
                   ? "bg-blue-500/10 text-blue-500"
                   : request.method === "POST"
@@ -124,124 +132,204 @@ function RequestDetail() {
               {request.method}
             </span>
 
-            <h1 className="text-2xl font-semibold">Request Detail</h1>
+            <div>
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-text-secondary">
+                Incoming request
+              </p>
+              <h1 className="mt-1 text-2xl font-semibold text-text-primary">
+                Request Detail
+              </h1>
+            </div>
           </div>
-          <CopyButton
-            content={generateCurl(request)}
-            showLabel
-            copyLabel="Copy as cURL"
-          />
-          <div className="flex gap-2">
-            <button
+
+          <div className="flex flex-wrap items-center gap-2">
+            <CopyButton
+              content={generateCurl(request)}
+              showLabel
+              copyLabel="Copy as cURL"
+            />
+
+            <Button
+              type="button"
               onClick={() => setShowReplayDialog(true)}
-              className="rounded-lg border border-border-default px-4 py-2 text-sm hover:bg-bg-sidebar"
+              className="bg-bg-base text-text-primary border border-border-default hover:bg-bg-sidebar shadow-sm"
             >
               Replay
-            </button>
+            </Button>
 
-            <button
+            <Button
+              type="button"
               onClick={handleExplain}
-              className="rounded-lg border px-4 py-2"
+              className="bg-bg-base text-text-primary border border-border-default hover:bg-bg-sidebar shadow-sm"
             >
               Explain Payload
-            </button>
+            </Button>
 
-            <button
+            <Button
+              type="button"
               onClick={handleDelete}
-              className="rounded-lg border border-red-500/20 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10"
+              className="bg-danger hover:bg-red-700"
             >
               Delete
-            </button>
+            </Button>
           </div>
         </div>
       </div>
-      {/* Metadata */}
-      <div className="grid gap-4 rounded-lg border border-border-default p-4 md:grid-cols-2">
-        <div>
-          <p className="text-xs text-text-secondary">IP Address</p>
 
-          <p>{request.ip}</p>
-        </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-xl border border-border-default bg-bg-card p-5 shadow-sm">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-text-secondary">
+            Request metadata
+          </p>
 
-        <div>
-          <p className="text-xs text-text-secondary">Content Type</p>
-
-          <p>{request.contentType}</p>
-        </div>
-
-        <div>
-          <p className="text-xs text-text-secondary">Payload Size</p>
-
-          <p>{request.size} bytes</p>
-        </div>
-
-        <div>
-          <p className="text-xs text-text-secondary">Received At</p>
-
-          <p>{new Date(request.createdAt).toLocaleString()}</p>
-        </div>
-
-        <div className="md:col-span-2">
-          <p className="text-xs text-text-secondary">User Agent</p>
-
-          <p className="break-all">{request.userAgent}</p>
-        </div>
-      </div>
-      {/* Payload */}
-      <div className="rounded-lg border border-border-default overflow-hidden">
-        <div className="flex border-b border-border-default bg-bg-sidebar">
-          {[
-            { key: "headers", label: "Headers" },
-            { key: "body", label: "Body" },
-            { key: "raw", label: "Raw Body" },
-            { key: "query", label: "Query Params" },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as typeof activeTab)}
-              className={`px-5 py-3 text-sm transition-colors ${
-                activeTab === tab.key
-                  ? "border-b-2 border-primary text-primary"
-                  : "text-text-secondary hover:text-text-primary"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {activeTab === "headers" && (
-          <JsonSection title="Headers" data={request.headers ?? {}} />
-        )}
-
-        {activeTab === "body" && (
-          <JsonSection title="Body" data={request.body ?? {}} />
-        )}
-
-        {activeTab === "query" && (
-          <JsonSection title="Query Params" data={request.query ?? {}} />
-        )}
-
-        {activeTab === "raw" && (
-          <section className="overflow-hidden">
-            <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
-              <h2 className="font-medium">Raw Body</h2>
-
-              <CopyButton content={request.rawBody ?? ""} />
+          <dl className="mt-4 space-y-4">
+            <div>
+              <dt className="text-xs text-text-secondary">IP Address</dt>
+              <dd className="mt-1 text-sm font-medium text-text-primary">
+                {request.ip}
+              </dd>
             </div>
 
-            <pre className="overflow-auto bg-background p-4 text-sm whitespace-pre-wrap break-all">
-              {request.rawBody || "No raw body available"}
-            </pre>
-          </section>
-        )}
+            <div>
+              <dt className="text-xs text-text-secondary">Content Type</dt>
+              <dd className="mt-1 text-sm font-medium text-text-primary">
+                {request.contentType}
+              </dd>
+            </div>
+
+            <div>
+              <dt className="text-xs text-text-secondary">Payload Size</dt>
+              <dd className="mt-1 text-sm font-medium text-text-primary">
+                {request.size} bytes
+              </dd>
+            </div>
+
+            <div>
+              <dt className="text-xs text-text-secondary">Received At</dt>
+              <dd className="mt-1 text-sm font-medium text-text-primary">
+                {new Date(request.createdAt).toLocaleString()}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div className="rounded-xl border border-border-default bg-bg-card p-5 shadow-sm">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-text-secondary">
+            Client details
+          </p>
+
+          <div className="mt-4 space-y-4">
+            <div>
+              <p className="text-xs text-text-secondary">User Agent</p>
+              <p className="mt-1 break-all text-sm font-medium text-text-primary">
+                {request.userAgent}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-text-secondary">Origin</p>
+              <p className="mt-1 text-sm font-medium text-text-primary">
+                {request.ip || "Unknown source"}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-text-secondary">Body Type</p>
+              <p className="mt-1 text-sm font-medium text-text-primary">
+                {request.body ? "Structured payload" : "No payload"}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-border-default bg-bg-card shadow-sm">
+        <div className="border-b border-border-default bg-bg-sidebar px-3 py-2">
+          <LayoutGroup id="request-detail-tabs">
+            <div className="flex w-fit gap-2 rounded-md border border-border-default bg-bg-sidebar p-0.75">
+              {payloadTabs.map((tab) => {
+                const isActive = activeTab === tab.key;
+
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => setActiveTab(tab.key as typeof activeTab)}
+                    className="relative rounded-[5px] px-2.5 py-1.5 text-sm cursor-pointer"
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="request-detail-tab-pill"
+                        layout="position"
+                        className="absolute inset-0 rounded-[5px] pointer-events-none border border-border-default bg-bg-card shadow-md"
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    <span
+                      className={`relative z-10 transition-colors ${
+                        isActive
+                          ? "font-medium text-text-primary"
+                          : "text-text-secondary"
+                      }`}
+                    >
+                      {tab.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </LayoutGroup>
+        </div>
+
+        <div className="min-h-[280px]">
+          {activeTab === "headers" && (
+            <JsonSection title="Headers" data={request.headers ?? {}} />
+          )}
+
+          {activeTab === "body" && (
+            <JsonSection title="Body" data={request.body ?? {}} />
+          )}
+
+          {activeTab === "query" && (
+            <JsonSection title="Query Params" data={request.query ?? {}} />
+          )}
+
+          {activeTab === "raw" && (
+            <section className="overflow-hidden">
+              <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
+                <h2 className="text-sm font-semibold text-text-primary">
+                  Raw Body
+                </h2>
+
+                <CopyButton content={request.rawBody ?? ""} />
+              </div>
+
+              <pre className="overflow-auto bg-bg-base p-4 text-sm leading-6 whitespace-pre-wrap break-all text-text-primary">
+                {request.rawBody || "No raw body available"}
+              </pre>
+            </section>
+          )}
+        </div>
       </div>
 
       {explanation && (
-        <div className="rounded-lg border p-4">
-          <h3 className="font-medium">AI Explanation</h3>
+        <div className="rounded-xl border border-border-default bg-bg-card p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-lg font-semibold text-text-primary">
+              AI Explanation
+            </h3>
+            <span className="rounded-full bg-accent-subtle px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
+              AI
+            </span>
+          </div>
 
-          <p className="mt-2 text-sm">{explanation}</p>
+          <p className="mt-3 whitespace-pre-line text-sm leading-7 text-text-secondary">
+            {explanation}
+          </p>
         </div>
       )}
 

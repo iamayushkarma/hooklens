@@ -74,6 +74,7 @@ function EndpointSettings() {
       <BackButton
         fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
         label="Back to Endpoint"
+        className="mb-4"
       />
 
       {/* General Information */}

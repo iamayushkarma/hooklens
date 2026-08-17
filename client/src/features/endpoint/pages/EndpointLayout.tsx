@@ -36,6 +36,7 @@ function EndpointLayout() {
         <BackButton
           fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
           label="Back to Project"
+          className="mb-4"
         />
       )}
 

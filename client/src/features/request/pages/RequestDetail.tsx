@@ -101,6 +101,7 @@ function RequestDetail() {
       <BackButton
         fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints/${endpointId}`}
         label="Back to Requests"
+        className="mb-4"
       />
 
       {/* Header */}

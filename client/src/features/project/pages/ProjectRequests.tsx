@@ -59,6 +59,7 @@ function ProjectRequests() {
       <BackButton
         fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
         label="Back to Endpoints"
+        className="mb-4"
       />
 
       {/* Header */}

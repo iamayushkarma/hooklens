@@ -14,6 +14,7 @@ function WorkspaceSettings() {
       <BackButton
         fallbackHref={`/dashboard/workspaces/${workspaceId}`}
         label="Back to Projects"
+        className="mb-4"
       />
 
       {/* Page header */}

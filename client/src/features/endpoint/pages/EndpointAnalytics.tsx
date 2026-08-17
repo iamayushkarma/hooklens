@@ -7,6 +7,7 @@ import {
   Radio,
   TrendingUp,
 } from "lucide-react";
+import BackButton from "@/shared/components/ui/BackButton";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -129,7 +130,7 @@ function LoadingState() {
 }
 
 export function EndpointAnalytics() {
-  const { endpointId } = useParams();
+  const { endpointId, workspaceId, projectId } = useParams();
 
   const [analytics, setAnalytics] = useState<EndpointAnalytics | null>(null);
 
@@ -171,6 +172,11 @@ export function EndpointAnalytics() {
 
   return (
     <div className="space-y-6">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints/${endpointId}`}
+        label="Back to Requests"
+      />
+
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CopyButton from "@/shared/components/ui/CopyButton";
+import BackButton from "@/shared/components/ui/BackButton";
 import { generateCurl } from "../utils/generateCurl";
 import { getRequest } from "@/features/request/api/getRequest";
 import type { RequestLog } from "../types/request.types";
@@ -13,7 +14,7 @@ import ReplayDialog from "../components/ReplayDialog";
 import ReplayResult from "../components/ReplayResult";
 
 function RequestDetail() {
-  const { requestId } = useParams();
+  const { requestId, workspaceId, projectId, endpointId } = useParams();
   const { goBack } = useAppNavigation();
   const [explanation, setExplanation] = useState("");
   const [activeTab, setActiveTab] = useState<
@@ -97,6 +98,11 @@ function RequestDetail() {
   };
   return (
     <div className="space-y-6">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}/endpoints/${endpointId}`}
+        label="Back to Requests"
+      />
+
       {/* Header */}
       <div className="space-y-4">
         <button

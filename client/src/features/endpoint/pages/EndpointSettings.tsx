@@ -9,6 +9,7 @@ import CopyButton from "@/shared/components/ui/CopyButton";
 import EndpointSettingsSkeleton from "@/shared/components/skletons/EndpointSettingsSkeleton";
 import { Input } from "@/shared/components/ui/Input";
 import { Button } from "@/shared/components/ui/Button";
+import BackButton from "@/shared/components/ui/BackButton";
 
 function EndpointSettings() {
   const endpoint = useCurrentEndpoint();
@@ -70,6 +71,11 @@ function EndpointSettings() {
 
   return (
     <div className="space-y-6">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
+        label="Back to Endpoint"
+      />
+
       {/* General Information */}
       <div className="rounded-lg border border-border-default bg-bg-card p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-text-primary">

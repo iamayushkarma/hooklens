@@ -1,13 +1,21 @@
 import { Settings } from "lucide-react";
+import { useParams } from "react-router-dom";
 import RenameWorkspaceCard from "../components/RenameWorkspaceCard";
 import DeleteWorkspaceCard from "../components/DeleteWorkspaceCard";
 import { usePermissions } from "@/shared/hooks/usePermissions";
+import BackButton from "@/shared/components/ui/BackButton";
 
 function WorkspaceSettings() {
   const permissions = usePermissions();
+  const { workspaceId } = useParams();
 
   return (
     <div className="space-y-8">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}`}
+        label="Back to Projects"
+      />
+
       {/* Page header */}
       <div className="flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-subtle">

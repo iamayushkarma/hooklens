@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserPlus, MoreVertical, Mail, Plus } from "lucide-react";
+import { useParams } from "react-router-dom";
+import BackButton from "@/shared/components/ui/BackButton";
 
 import { Button } from "@/shared/components/ui/Button";
 import { RoleBadge } from "@/shared/components/ui/role-badge";
@@ -40,6 +42,7 @@ function getInitials(name?: string, email?: string) {
 
 function WorkspaceMembers() {
   const { currentWorkspaceId } = useCurrentWorkspace();
+  const { workspaceId } = useParams();
   const auth = useAuthStore();
   const [selectedMember, setSelectedMember] = useState<WorkspaceMember | null>(
     null,
@@ -83,6 +86,11 @@ function WorkspaceMembers() {
 
   return (
     <div className="space-y-8">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}`}
+        label="Back to Projects"
+      />
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-text-primary">

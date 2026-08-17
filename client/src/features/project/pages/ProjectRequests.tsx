@@ -3,6 +3,7 @@ import { LayoutGroup, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Search, Webhook } from "lucide-react";
+import BackButton from "@/shared/components/ui/BackButton";
 
 import { getProjectRequests } from "@/features/request/api/getProjectRequests";
 import type { RequestLog } from "@/features/request/types/request.types";
@@ -12,7 +13,7 @@ import RequestCardSkeletonList from "@/shared/components/skletons/RequestCardSke
 const methods = ["ALL", "GET", "POST", "PUT", "PATCH", "DELETE"];
 
 function ProjectRequests() {
-  const { projectId } = useParams();
+  const { projectId, workspaceId } = useParams();
 
   const [requests, setRequests] = useState<RequestLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +56,11 @@ function ProjectRequests() {
 
   return (
     <div className="space-y-4 relative pb-16">
+      <BackButton
+        fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
+        label="Back to Endpoints"
+      />
+
       {/* Header */}
       <div className="flex flex-wrap items-center gap-3">
         <h2 className="text-xl font-semibold text-text-primary">

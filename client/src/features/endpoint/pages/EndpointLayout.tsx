@@ -1,11 +1,13 @@
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import { CopyButton } from "@/shared/components/ui/CopyButton";
 import { MoreHorizontal } from "lucide-react";
 import Tabs from "@/shared/components/ui/Tabs";
+import BackButton from "@/shared/components/ui/BackButton";
 
 function EndpointLayout() {
   const endpoint = useCurrentEndpoint();
+  const location = useLocation();
 
   const { workspaceId, projectId, endpointId } = useParams();
 
@@ -26,8 +28,17 @@ function EndpointLayout() {
     },
   ];
 
+  const isRequestDetailView = /\/requests\/[^/]+$/.test(location.pathname);
+
   return (
     <div className="space-y-6">
+      {!isRequestDetailView && (
+        <BackButton
+          fallbackHref={`/dashboard/workspaces/${workspaceId}/projects/${projectId}`}
+          label="Back to Project"
+        />
+      )}
+
       <div className="space-y-4">
         {/* Header */}
         <div>
@@ -96,10 +107,11 @@ function EndpointLayout() {
           </div>
         </div>
       </div>
-      {/* Tabs */}
-      <div className="flex gap-2">
-        <Tabs tabs={tabs} />
-      </div>
+      {!isRequestDetailView && (
+        <div className="flex gap-2">
+          <Tabs tabs={tabs} />
+        </div>
+      )}
       <Outlet />
     </div>
   );

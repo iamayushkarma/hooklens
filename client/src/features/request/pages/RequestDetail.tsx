@@ -105,13 +105,6 @@ function RequestDetail() {
 
       {/* Header */}
       <div className="space-y-4">
-        <button
-          onClick={goBack}
-          className="text-sm text-text-secondary hover:text-text-primary"
-        >
-          ← Back to Requests
-        </button>
-
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span

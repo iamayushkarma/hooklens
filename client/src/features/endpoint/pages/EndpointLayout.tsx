@@ -71,10 +71,6 @@ function EndpointLayout() {
                 </span>{" "}
                 requests
               </span>
-
-              <button className="flex size-7 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-bg-sidebar hover:text-text-primary">
-                <MoreHorizontal className="size-4" />
-              </button>
             </div>
           </div>
 

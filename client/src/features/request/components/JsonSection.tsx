@@ -8,7 +8,7 @@ interface JsonSectionProps {
 
 export function JsonSection({ title, data }: JsonSectionProps) {
   return (
-    <section className="overflow-hidden border border-border-default">
+    <section className="overflow-hidden">
       <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
         <h2 className="font-medium">{title}</h2>
         <CopyButton content={JSON.stringify(data, null, 2)} />

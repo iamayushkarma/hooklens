@@ -285,7 +285,7 @@ function RequestDetail() {
           </LayoutGroup>
         </div>
 
-        <div className="min-h-[280px]">
+        <div className="min-h-70">
           {activeTab === "headers" && (
             <JsonSection title="Headers" data={request.headers ?? {}} />
           )}
@@ -308,7 +308,7 @@ function RequestDetail() {
                 <CopyButton content={request.rawBody ?? ""} />
               </div>
 
-              <pre className="overflow-auto bg-bg-base p-4 text-sm leading-6 whitespace-pre-wrap break-all text-text-primary">
+              <pre className="overflow-auto m-0! bg-bg-base text-sm leading-6 whitespace-pre-wrap break-all text-text-primary">
                 {request.rawBody || "No raw body available"}
               </pre>
             </section>

@@ -31,7 +31,7 @@ export function AnalyticsChartSkeleton() {
         </div>
         <SkeletonBlock className="h-9 w-28 rounded-md" />
       </div>
-      <div className="h-[260px] flex items-end gap-2 px-2 pb-4">
+      <div className="h-65 flex items-end gap-2 px-2 pb-4">
         {Array.from({ length: 24 }).map((_, i) => (
           <SkeletonBlock key={i} className="flex-1" />
         ))}

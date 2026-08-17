@@ -1,7 +1,6 @@
 import { useCurrentEndpoint } from "../hooks/useCurrentEndpoint";
 import { Outlet, useLocation, useParams } from "react-router-dom";
 import { CopyButton } from "@/shared/components/ui/CopyButton";
-import { MoreHorizontal } from "lucide-react";
 import Tabs from "@/shared/components/ui/Tabs";
 import BackButton from "@/shared/components/ui/BackButton";
 

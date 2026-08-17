@@ -16,7 +16,7 @@ function NotificationBell() {
     <div ref={wrapperRef} className="relative">
       <button
         onClick={() => setOpen((prev) => !prev)}
-        className="relative flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-bg-hover"
+        className="relative cursor-pointer flex h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-bg-hover"
       >
         <Bell className="size-5" />
 

@@ -11,6 +11,7 @@ export interface CopyButtonProps {
   showLabel?: boolean;
   copyLabel?: string;
   copiedLabel?: string;
+  className?: string;
   color?: CopyButtonColor;
   onCopy?: () => void;
 }
@@ -47,6 +48,7 @@ const colorClasses: Record<CopyButtonColor, string> = {
 
 export function CopyButton({
   content,
+  className,
   size = "md",
   showLabel = false,
   copyLabel = "Copy",
@@ -77,6 +79,7 @@ export function CopyButton({
       whileTap={{ scale: 0.92 }}
       className={`relative flex items-center justify-center cursor-pointer rounded-md
                   transition-colors duration-150 whitespace-nowrap
+                  ${className}
                   ${colorClasses[color]}
                   ${showLabel ? paddedSizeClasses[size] : sizeClasses[size]}`}
     >

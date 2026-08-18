@@ -162,7 +162,10 @@ export default function IntegrationSnippetsSection() {
               {active.filename}
             </span>
             <div className="ml-auto">
-              <CopyButton content={plainSnippet(active)} />
+              <CopyButton
+                className="bg-bg-sidebar"
+                content={plainSnippet(active)}
+              />
             </div>
           </div>
 

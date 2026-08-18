@@ -25,8 +25,10 @@ import AppSettings from "@/features/settings/pages/AppSettings";
 import NotFound from "@/features/public/pages/NotFound";
 import LearnMorePage from "@/features/public/pages/LearnMorePage";
 import PrivacyPolicyPage from "@/features/public/pages/PrivacyPolicyPage";
+import { Analytics } from "@vercel/analytics/next";
 export const appRoutes = (
   <Routes>
+    <Analytics />
     <Route element={<AuthLayout />}>
       <Route path="/login" element={<LoginPage />} />
 

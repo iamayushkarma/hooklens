@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import AppRouter from "./app/router/AppRouter";
 import { useAuthStore } from "./store/auth.store";
@@ -19,6 +20,7 @@ const App = () => {
   return (
     <>
       <AppRouter />
+      <Toaster position="top-center" />
       <Analytics />
     </>
   );

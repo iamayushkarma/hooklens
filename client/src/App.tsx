@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import AppRouter from "./app/router/AppRouter";
 import { useAuthStore } from "./store/auth.store";
 import useOnlineStatus from "./shared/hooks/useOnlineStatus";
@@ -15,7 +16,12 @@ const App = () => {
 
   if (!isOnline) return <OfflinePage />;
   if (!initialized) return;
-  return <AppRouter />;
+  return (
+    <>
+      <AppRouter />
+      <Analytics />
+    </>
+  );
 };
 
 export default App;

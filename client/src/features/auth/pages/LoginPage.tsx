@@ -13,6 +13,7 @@ import {
   type LoginFormData,
 } from "@/shared/validators/auth.validators";
 import BackButton from "@/shared/components/ui/BackButton";
+import toast from "react-hot-toast";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -160,7 +161,14 @@ function LoginPage() {
                   {loading ? "Signing in..." : "Sign in with Google"}
                 </span>
               </Button>
-              <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
+              <Button
+                onClick={() =>
+                  toast("GitHub sign-in is coming soon", {
+                    icon: "🚧",
+                  })
+                }
+                className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3"
+              >
                 <FaGithub className="size-5 shrink-0" />
                 <span>Sign in with GitHub</span>
               </Button>

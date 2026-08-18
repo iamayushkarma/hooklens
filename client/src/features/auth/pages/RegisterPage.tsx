@@ -13,6 +13,7 @@ import {
   type RegisterFormData,
 } from "@/shared/validators/auth.validators";
 import BackButton from "@/shared/components/ui/BackButton";
+import toast from "react-hot-toast";
 
 function RegisterPage() {
   const loading = useAuthStore((state) => state.loading);
@@ -175,9 +176,16 @@ function RegisterPage() {
                   {loading ? "Signing in..." : "Sign up with Google"}
                 </span>
               </Button>
-              <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
+              <Button
+                onClick={() =>
+                  toast("GitHub sign-in is coming soon", {
+                    icon: "🚧",
+                  })
+                }
+                className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3"
+              >
                 <FaGithub className="size-5 shrink-0" />
-                <span>Sign up with Github</span>
+                <span>Sign up with GitHub</span>
               </Button>
             </div>
 

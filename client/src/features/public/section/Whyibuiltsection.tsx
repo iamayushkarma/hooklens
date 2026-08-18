@@ -11,13 +11,12 @@ import type { IconType } from "react-icons";
 import {
   SiStripe,
   SiGithub,
-  SiSlack,
   SiDiscord,
-  SiTwilio,
   SiShopify,
   SiRazorpay,
-  SiSendgrid,
 } from "react-icons/si";
+
+import { FaSlack, FaPhone, FaEnvelope } from "react-icons/fa";
 
 const COPY =
   "Every time I integrated Stripe, GitHub, or other third-party services, debugging webhooks meant digging through logs, restarting local servers, and guessing what payload was actually sent. I built HookLens to make webhook debugging instant.";
@@ -27,12 +26,12 @@ type Provider = { name: string; Icon: IconType; color: string };
 const PROVIDERS: Provider[] = [
   { name: "Stripe", Icon: SiStripe, color: "#635BFF" },
   { name: "GitHub", Icon: SiGithub, color: "#181717" },
-  { name: "Slack", Icon: SiSlack, color: "#4A154B" },
+  { name: "Slack", Icon: FaSlack, color: "#4A154B" },
   { name: "Discord", Icon: SiDiscord, color: "#5865F2" },
-  { name: "Twilio", Icon: SiTwilio, color: "#F22F46" },
+  { name: "Twilio", Icon: FaPhone, color: "#F22F46" },
   { name: "Shopify", Icon: SiShopify, color: "#7AB55C" },
   { name: "Razorpay", Icon: SiRazorpay, color: "#0C2451" },
-  { name: "SendGrid", Icon: SiSendgrid, color: "#51A9E3" },
+  { name: "SendGrid", Icon: FaEnvelope, color: "#51A9E3" },
 ];
 
 function Word({

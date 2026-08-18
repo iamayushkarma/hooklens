@@ -152,6 +152,7 @@ function RegisterPage() {
             {/* O-Auth */}
             <div className="flex flex-col sm:flex-row md:flex-col gap-3 mt-5">
               <Button
+                disabled={loading}
                 onClick={async () => {
                   try {
                     await googleLogin();
@@ -170,7 +171,9 @@ function RegisterPage() {
                 className="bg-white w-full flex items-center justify-center text-[.95rem] hover:bg-gray-50 border border-border-subtle gap-3"
               >
                 <FcGoogle className="size-5 shrink-0" />
-                <span className="text-gray-950">Sign up with Google</span>
+                <span className="text-gray-950">
+                  {loading ? "Signing in..." : "Sign up with Google"}
+                </span>
               </Button>
               <Button className="bg-gray-950 w-full flex items-center justify-center text-[.95rem] hover:bg-gray-900 gap-3">
                 <FaGithub className="size-5 shrink-0" />

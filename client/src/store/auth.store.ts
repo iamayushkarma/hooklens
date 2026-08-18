@@ -36,21 +36,29 @@ export const useAuthStore = create<AuthStore>((set) => ({
   initialized: false,
 
   googleLogin: async () => {
-    const { idToken } = await googleLoginApi();
+    set({ loading: true });
 
-    const response = await googleAuthApi(idToken);
-    localStorage.setItem("token", response.data.token);
+    try {
+      const { idToken } = await googleLoginApi();
 
-    const workspaces = await getWorkspaces();
-    if (workspaces.length) {
-      useWorkspaceStore.getState().setCurrentWorkspaceId(workspaces[0]._id);
+      const response = await googleAuthApi(idToken);
+      localStorage.setItem("token", response.data.token);
+
+      const workspaces = await getWorkspaces();
+      if (workspaces.length) {
+        useWorkspaceStore.getState().setCurrentWorkspaceId(workspaces[0]._id);
+      }
+
+      set({
+        token: response.data.token,
+        user: response.data.user,
+        loading: false,
+        initialized: true,
+      });
+    } catch (error) {
+      set({ loading: false });
+      throw error;
     }
-
-    set({
-      token: response.data.token,
-      user: response.data.user,
-      initialized: true,
-    });
   },
 
   login: async (email, password) => {

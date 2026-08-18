@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import { Copy, Check } from "lucide-react";
+import CopyButton from "@/shared/components/ui/CopyButton";
 
 interface Service {
   id: string;
@@ -72,7 +72,6 @@ function plainSnippet(s: Service): string {
 
 export default function IntegrationSnippetsSection() {
   const [activeId, setActiveId] = useState<string>(services[0].id);
-  const [copied, setCopied] = useState(false);
   const [latency, setLatency] = useState(43);
 
   // services is a fixed, non-empty local array and activeId only ever
@@ -83,12 +82,6 @@ export default function IntegrationSnippetsSection() {
     if (id === activeId) return;
     setActiveId(id);
     setLatency(18 + Math.floor(Math.random() * 55));
-  };
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(plainSnippet(active));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1300);
   };
 
   return (
@@ -168,40 +161,12 @@ export default function IntegrationSnippetsSection() {
             <span className="font-mono text-xs text-text-muted truncate">
               {active.filename}
             </span>
-            <button
-              onClick={handleCopy}
-              className={`ml-auto shrink-0 flex items-center gap-1.5 bg-bg-surface border border-border-default font-sans text-xs font-medium px-2 sm:px-2.5 py-1.5 rounded-md transition-colors ${
-                copied
-                  ? "text-success border-success-border"
-                  : "text-text-secondary hover:text-text-primary"
-              }`}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {copied ? (
-                  <motion.span
-                    key="check"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ duration: 0.12 }}
-                    className="flex items-center gap-1.5"
-                  >
-                    <Check size={13} /> Copied
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="copy"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{ duration: 0.12 }}
-                    className="flex items-center gap-1.5"
-                  >
-                    <Copy size={13} /> Copy
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
+            <div className="ml-auto">
+              <CopyButton
+                className="bg-bg-sidebar"
+                content={plainSnippet(active)}
+              />
+            </div>
           </div>
 
           <AnimatePresence mode="wait">
